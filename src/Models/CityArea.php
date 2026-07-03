@@ -7,6 +7,7 @@ namespace Zarbin\IranLocations\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Zarbin\IranLocations\Builders\CityAreaBuilder;
 use Zarbin\IranLocations\Models\Concerns\HasConfigurableTable;
 use Zarbin\IranLocations\Models\Concerns\HasDisplayName;
 use Zarbin\IranLocations\Models\Concerns\HasLocationAliases;
@@ -53,6 +54,11 @@ class CityArea extends Model
         'is_active' => 'boolean',
         'deprecated_at' => 'datetime',
     ];
+
+    public function newEloquentBuilder($query): CityAreaBuilder
+    {
+        return new CityAreaBuilder($query);
+    }
 
     public function region(): BelongsTo
     {

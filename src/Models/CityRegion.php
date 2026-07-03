@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Zarbin\IranLocations\Builders\CityRegionBuilder;
 use Zarbin\IranLocations\Models\Concerns\HasConfigurableTable;
 use Zarbin\IranLocations\Models\Concerns\HasDisplayName;
 use Zarbin\IranLocations\Models\Concerns\HasLocationAliases;
@@ -56,6 +57,11 @@ class CityRegion extends Model
         'is_active' => 'boolean',
         'deprecated_at' => 'datetime',
     ];
+
+    public function newEloquentBuilder($query): CityRegionBuilder
+    {
+        return new CityRegionBuilder($query);
+    }
 
     public function city(): BelongsTo
     {

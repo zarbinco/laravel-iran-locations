@@ -18,11 +18,11 @@
 - Full data sync engine, import sources, diffing, data checksums, safe update planning, and deprecation workflow.
 - Admin CRUD UI, controllers, forms, policies, and Blade screens.
 - Public API resources, controllers, request validation, and response filtering.
-- Advanced query filters, dedicated builders, validation rules, and search ranking.
+- Validation rules and search ranking.
 - Database record mutation inside placeholder sync/normalize commands.
-- Alias search ranking and alias-aware query filters.
+- Alias search ranking.
 - Database sync from the package JSON data files.
-- Admin UI, API controllers, and public query filters.
+- Admin UI, API controllers, and HTTP request filter endpoints.
 
 ## How To Run Tests
 
@@ -67,6 +67,24 @@ Implement the first safe data lifecycle layer: source dataset contracts, data ve
 - Hardened route key fallback to supported keys only: `id`, `code`, and `slug`.
 - Updated save-time name normalization to preserve manually supplied non-empty slugs.
 - Added relationship tests covering main model relations, aliases, replacement relations, configured model classes, configured table names, pivot table config, display-name fallback, status/source helpers, route keys, and fake normalizer usage.
-- Query filters, database sync, admin UI, and API endpoints remain intentionally out of scope.
+- Database sync, admin UI, and API endpoints remain intentionally out of scope.
 - Verification run: `composer test`, `vendor/bin/pint --test`, and `composer analyse` passed.
-- Suggested next step: implement focused query scopes/builders for common read use cases before introducing any database sync write path.
+- Suggested next step: implement the first database sync dry-run layer before introducing any write behavior.
+
+## Query Builder And Filter Notes
+
+- Added custom Eloquent builders for provinces, cities, city regions, city areas, and neighborhoods.
+- Common builder methods cover status, source, code, slug, search, default ordering, latest update ordering, safe array filters, and whitelisted sort keys.
+- Province filters: `q`, `status`, `source`, `code`, `slug`, `has_cities`, and `sort`.
+- City filters: `q`, `province_id`, `province_code`, `status`, `source`, `is_capital`, `has_regions`, `has_neighborhoods`, `code`, `slug`, and `sort`.
+- City region filters: `q`, `city_id`, `city_code`, `number`, `type`, `status`, `source`, `code`, `slug`, and `sort`.
+- City area filters: `q`, `city_id`, `city_code`, `region_id`, `region_code`, `number`, `status`, `source`, `code`, `slug`, and `sort`.
+- Neighborhood filters: `q`, `province_id`, `province_code`, `city_id`, `city_code`, `region_id`, `region_code`, `area_id`, `area_code`, `type`, `status`, `source`, `has_region`, `missing_region`, `code`, `slug`, and `sort`.
+- Search terms are normalized through the bound `LocationNormalizer` contract and grouped before matching `normalized_name`, `name_fa`, `slug`, `code`, and aliases when alias search is enabled.
+- Sort handling is whitelist-only. Relationship-like sort keys use local foreign key columns for now; no fragile joins were added.
+- Added lightweight filter helpers for blank string handling and common boolean-like values.
+- Builder tests use local database records and a fake normalizer binding instead of generated package data.
+- No generated JSON data, raw SQL sources, database sync behavior, admin UI, API endpoints, or Blade components were changed.
+- Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
+- Suggested next implementation step: add a non-destructive sync preview that reports differences without mutating user data.

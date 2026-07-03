@@ -92,36 +92,41 @@ class ModelRelationshipTest extends TestCase
      */
     private function createLocationGraph(string $suffix = ''): array
     {
-        $province = Province::create([
+        $province = new Province([
             'code' => 'province'.$suffix,
             'name_fa' => 'Province '.$suffix,
         ]);
+        $province->save();
 
-        $city = City::create([
+        $city = new City([
             'province_id' => $province->getKey(),
             'code' => 'city'.$suffix,
             'name_fa' => 'City '.$suffix,
         ]);
+        $city->save();
 
-        $region = CityRegion::create([
+        $region = new CityRegion([
             'city_id' => $city->getKey(),
             'code' => 'region'.$suffix,
             'name_fa' => 'Region '.$suffix,
         ]);
+        $region->save();
 
-        $area = CityArea::create([
+        $area = new CityArea([
             'city_region_id' => $region->getKey(),
             'code' => 'area'.$suffix,
             'name_fa' => 'Area '.$suffix,
         ]);
+        $area->save();
 
-        $neighborhood = Neighborhood::create([
+        $neighborhood = new Neighborhood([
             'city_id' => $city->getKey(),
             'default_city_region_id' => $region->getKey(),
             'default_city_area_id' => $area->getKey(),
             'code' => 'neighborhood'.$suffix,
             'name_fa' => 'Neighborhood '.$suffix,
         ]);
+        $neighborhood->save();
 
         return [
             'province' => $province,
