@@ -120,3 +120,30 @@ Implement the first safe data lifecycle layer: source dataset contracts, data ve
 - Added command tests covering normal sync, custom records, deprecated package records, local records in non-authoritative datasets, wrong active package counts, and missing applied data versions.
 - Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
 - Skipped tests or failures: none.
+
+## Admin Blade UI Notes
+
+- Added an optional admin UI that loads only when `iran-locations.admin.enabled` is true and uses the configured prefix, middleware, and optional gate.
+- Added admin routes for dashboard, data status, data sync, provinces, cities, city regions, city areas, neighborhoods, and aliases under `iran-locations.admin.*` route names.
+- Added plain Laravel controllers, FormRequests, and publishable Blade views under the `iran-locations` view namespace.
+- Index screens use GET filters, Laravel pagination with query strings, and the existing query builder/filter layer where available.
+- Create and edit screens use normal Blade forms and rely on model save-time normalization through the bound `LocationNormalizer` contract.
+- Admin-created location and alias records default to `custom` unless a source is explicitly provided.
+- Destroy actions do not hard delete package-owned records; package-owned lifecycle records are deprecated, while custom records are deleted when safe or deactivated if related records block deletion.
+- Added a data status page with package counts, raw database counts, active package-owned counts, latest applied version, dry-run sync, apply sync, and sync summary output.
+- Added admin authorization tests covering null gate, allowed gate, and denied gate behavior.
+- Added admin route, dashboard, data sync, CRUD, validation, relationship, and normalization coverage.
+- Public API endpoints, Blade select components for application forms, release docs, frontend dependencies, JavaScript frameworks, generated data changes, and public README changes remain intentionally out of scope.
+- Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
+- Suggested next implementation step: perform a final release audit and add end-user documentation without process wording.
+
+## Admin Option And Alias Search Notes
+
+- Relation option lists no longer have an arbitrary 500-record limit.
+- Relation option lists now use a shared admin helper that prefers active, non-deprecated records and ordered package builders.
+- Custom configured models without the package builder fall back to simple active/deprecated filters when those columns exist.
+- Alias index search now keeps raw alias matching and normalizes the query through the bound `LocationNormalizer` contract before checking `normalized_alias`.
+- Added regression tests for option lists beyond 500 records, inactive/deprecated option exclusion, and normalized alias searching.
+- Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
