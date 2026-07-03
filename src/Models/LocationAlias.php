@@ -15,7 +15,7 @@ class LocationAlias extends Model
     use HasConfigurableTable;
     use HasLocationSource;
 
-    protected string $tableConfigKey = 'location_aliases';
+    protected string $tableConfigKey = 'location_alias';
 
     protected $fillable = [
         'location_type',
@@ -24,6 +24,10 @@ class LocationAlias extends Model
         'normalized_alias',
         'reason',
         'source',
+    ];
+
+    protected $attributes = [
+        'source' => self::SOURCE_PACKAGE,
     ];
 
     protected static function booted(): void

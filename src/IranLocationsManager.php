@@ -7,6 +7,7 @@ namespace Zarbin\IranLocations;
 use InvalidArgumentException;
 use Zarbin\IranLocations\Contracts\LocationDataRepository;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
+use Zarbin\IranLocations\Support\LocationModelResolver;
 
 class IranLocationsManager
 {
@@ -50,24 +51,20 @@ class IranLocationsManager
 
     public function table(string $key): string
     {
-        $table = config("iran-locations.tables.{$key}");
-
-        if (! is_string($table) || $table === '') {
+        try {
+            return LocationModelResolver::table($key);
+        } catch (InvalidArgumentException) {
             throw new InvalidArgumentException("Unknown Iran Locations table key [{$key}].");
         }
-
-        return $table;
     }
 
     public function model(string $key): string
     {
-        $model = config("iran-locations.models.{$key}");
-
-        if (! is_string($model) || $model === '') {
+        try {
+            return LocationModelResolver::model($key);
+        } catch (InvalidArgumentException) {
             throw new InvalidArgumentException("Unknown Iran Locations model key [{$key}].");
         }
-
-        return $model;
     }
 
     public function dataVersion(): string

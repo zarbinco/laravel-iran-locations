@@ -58,3 +58,15 @@ Implement the first safe data lifecycle layer: source dataset contracts, data ve
 - phpMyAdmin-style dump parsing with comments, setup statements, directives, and multiple INSERT blocks is covered.
 - No data semantics were changed while hardening these tests.
 - Raw SQL source files remain excluded from package patch archives.
+
+## Model And Relationship Hardening Notes
+
+- Added resolver-backed configurable model and table lookup while preserving existing plural table keys for compatibility.
+- Added self-referencing replacement relations for main location models.
+- Added status mutator helpers for active, inactive, deprecated, and deprecation restore states.
+- Hardened route key fallback to supported keys only: `id`, `code`, and `slug`.
+- Updated save-time name normalization to preserve manually supplied non-empty slugs.
+- Added relationship tests covering main model relations, aliases, replacement relations, configured model classes, configured table names, pivot table config, display-name fallback, status/source helpers, route keys, and fake normalizer usage.
+- Query filters, database sync, admin UI, and API endpoints remain intentionally out of scope.
+- Verification run: `composer test`, `vendor/bin/pint --test`, and `composer analyse` passed.
+- Suggested next step: implement focused query scopes/builders for common read use cases before introducing any database sync write path.

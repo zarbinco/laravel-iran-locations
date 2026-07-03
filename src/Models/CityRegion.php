@@ -11,22 +11,27 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Zarbin\IranLocations\Models\Concerns\HasConfigurableTable;
 use Zarbin\IranLocations\Models\Concerns\HasDisplayName;
 use Zarbin\IranLocations\Models\Concerns\HasLocationAliases;
+use Zarbin\IranLocations\Models\Concerns\HasLocationReplacement;
 use Zarbin\IranLocations\Models\Concerns\HasLocationSource;
 use Zarbin\IranLocations\Models\Concerns\HasLocationStatus;
 use Zarbin\IranLocations\Models\Concerns\HasStableCode;
 use Zarbin\IranLocations\Models\Concerns\NormalizesLocationName;
+use Zarbin\IranLocations\Support\LocationModelResolver;
 
 class CityRegion extends Model
 {
     use HasConfigurableTable;
     use HasDisplayName;
     use HasLocationAliases;
+    use HasLocationReplacement;
     use HasLocationSource;
     use HasLocationStatus;
     use HasStableCode;
     use NormalizesLocationName;
 
-    protected string $tableConfigKey = 'city_regions';
+    protected string $tableConfigKey = 'city_region';
+
+    protected string $modelConfigKey = 'city_region';
 
     protected $fillable = [
         'city_id',
@@ -54,19 +59,19 @@ class CityRegion extends Model
 
     public function city(): BelongsTo
     {
-        return $this->belongsTo(config('iran-locations.models.city'), 'city_id');
+        return $this->belongsTo(LocationModelResolver::model('city'), 'city_id');
     }
 
     public function areas(): HasMany
     {
-        return $this->hasMany(config('iran-locations.models.city_area'), 'city_region_id');
+        return $this->hasMany(LocationModelResolver::model('city_area'), 'city_region_id');
     }
 
     public function neighborhoods(): BelongsToMany
     {
         return $this->belongsToMany(
-            config('iran-locations.models.neighborhood'),
-            config('iran-locations.tables.neighborhood_region'),
+            LocationModelResolver::model('neighborhood'),
+            LocationModelResolver::table('neighborhood_region'),
             'city_region_id',
             'neighborhood_id',
         )->withPivot(['is_primary', 'source', 'confidence'])->withTimestamps();

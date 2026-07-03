@@ -18,7 +18,7 @@ trait NormalizesLocationName
 
             $name = $model->getAttribute('name_fa');
 
-            if (! is_string($name) || $name === '') {
+            if (! is_string($name) || blank($name)) {
                 return;
             }
 
@@ -31,7 +31,7 @@ trait NormalizesLocationName
 
             if (
                 (bool) config('iran-locations.normalization.slugs', true)
-                && ($model->isDirty('name_fa') || blank($model->getAttribute('slug')))
+                && blank($model->getAttribute('slug'))
             ) {
                 $model->setAttribute('slug', $normalizer->slug($name));
             }

@@ -12,13 +12,20 @@ use Zarbin\IranLocations\Models\Province;
 
 return [
     'tables' => [
+        'province' => 'iran_provinces',
         'provinces' => 'iran_provinces',
+        'city' => 'iran_cities',
         'cities' => 'iran_cities',
+        'city_region' => 'iran_city_regions',
         'city_regions' => 'iran_city_regions',
+        'city_area' => 'iran_city_areas',
         'city_areas' => 'iran_city_areas',
+        'neighborhood' => 'iran_neighborhoods',
         'neighborhoods' => 'iran_neighborhoods',
         'neighborhood_region' => 'iran_neighborhood_region',
+        'location_alias' => 'iran_location_aliases',
         'location_aliases' => 'iran_location_aliases',
+        'data_version' => 'iran_location_data_versions',
         'data_versions' => 'iran_location_data_versions',
     ],
 

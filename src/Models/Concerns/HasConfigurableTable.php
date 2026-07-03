@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Models\Concerns;
 
+use Zarbin\IranLocations\Support\LocationModelResolver;
+
 trait HasConfigurableTable
 {
-    public function getTable()
+    public function getTable(): string
     {
         if (isset($this->table)) {
             return $this->table;
         }
 
-        return (string) config("iran-locations.tables.{$this->tableConfigKey}", parent::getTable());
+        return LocationModelResolver::table($this->tableConfigKey);
     }
 }

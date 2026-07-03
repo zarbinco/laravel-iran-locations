@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Zarbin\IranLocations\Support\LocationModelResolver;
 
 return new class extends Migration
 {
@@ -173,14 +174,14 @@ return new class extends Migration
     private function tables(): array
     {
         return [
-            'provinces' => (string) config('iran-locations.tables.provinces', 'iran_provinces'),
-            'cities' => (string) config('iran-locations.tables.cities', 'iran_cities'),
-            'city_regions' => (string) config('iran-locations.tables.city_regions', 'iran_city_regions'),
-            'city_areas' => (string) config('iran-locations.tables.city_areas', 'iran_city_areas'),
-            'neighborhoods' => (string) config('iran-locations.tables.neighborhoods', 'iran_neighborhoods'),
-            'neighborhood_region' => (string) config('iran-locations.tables.neighborhood_region', 'iran_neighborhood_region'),
-            'location_aliases' => (string) config('iran-locations.tables.location_aliases', 'iran_location_aliases'),
-            'data_versions' => (string) config('iran-locations.tables.data_versions', 'iran_location_data_versions'),
+            'provinces' => LocationModelResolver::table('province'),
+            'cities' => LocationModelResolver::table('city'),
+            'city_regions' => LocationModelResolver::table('city_region'),
+            'city_areas' => LocationModelResolver::table('city_area'),
+            'neighborhoods' => LocationModelResolver::table('neighborhood'),
+            'neighborhood_region' => LocationModelResolver::table('neighborhood_region'),
+            'location_aliases' => LocationModelResolver::table('location_alias'),
+            'data_versions' => LocationModelResolver::table('data_version'),
         ];
     }
 };

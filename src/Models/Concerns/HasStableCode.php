@@ -10,7 +10,11 @@ trait HasStableCode
 {
     public function getRouteKeyName(): string
     {
-        return (string) config('iran-locations.route_key', 'id');
+        $routeKey = config('iran-locations.route_key', 'id');
+
+        return is_string($routeKey) && in_array($routeKey, ['id', 'code', 'slug'], true)
+            ? $routeKey
+            : 'id';
     }
 
     public function scopeCode(Builder $query, string $code): Builder

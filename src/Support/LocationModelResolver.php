@@ -1,0 +1,126 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Zarbin\IranLocations\Support;
+
+use InvalidArgumentException;
+use Zarbin\IranLocations\Models\City;
+use Zarbin\IranLocations\Models\CityArea;
+use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\LocationAlias;
+use Zarbin\IranLocations\Models\LocationDataVersion;
+use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\Province;
+
+final class LocationModelResolver
+{
+    public static function model(string $key): string
+    {
+        $model = config("iran-locations.models.{$key}");
+
+        if (is_string($model) && $model !== '') {
+            return $model;
+        }
+
+        $default = self::defaultModels()[$key] ?? null;
+
+        if ($default === null) {
+            throw new InvalidArgumentException("Unknown Iran Locations model key [{$key}].");
+        }
+
+        return $default;
+    }
+
+    public static function table(string $key): string
+    {
+        $direct = self::configuredTable($key);
+        $legacyKey = self::legacyTableKey($key);
+        $legacy = $legacyKey === null ? null : self::configuredTable($legacyKey);
+        $defaults = self::defaultTables();
+
+        if ($direct !== null && $direct !== ($defaults[$key] ?? null)) {
+            return $direct;
+        }
+
+        if ($legacy !== null && $legacy !== ($defaults[$legacyKey] ?? null)) {
+            return $legacy;
+        }
+
+        if ($direct !== null) {
+            return $direct;
+        }
+
+        if ($legacy !== null) {
+            return $legacy;
+        }
+
+        $default = $defaults[$key] ?? null;
+
+        if ($default === null) {
+            throw new InvalidArgumentException("Unknown Iran Locations table key [{$key}].");
+        }
+
+        return $default;
+    }
+
+    private static function configuredTable(string $key): ?string
+    {
+        $table = config("iran-locations.tables.{$key}");
+
+        return is_string($table) && $table !== '' ? $table : null;
+    }
+
+    private static function legacyTableKey(string $key): ?string
+    {
+        return [
+            'province' => 'provinces',
+            'city' => 'cities',
+            'city_region' => 'city_regions',
+            'city_area' => 'city_areas',
+            'neighborhood' => 'neighborhoods',
+            'location_alias' => 'location_aliases',
+            'data_version' => 'data_versions',
+        ][$key] ?? null;
+    }
+
+    /**
+     * @return array<string, class-string>
+     */
+    private static function defaultModels(): array
+    {
+        return [
+            'province' => Province::class,
+            'city' => City::class,
+            'city_region' => CityRegion::class,
+            'city_area' => CityArea::class,
+            'neighborhood' => Neighborhood::class,
+            'location_alias' => LocationAlias::class,
+            'data_version' => LocationDataVersion::class,
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private static function defaultTables(): array
+    {
+        return [
+            'province' => 'iran_provinces',
+            'provinces' => 'iran_provinces',
+            'city' => 'iran_cities',
+            'cities' => 'iran_cities',
+            'city_region' => 'iran_city_regions',
+            'city_regions' => 'iran_city_regions',
+            'city_area' => 'iran_city_areas',
+            'city_areas' => 'iran_city_areas',
+            'neighborhood' => 'iran_neighborhoods',
+            'neighborhoods' => 'iran_neighborhoods',
+            'neighborhood_region' => 'iran_neighborhood_region',
+            'location_alias' => 'iran_location_aliases',
+            'location_aliases' => 'iran_location_aliases',
+            'data_version' => 'iran_location_data_versions',
+            'data_versions' => 'iran_location_data_versions',
+        ];
+    }
+}
