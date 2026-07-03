@@ -1,0 +1,67 @@
+{
+    "name": "zarbinco/laravel-iran-locations",
+    "description": "Laravel package for Iran location data management.",
+    "type": "library",
+    "keywords": [
+        "iran",
+        "iranian",
+        "laravel",
+        "locations",
+        "municipal",
+        "neighborhoods",
+        "persian",
+        "provinces",
+        "cities"
+    ],
+    "homepage": "https://github.com/zarbinco/laravel-iran-locations",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "illuminate/contracts": "^11.0|^12.0|^13.0",
+        "illuminate/database": "^11.0|^12.0|^13.0",
+        "illuminate/routing": "^11.0|^12.0|^13.0",
+        "illuminate/support": "^11.0|^12.0|^13.0",
+        "zarbinco/laravel-persian-core": "^1.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^2.0|^3.0",
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "phpstan/phpstan": "^1.10|^2.0",
+        "phpunit/phpunit": "^10.5|^11.5|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zarbin\\IranLocations\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Zarbin\\IranLocations\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Zarbin\\IranLocations\\IranLocationsServiceProvider"
+            ],
+            "aliases": {
+                "IranLocations": "Zarbin\\IranLocations\\Facades\\IranLocations"
+            }
+        }
+    },
+    "scripts": {
+        "analyse": "phpstan analyse",
+        "format": "pint",
+        "test": "phpunit"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

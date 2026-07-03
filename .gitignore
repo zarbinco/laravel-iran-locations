@@ -1,0 +1,8 @@
+/vendor/
+/composer.lock
+/.phpunit.cache/
+/.phpstan.cache/
+/storage/logs/
+/runtime/cache/
+/.env
+*.zip
