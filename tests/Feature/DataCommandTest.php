@@ -9,7 +9,7 @@ use Zarbin\IranLocations\Tests\TestCase;
 
 class DataCommandTest extends TestCase
 {
-    public function test_status_command_shows_package_data_version_and_counts(): void
+    public function test_status_command_shows_package_data_version_counts_and_missing_database_tables(): void
     {
         $counts = json_decode((string) file_get_contents(dirname(__DIR__, 2).'/data/manifest.json'), true, 512, JSON_THROW_ON_ERROR)['counts'];
 
@@ -24,7 +24,11 @@ class DataCommandTest extends TestCase
             self::assertStringContainsString("{$dataset}: {$count}", $output);
         }
 
-        self::assertStringContainsString('Database sync status: not implemented.', $output);
+        self::assertStringContainsString('Database status', $output);
+        self::assertStringContainsString('Database tables: missing', $output);
+        self::assertStringContainsString('database provinces: missing', $output);
+        self::assertStringContainsString('Latest applied database data version: none', $output);
+        self::assertStringContainsString('Database appears synced: no', $output);
     }
 
     public function test_doctor_command_reports_package_data_validation_result(): void
@@ -34,6 +38,8 @@ class DataCommandTest extends TestCase
 
         self::assertSame(0, $exitCode);
         self::assertStringContainsString('Package data validation: passed', $output);
+        self::assertStringContainsString('Configured models: passed', $output);
+        self::assertStringContainsString('Database tables: missing', $output);
         self::assertStringContainsString('No database records were inspected or modified.', $output);
     }
 }

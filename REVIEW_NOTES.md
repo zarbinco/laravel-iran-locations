@@ -88,3 +88,35 @@ Implement the first safe data lifecycle layer: source dataset contracts, data ve
 - Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
 - Skipped tests or failures: none.
 - Suggested next implementation step: add a non-destructive sync preview that reports differences without mutating user data.
+
+## Safe Data Sync Notes
+
+- Added a structured sync engine with options, per-record changes, per-dataset summaries, aggregate results, and clear sync exceptions.
+- Sync order is dependency-safe: provinces, cities, city regions, city areas, neighborhoods, then aliases.
+- Dry-run mode validates package data, resolves dependencies by stable codes, builds create/update/deprecation previews, and does not write location or data-version records.
+- Real sync validates package data, upserts package-owned records by stable `code`, records a data-version entry on successful runs, and never truncates tables.
+- Package records missing from non-empty synced package datasets are deprecated by default. Empty package datasets are not deprecated during default full sync; explicit dataset sync can deprecate them when configured.
+- Custom records are preserved, including same-code conflicts and unrelated custom records. Records with unknown source are skipped unless force mode is used.
+- Package updates preserve existing non-empty `display_name_fa` overrides, restore records that reappear in package data, and keep normalization delegated to the existing `LocationNormalizer` contract.
+- Hard delete behavior is intentionally rejected with a clear exception; only `deprecate` and `ignore` are supported safely.
+- Added a database inspector for table presence, configured model checks, safe dataset counts, and latest applied data-version reporting.
+- Updated `iran-locations:sync` with dry-run, dataset selection, force, no-deprecate, and summary output.
+- Updated `iran-locations:status` to show package metadata, safe database counts, latest applied data version, and whether the database appears synced.
+- Updated `iran-locations:doctor` to report package data validation, configured model status, table presence, and latest applied version without modifying data.
+- Updated `iran-locations:install` so it remains non-mutating by default and runs sync only when `--sync` is provided.
+- Added service and command tests for dry-run, full sync counts, idempotency, relationships, custom preservation, deprecation safety, empty dataset behavior, dependency failures, hard-delete rejection, status, doctor, and install behavior.
+- No generated JSON data, raw SQL sources, admin UI, API endpoints, Blade components, release docs, Tehran municipal regions, official divisions, or geo/boundary data were changed.
+- Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
+- Suggested next implementation step: add release-facing documentation and a small application-level sync preview UI after the package API stabilizes.
+
+## Status Count Detection Notes
+
+- Status sync detection now uses active package-owned counts instead of raw database table counts.
+- Custom records no longer make status look unsynced when package-owned active counts still match package data.
+- Deprecated package records no longer make status look unsynced when active package-owned counts still match package data.
+- Non-authoritative empty datasets are ignored for synced detection when the manifest marks `contains.*` as false.
+- Status output still shows raw database counts and now also shows package active counts for debugging.
+- Added command tests covering normal sync, custom records, deprecated package records, local records in non-authoritative datasets, wrong active package counts, and missing applied data versions.
+- Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.

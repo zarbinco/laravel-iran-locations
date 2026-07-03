@@ -15,7 +15,9 @@ use Zarbin\IranLocations\Contracts\LocationDataRepository;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Data\JsonLocationDataRepository;
 use Zarbin\IranLocations\Data\LocationDataValidator;
+use Zarbin\IranLocations\Support\LocationDatabaseInspector;
 use Zarbin\IranLocations\Support\PersianCoreLocationNormalizer;
+use Zarbin\IranLocations\Sync\LocationSyncService;
 
 class IranLocationsServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,8 @@ class IranLocationsServiceProvider extends ServiceProvider
         $this->app->singleton(JsonLocationDataRepository::class);
         $this->app->singleton(LocationDataRepository::class, JsonLocationDataRepository::class);
         $this->app->singleton(LocationDataValidator::class);
+        $this->app->singleton(LocationDatabaseInspector::class);
+        $this->app->singleton(LocationSyncService::class);
 
         $this->app->singleton(IranLocationsManager::class, function ($app): IranLocationsManager {
             return new IranLocationsManager(
