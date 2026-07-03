@@ -16,11 +16,16 @@ class StatusCommand extends Command
     public function handle(IranLocationsManager $locations): int
     {
         $this->info('Laravel Iran Locations status');
-        $this->line('Configured data version: '.$locations->dataVersion());
+        $this->line('Package data status');
+        $this->line('Data version: '.$locations->dataVersion());
+
+        foreach (['provinces', 'cities', 'city_regions', 'city_areas', 'neighborhoods', 'aliases'] as $dataset) {
+            $this->line("{$dataset}: ".$locations->dataCount($dataset));
+        }
+
+        $this->line('Database sync status: not implemented.');
         $this->line('Admin routes enabled: '.($this->enabled('iran-locations.admin.enabled') ? 'yes' : 'no'));
         $this->line('API routes enabled: '.($this->enabled('iran-locations.api.enabled') ? 'yes' : 'no'));
-        $this->line('Province table: '.$locations->table('provinces'));
-        $this->line('City table: '.$locations->table('cities'));
 
         return self::SUCCESS;
     }

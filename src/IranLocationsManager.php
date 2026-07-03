@@ -5,17 +5,37 @@ declare(strict_types=1);
 namespace Zarbin\IranLocations;
 
 use InvalidArgumentException;
+use Zarbin\IranLocations\Contracts\LocationDataRepository;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
 
 class IranLocationsManager
 {
     public function __construct(
         private readonly LocationNormalizer $normalizer,
+        private readonly LocationDataRepository $dataRepository,
     ) {}
 
     public function normalizer(): LocationNormalizer
     {
         return $this->normalizer;
+    }
+
+    public function dataRepository(): LocationDataRepository
+    {
+        return $this->dataRepository;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function dataManifest(): array
+    {
+        return $this->dataRepository->manifest();
+    }
+
+    public function dataCount(string $dataset): int
+    {
+        return $this->dataRepository->count($dataset);
     }
 
     public function normalizeForSearch(string $value): string
@@ -52,6 +72,6 @@ class IranLocationsManager
 
     public function dataVersion(): string
     {
-        return (string) config('iran-locations.data.current_version', '0.1.0-dev');
+        return $this->dataRepository->dataVersion();
     }
 }

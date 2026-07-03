@@ -1,0 +1,31 @@
+{
+    "data_version": "0.1.0-dev",
+    "country_code": "IR",
+    "source": {
+        "name": "project-sql-import",
+        "version": "initial",
+        "files": [
+            "provinces.sql",
+            "cities.sql",
+            "districts.sql"
+        ]
+    },
+    "contains": {
+        "provinces": true,
+        "cities": true,
+        "city_regions": false,
+        "city_areas": false,
+        "neighborhoods": true,
+        "aliases": false
+    },
+    "generated_at": null,
+    "counts": {
+        "provinces": 31,
+        "cities": 1226,
+        "city_regions": 0,
+        "city_areas": 0,
+        "neighborhoods": 505,
+        "aliases": 0
+    },
+    "checksum": "52980e382514f83979503e04ee81839fb4d1cc45f7cb6392011e6a0eff8f0097"
+}

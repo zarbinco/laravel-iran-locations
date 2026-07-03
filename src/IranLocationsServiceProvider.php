@@ -11,7 +11,10 @@ use Zarbin\IranLocations\Commands\InstallCommand;
 use Zarbin\IranLocations\Commands\NormalizeCommand;
 use Zarbin\IranLocations\Commands\StatusCommand;
 use Zarbin\IranLocations\Commands\SyncCommand;
+use Zarbin\IranLocations\Contracts\LocationDataRepository;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
+use Zarbin\IranLocations\Data\JsonLocationDataRepository;
+use Zarbin\IranLocations\Data\LocationDataValidator;
 use Zarbin\IranLocations\Support\PersianCoreLocationNormalizer;
 
 class IranLocationsServiceProvider extends ServiceProvider
@@ -21,9 +24,15 @@ class IranLocationsServiceProvider extends ServiceProvider
         $this->mergeConfigFrom($this->packagePath('config/iran-locations.php'), 'iran-locations');
 
         $this->app->singleton(LocationNormalizer::class, PersianCoreLocationNormalizer::class);
+        $this->app->singleton(JsonLocationDataRepository::class);
+        $this->app->singleton(LocationDataRepository::class, JsonLocationDataRepository::class);
+        $this->app->singleton(LocationDataValidator::class);
 
         $this->app->singleton(IranLocationsManager::class, function ($app): IranLocationsManager {
-            return new IranLocationsManager($app->make(LocationNormalizer::class));
+            return new IranLocationsManager(
+                $app->make(LocationNormalizer::class),
+                $app->make(LocationDataRepository::class),
+            );
         });
 
         $this->app->alias(IranLocationsManager::class, 'iran-locations');
