@@ -74,6 +74,7 @@ class PublicDocumentationTest extends TestCase
             'docs/api.md',
             'docs/components.md',
             'docs/extending.md',
+            'docs/consumer-smoke-test.md',
             'docs/release-checklist.md',
         ];
     }

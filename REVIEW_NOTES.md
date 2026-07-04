@@ -210,3 +210,22 @@ Implement the first safe data lifecycle layer: source dataset contracts, data ve
 - Verification run: `composer test`, `composer run-script format:test`, `composer analyse`, and `composer validate --strict` passed.
 - Skipped tests or failures: none.
 - Suggested next step: perform a small release smoke test against an application after the package archive is reviewed.
+
+## Consumer Smoke Test Notes
+
+- Smoke app framework: Laravel Framework 12.62.0.
+- PHP version: 8.3.30.
+- Database driver: SQLite.
+- Package install method: consumer-app-only Composer path repository for `zarbinco/laravel-iran-locations`.
+- Persian Core install method: consumer-app-only Composer path repository with a stable `1.0.0` version override.
+- Smoke commands run: `vendor:publish` for config, migrations, and views; `migrate`; `iran-locations:status`; `iran-locations:doctor`; `iran-locations:sync --dry-run`; `iran-locations:sync`; repeated `status` and `doctor`.
+- Synced database counts matched package data: 31 provinces, 484 counties, 1087 official districts, 73 rural districts, 1456 cities, 22 city regions, 0 city areas, 568 neighborhoods, 568 neighborhood-region mappings, and 0 aliases.
+- Eloquent smoke checks covered Province, County, OfficialDistrict, RuralDistrict, City, CityRegion, and Neighborhood builders and relationships.
+- Admin URLs checked: dashboard, data, provinces, counties, official districts, rural districts, cities, city regions, city areas, neighborhoods, aliases, and representative create/edit screens.
+- API URLs checked: status, search, location list endpoints, official division endpoints, option endpoints, pagination, validation, and JSON 404 responses.
+- Blade components checked: province, county, official district, rural district, city, city region, city area, neighborhood, parent filters, common props, option volume, and inactive/deprecated exclusion.
+- Package test suite commands run: `composer validate --strict`, `composer test`, `composer run-script format:test`, `composer analyse`, and `composer run-script test:coverage`.
+- Coverage script result: skipped by the local PHPUnit runner because no code coverage driver is installed; no package tests were executed for that script.
+- Fixes made: added `docs/consumer-smoke-test.md`, linked it from public docs, and added it to public documentation guardrail coverage.
+- Release blockers: none found in the consumer smoke test.
+- Release readiness: ready pending Persian Core stable tag availability and CI.

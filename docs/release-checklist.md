@@ -15,5 +15,6 @@
 - Confirm migration publishing works.
 - Confirm view publishing works.
 - Confirm admin and API routes are disabled by default.
+- Run the [consumer smoke test](consumer-smoke-test.md) in a fresh Laravel app.
 - Run `php artisan iran-locations:sync --dry-run` in a test app.
 - Confirm safe sync behavior before applying data.

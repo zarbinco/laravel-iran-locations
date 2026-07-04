@@ -157,6 +157,7 @@ composer validate --strict
 - [API](docs/api.md)
 - [Blade components](docs/components.md)
 - [Extending](docs/extending.md)
+- [Consumer smoke test](docs/consumer-smoke-test.md)
 - [Release checklist](docs/release-checklist.md)
 - [Changelog](CHANGELOG.md)
 
