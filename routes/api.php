@@ -6,10 +6,13 @@ use Illuminate\Support\Facades\Route;
 use Zarbin\IranLocations\Http\Controllers\Api\CityAreaController;
 use Zarbin\IranLocations\Http\Controllers\Api\CityController;
 use Zarbin\IranLocations\Http\Controllers\Api\CityRegionController;
+use Zarbin\IranLocations\Http\Controllers\Api\CountyController;
 use Zarbin\IranLocations\Http\Controllers\Api\LocationAliasController;
 use Zarbin\IranLocations\Http\Controllers\Api\NeighborhoodController;
+use Zarbin\IranLocations\Http\Controllers\Api\OfficialDistrictController;
 use Zarbin\IranLocations\Http\Controllers\Api\OptionController;
 use Zarbin\IranLocations\Http\Controllers\Api\ProvinceController;
+use Zarbin\IranLocations\Http\Controllers\Api\RuralDistrictController;
 use Zarbin\IranLocations\Http\Controllers\Api\SearchController;
 use Zarbin\IranLocations\Http\Controllers\Api\StatusController;
 
@@ -17,7 +20,19 @@ Route::get('/status', StatusController::class)->name('iran-locations.api.status'
 Route::get('/search', SearchController::class)->name('iran-locations.api.search');
 
 Route::get('/provinces', [ProvinceController::class, 'index'])->name('iran-locations.api.provinces.index');
+Route::get('/provinces/{province}/counties', [ProvinceController::class, 'counties'])->name('iran-locations.api.provinces.counties');
 Route::get('/provinces/{province}/cities', [ProvinceController::class, 'cities'])->name('iran-locations.api.provinces.cities');
+
+Route::get('/counties', [CountyController::class, 'index'])->name('iran-locations.api.counties.index');
+Route::get('/counties/{county}/official-districts', [CountyController::class, 'officialDistricts'])->name('iran-locations.api.counties.official-districts');
+Route::get('/counties/{county}/cities', [CountyController::class, 'cities'])->name('iran-locations.api.counties.cities');
+Route::get('/counties/{county}/rural-districts', [CountyController::class, 'ruralDistricts'])->name('iran-locations.api.counties.rural-districts');
+
+Route::get('/official-districts', [OfficialDistrictController::class, 'index'])->name('iran-locations.api.official-districts.index');
+Route::get('/official-districts/{officialDistrict}/cities', [OfficialDistrictController::class, 'cities'])->name('iran-locations.api.official-districts.cities');
+Route::get('/official-districts/{officialDistrict}/rural-districts', [OfficialDistrictController::class, 'ruralDistricts'])->name('iran-locations.api.official-districts.rural-districts');
+
+Route::get('/rural-districts', [RuralDistrictController::class, 'index'])->name('iran-locations.api.rural-districts.index');
 
 Route::get('/cities', [CityController::class, 'index'])->name('iran-locations.api.cities.index');
 Route::get('/cities/{city}/regions', [CityController::class, 'regions'])->name('iran-locations.api.cities.regions');
@@ -35,6 +50,9 @@ Route::get('/neighborhoods', [NeighborhoodController::class, 'index'])->name('ir
 Route::get('/aliases', [LocationAliasController::class, 'index'])->name('iran-locations.api.aliases.index');
 
 Route::get('/options/provinces', [OptionController::class, 'provinces'])->name('iran-locations.api.options.provinces');
+Route::get('/options/counties', [OptionController::class, 'counties'])->name('iran-locations.api.options.counties');
+Route::get('/options/official-districts', [OptionController::class, 'officialDistricts'])->name('iran-locations.api.options.official-districts');
+Route::get('/options/rural-districts', [OptionController::class, 'ruralDistricts'])->name('iran-locations.api.options.rural-districts');
 Route::get('/options/cities', [OptionController::class, 'cities'])->name('iran-locations.api.options.cities');
 Route::get('/options/city-regions', [OptionController::class, 'cityRegions'])->name('iran-locations.api.options.city-regions');
 Route::get('/options/city-areas', [OptionController::class, 'cityAreas'])->name('iran-locations.api.options.city-areas');

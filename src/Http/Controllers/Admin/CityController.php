@@ -25,6 +25,8 @@ class CityController extends AdminController
         return $this->adminView('cities.index', [
             'cities' => $query->paginate($this->perPage($request->integer('per_page')))->withQueryString(),
             'provinces' => $this->optionRecords('province'),
+            'counties' => $this->optionRecords('county'),
+            'officialDistricts' => $this->optionRecords('official_district'),
         ]);
     }
 
@@ -35,6 +37,8 @@ class CityController extends AdminController
         return $this->adminView('cities.create', [
             'city' => $this->newModel('city'),
             'provinces' => $this->optionRecords('province'),
+            'counties' => $this->optionRecords('county'),
+            'officialDistricts' => $this->optionRecords('official_district'),
         ]);
     }
 
@@ -58,6 +62,8 @@ class CityController extends AdminController
         return $this->adminView('cities.edit', [
             'city' => $this->findModel('city', $city),
             'provinces' => $this->optionRecords('province'),
+            'counties' => $this->optionRecords('county'),
+            'officialDistricts' => $this->optionRecords('official_district'),
         ]);
     }
 

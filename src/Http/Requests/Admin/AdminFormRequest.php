@@ -36,13 +36,13 @@ abstract class AdminFormRequest extends FormRequest
     protected function commonIndexRules(): array
     {
         return [
-            'q' => ['nullable', 'string', 'max:255'],
+            'q' => ['nullable', 'string', 'max:100'],
             'status' => ['nullable', 'in:active,inactive,deprecated,all'],
             'source' => ['nullable', 'in:package,custom,all'],
             'code' => ['nullable', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255'],
             'sort' => ['nullable', 'string', 'max:50'],
-            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+            'per_page' => ['nullable', 'integer', 'min:5', 'max:100'],
         ];
     }
 

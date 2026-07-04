@@ -23,7 +23,7 @@ class CityController extends Controller
 
     public function index(CityApiRequest $request): AnonymousResourceCollection
     {
-        $query = $this->query('city')->with('province');
+        $query = $this->query('city')->with(['province', 'county', 'officialDistrict']);
         $this->applyLocationFilters($query, $request->validated());
 
         return CityResource::collection($this->paginate($query, $request));

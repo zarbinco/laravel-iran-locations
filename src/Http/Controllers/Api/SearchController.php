@@ -12,8 +12,11 @@ use Zarbin\IranLocations\Http\Requests\Api\SearchApiRequest;
 use Zarbin\IranLocations\Http\Resources\CityAreaResource;
 use Zarbin\IranLocations\Http\Resources\CityRegionResource;
 use Zarbin\IranLocations\Http\Resources\CityResource;
+use Zarbin\IranLocations\Http\Resources\CountyResource;
 use Zarbin\IranLocations\Http\Resources\NeighborhoodResource;
+use Zarbin\IranLocations\Http\Resources\OfficialDistrictResource;
 use Zarbin\IranLocations\Http\Resources\ProvinceResource;
+use Zarbin\IranLocations\Http\Resources\RuralDistrictResource;
 
 class SearchController extends Controller
 {
@@ -28,7 +31,10 @@ class SearchController extends Controller
             'query' => $query,
             'results' => [
                 'provinces' => $this->resourceArray(ProvinceResource::class, $this->search('province', $query, $limit), $request),
-                'cities' => $this->resourceArray(CityResource::class, $this->search('city', $query, $limit, ['province']), $request),
+                'counties' => $this->resourceArray(CountyResource::class, $this->search('county', $query, $limit, ['province']), $request),
+                'official_districts' => $this->resourceArray(OfficialDistrictResource::class, $this->search('official_district', $query, $limit, ['province', 'county']), $request),
+                'rural_districts' => $this->resourceArray(RuralDistrictResource::class, $this->search('rural_district', $query, $limit, ['province', 'county', 'officialDistrict']), $request),
+                'cities' => $this->resourceArray(CityResource::class, $this->search('city', $query, $limit, ['province', 'county', 'officialDistrict']), $request),
                 'city_regions' => $this->resourceArray(CityRegionResource::class, $this->search('city_region', $query, $limit, ['city']), $request),
                 'city_areas' => $this->resourceArray(CityAreaResource::class, $this->search('city_area', $query, $limit, ['region.city']), $request),
                 'neighborhoods' => $this->resourceArray(NeighborhoodResource::class, $this->search('neighborhood', $query, $limit, ['city', 'defaultRegion', 'defaultArea']), $request),

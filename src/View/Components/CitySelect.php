@@ -18,6 +18,10 @@ class CitySelect extends LocationSelect
         bool $required = false,
         public int|string|null $provinceId = null,
         public ?string $provinceCode = null,
+        public int|string|null $countyId = null,
+        public ?string $countyCode = null,
+        public int|string|null $officialDistrictId = null,
+        public ?string $officialDistrictCode = null,
     ) {
         parent::__construct($name, $selected, $placeholder, $disabled, $required);
     }
@@ -30,6 +34,10 @@ class CitySelect extends LocationSelect
         return $this->optionRecords('city', [
             'province_id' => $this->provinceId,
             'province_code' => $this->provinceCode,
+            'county_id' => $this->countyId,
+            'county_code' => $this->countyCode,
+            'official_district_id' => $this->officialDistrictId,
+            'official_district_code' => $this->officialDistrictCode,
         ]);
     }
 

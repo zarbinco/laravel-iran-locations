@@ -11,6 +11,10 @@ class CityApiRequest extends ApiRequest
         return array_merge($this->commonRules(), [
             'province_id' => ['nullable', 'integer'],
             'province_code' => ['nullable', 'string', 'max:255'],
+            'county_id' => ['nullable', 'integer'],
+            'county_code' => ['nullable', 'string', 'max:255'],
+            'official_district_id' => ['nullable', 'integer'],
+            'official_district_code' => ['nullable', 'string', 'max:255'],
             'is_capital' => ['nullable', 'boolean'],
             'has_regions' => ['nullable', 'boolean'],
             'has_neighborhoods' => ['nullable', 'boolean'],

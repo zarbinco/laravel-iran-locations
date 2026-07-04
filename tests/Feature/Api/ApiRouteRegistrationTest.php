@@ -25,7 +25,11 @@ class EnabledApiRouteRegistrationTest extends ApiTestCase
     {
         self::assertTrue(Route::has('iran-locations.api.status'));
         self::assertTrue(Route::has('iran-locations.api.provinces.index'));
+        self::assertTrue(Route::has('iran-locations.api.counties.index'));
+        self::assertTrue(Route::has('iran-locations.api.official-districts.index'));
+        self::assertTrue(Route::has('iran-locations.api.rural-districts.index'));
         self::assertTrue(Route::has('iran-locations.api.options.cities'));
+        self::assertTrue(Route::has('iran-locations.api.options.counties'));
     }
 
     public function test_default_api_prefix_works(): void

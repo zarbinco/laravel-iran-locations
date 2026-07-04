@@ -19,7 +19,16 @@ Route names use `iran-locations.api.*`.
 - `GET /status`
 - `GET /search?q=...`
 - `GET /provinces`
+- `GET /provinces/{province}/counties`
 - `GET /provinces/{province}/cities`
+- `GET /counties`
+- `GET /counties/{county}/official-districts`
+- `GET /counties/{county}/cities`
+- `GET /counties/{county}/rural-districts`
+- `GET /official-districts`
+- `GET /official-districts/{officialDistrict}/cities`
+- `GET /official-districts/{officialDistrict}/rural-districts`
+- `GET /rural-districts`
 - `GET /cities`
 - `GET /cities/{city}/regions`
 - `GET /cities/{city}/areas`
@@ -32,6 +41,9 @@ Route names use `iran-locations.api.*`.
 - `GET /neighborhoods`
 - `GET /aliases`
 - `GET /options/provinces`
+- `GET /options/counties`
+- `GET /options/official-districts`
+- `GET /options/rural-districts`
 - `GET /options/cities`
 - `GET /options/city-regions`
 - `GET /options/city-areas`
@@ -41,7 +53,7 @@ Route parameters can resolve records by id, code, or slug where practical.
 
 ## Filters
 
-List endpoints support builder-backed filters such as `q`, `status`, `source`, `code`, `slug`, `sort`, `province_id`, `province_code`, `city_id`, `city_code`, `region_id`, `region_code`, `area_id`, `area_code`, and `type` where relevant.
+List endpoints support builder-backed filters such as `q`, `status`, `source`, `code`, `slug`, `sort`, `province_id`, `province_code`, `county_id`, `county_code`, `official_district_id`, `official_district_code`, `city_id`, `city_code`, `region_id`, `region_code`, `area_id`, `area_code`, and `type` where relevant.
 
 Pagination uses `per_page` and `page` with the configured maximum.
 
@@ -58,6 +70,9 @@ Search returns grouped results:
   "query": "تهران",
   "results": {
     "provinces": [],
+    "counties": [],
+    "official_districts": [],
+    "rural_districts": [],
     "cities": [],
     "city_regions": [],
     "city_areas": [],

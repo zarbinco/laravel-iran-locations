@@ -22,6 +22,9 @@ class EnabledAdminRouteRegistrationTest extends AdminTestCase
     {
         self::assertTrue(Route::has('iran-locations.admin.dashboard'));
         self::assertTrue(Route::has('iran-locations.admin.provinces.index'));
+        self::assertTrue(Route::has('iran-locations.admin.counties.index'));
+        self::assertTrue(Route::has('iran-locations.admin.official-districts.index'));
+        self::assertTrue(Route::has('iran-locations.admin.rural-districts.index'));
     }
 
     public function test_default_admin_prefix_works(): void

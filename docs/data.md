@@ -15,7 +15,7 @@ Laravel Iran Locations ships versioned JSON data under the package `data/` direc
 - Neighborhood-region mappings: 568
 - Aliases: 0
 
-The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. Municipal data remains separate: city regions, city areas, and neighborhoods. City areas are supported in the schema, models, builders, admin UI, API, and components, but the packaged dataset does not populate them by default.
+The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. Municipal data remains separate: city regions, city areas, and neighborhoods. Official divisions and municipal locations are available through the schema, models, builders, sync, admin UI, API, and Blade components. City areas are supported by those surfaces, but the packaged dataset does not populate them by default.
 
 ## Scope And Limitations
 

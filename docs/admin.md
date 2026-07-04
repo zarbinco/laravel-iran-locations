@@ -15,6 +15,12 @@ The optional admin UI is disabled by default.
 
 Routes are named under `iran-locations.admin.*`.
 
+## Managed Records
+
+The admin UI includes screens for provinces, counties, official districts, rural districts, cities, city regions, city areas, neighborhoods, and aliases.
+
+County, official district, and rural district screens use the official administrative hierarchy. City region, city area, and neighborhood screens remain municipal hierarchy screens.
+
 ## Authorization
 
 Set `iran-locations.admin.gate` to a Laravel gate name if you want package-level authorization. A null gate allows access when the configured middleware allows the request.

@@ -198,3 +198,15 @@ Implement the first safe data lifecycle layer: source dataset contracts, data ve
 - Verification run: `composer test`, `composer run-script format:test`, `composer analyse`, and `composer validate --strict` passed.
 - Skipped tests or failures: none.
 - Suggested next step: add focused UI/API surfaces for the official division hierarchy after the backend contracts settle.
+
+## Official Division Surface Notes
+
+- Added admin CRUD screens, routes, controllers, and FormRequests for counties, official districts, and rural districts.
+- Added read-only API resources, list endpoints, nested endpoints, option endpoints, and grouped search output for the official division hierarchy.
+- Added Blade select components for counties, official districts, and rural districts, and extended city selects with county and official district filters.
+- Updated city admin forms, API filters, resources, and options to expose optional county and official district relationships.
+- Package-owned admin destroy remains non-destructive; custom records are deleted when safe or deactivated when related records block deletion.
+- No generated JSON data, data semantics, raw Excel files, raw SQL files, sync engine behavior, admin frontend dependencies, or JavaScript framework dependencies were changed.
+- Verification run: `composer test`, `composer run-script format:test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
+- Suggested next step: perform a small release smoke test against an application after the package archive is reviewed.

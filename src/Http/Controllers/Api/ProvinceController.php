@@ -9,8 +9,10 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Zarbin\IranLocations\Http\Controllers\Api\Concerns\ResolvesLocationApiModels;
 use Zarbin\IranLocations\Http\Requests\Api\CityApiRequest;
+use Zarbin\IranLocations\Http\Requests\Api\CountyApiRequest;
 use Zarbin\IranLocations\Http\Requests\Api\ProvinceApiRequest;
 use Zarbin\IranLocations\Http\Resources\CityResource;
+use Zarbin\IranLocations\Http\Resources\CountyResource;
 use Zarbin\IranLocations\Http\Resources\ProvinceResource;
 
 class ProvinceController extends Controller
@@ -33,11 +35,27 @@ class ProvinceController extends Controller
             return $this->missingLocationResponse('Province');
         }
 
-        $query = $this->query('city')->with('province');
+        $query = $this->query('city')->with(['province', 'county', 'officialDistrict']);
         $this->applyLocationFilters($query, array_merge($request->validated(), [
             'province_id' => $model->getKey(),
         ]));
 
         return CityResource::collection($this->paginate($query, $request));
+    }
+
+    public function counties(CountyApiRequest $request, int|string $province): AnonymousResourceCollection|JsonResponse
+    {
+        $model = $this->resolveLocation('province', $province);
+
+        if ($model === null) {
+            return $this->missingLocationResponse('Province');
+        }
+
+        $query = $this->query('county')->with('province');
+        $this->applyLocationFilters($query, array_merge($request->validated(), [
+            'province_id' => $model->getKey(),
+        ]));
+
+        return CountyResource::collection($this->paginate($query, $request));
     }
 }

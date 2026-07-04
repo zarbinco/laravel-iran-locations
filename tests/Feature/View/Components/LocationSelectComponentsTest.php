@@ -94,6 +94,92 @@ class LocationSelectComponentsTest extends TestCase
         self::assertStringNotContainsString('Neighborhood component-filters-other', $neighborhoods);
     }
 
+    public function test_official_division_selects_apply_parent_filters(): void
+    {
+        $records = $this->createLocationGraph('component-official');
+        $other = $this->createLocationGraph('component-official-other');
+
+        $counties = Blade::render(
+            '<x-iran-locations::county-select name="county_id" :province-id="$provinceId" placeholder="Choose county" required class="county-select" />',
+            ['provinceId' => $records['province']->getKey()],
+        );
+
+        self::assertStringContainsString('Choose county', $counties);
+        self::assertStringContainsString('required', $counties);
+        self::assertStringContainsString('county-select', $counties);
+        self::assertStringContainsString('County component-official', $counties);
+        self::assertStringNotContainsString('County component-official-other', $counties);
+
+        $countiesByCode = Blade::render(
+            '<x-iran-locations::county-select name="county_id" :province-code="$provinceCode" />',
+            ['provinceCode' => $other['province']->getAttribute('code')],
+        );
+
+        self::assertStringContainsString('County component-official-other', $countiesByCode);
+        self::assertStringNotContainsString('data-code="'.$records['county']->getAttribute('code').'"', $countiesByCode);
+
+        $officialDistricts = Blade::render(
+            '<x-iran-locations::official-district-select name="official_district_id" :county-id="$countyId" :selected="$selected" />',
+            ['countyId' => $records['county']->getKey(), 'selected' => $records['officialDistrict']->getKey()],
+        );
+
+        self::assertStringContainsString('Official District component-official', $officialDistricts);
+        self::assertStringNotContainsString('Official District component-official-other', $officialDistricts);
+        self::assertMatchesRegularExpression('/value="'.$records['officialDistrict']->getKey().'"[^>]*selected/', $officialDistricts);
+
+        $officialDistrictsByCode = Blade::render(
+            '<x-iran-locations::official-district-select name="official_district_id" :county-code="$countyCode" />',
+            ['countyCode' => $other['county']->getAttribute('code')],
+        );
+
+        self::assertStringContainsString('Official District component-official-other', $officialDistrictsByCode);
+
+        $ruralDistricts = Blade::render(
+            '<x-iran-locations::rural-district-select name="rural_district_id" :official-district-id="$officialDistrictId" />',
+            ['officialDistrictId' => $records['officialDistrict']->getKey()],
+        );
+
+        self::assertStringContainsString('Rural District component-official', $ruralDistricts);
+        self::assertStringNotContainsString('Rural District component-official-other', $ruralDistricts);
+
+        $ruralDistrictsByCode = Blade::render(
+            '<x-iran-locations::rural-district-select name="rural_district_id" :official-district-code="$officialDistrictCode" />',
+            ['officialDistrictCode' => $other['officialDistrict']->getAttribute('code')],
+        );
+
+        self::assertStringContainsString('Rural District component-official-other', $ruralDistrictsByCode);
+    }
+
+    public function test_city_select_filters_by_county_and_official_district(): void
+    {
+        $records = $this->createLocationGraph('component-city-official');
+        $other = $this->createLocationGraph('component-city-official-other');
+
+        $byCounty = Blade::render(
+            '<x-iran-locations::city-select name="city_id" :county-id="$countyId" />',
+            ['countyId' => $records['county']->getKey()],
+        );
+
+        self::assertStringContainsString('City component-city-official', $byCounty);
+        self::assertStringNotContainsString('City component-city-official-other', $byCounty);
+
+        $byOfficialDistrict = Blade::render(
+            '<x-iran-locations::city-select name="city_id" :official-district-id="$officialDistrictId" />',
+            ['officialDistrictId' => $records['officialDistrict']->getKey()],
+        );
+
+        self::assertStringContainsString('City component-city-official', $byOfficialDistrict);
+        self::assertStringNotContainsString('City component-city-official-other', $byOfficialDistrict);
+
+        $byOfficialDistrictCode = Blade::render(
+            '<x-iran-locations::city-select name="city_id" :official-district-code="$officialDistrictCode" />',
+            ['officialDistrictCode' => $other['officialDistrict']->getAttribute('code')],
+        );
+
+        self::assertStringContainsString('City component-city-official-other', $byOfficialDistrictCode);
+        self::assertStringNotContainsString('City component-city-official"', $byOfficialDistrictCode);
+    }
+
     public function test_components_preserve_old_input_and_skip_inactive_or_deprecated_records(): void
     {
         $records = $this->createLocationGraph('component-old');

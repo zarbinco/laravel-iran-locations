@@ -29,6 +29,30 @@ class OptionController extends Controller
         );
     }
 
+    public function counties(OptionApiRequest $request): JsonResponse
+    {
+        return $this->optionResponse(
+            $this->optionQuery('county', $request->validated()),
+            $request,
+        );
+    }
+
+    public function officialDistricts(OptionApiRequest $request): JsonResponse
+    {
+        return $this->optionResponse(
+            $this->optionQuery('official_district', $request->validated()),
+            $request,
+        );
+    }
+
+    public function ruralDistricts(OptionApiRequest $request): JsonResponse
+    {
+        return $this->optionResponse(
+            $this->optionQuery('rural_district', $request->validated()),
+            $request,
+        );
+    }
+
     public function cityRegions(OptionApiRequest $request): JsonResponse
     {
         return $this->optionResponse(

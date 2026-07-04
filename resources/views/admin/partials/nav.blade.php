@@ -8,6 +8,9 @@
             <a class="rounded border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100" href="{{ route('iran-locations.admin.dashboard') }}">Dashboard</a>
             <a class="rounded border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100" href="{{ route('iran-locations.admin.data.index') }}">Data</a>
             <a class="rounded border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100" href="{{ route('iran-locations.admin.provinces.index') }}">Provinces</a>
+            <a class="rounded border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100" href="{{ route('iran-locations.admin.counties.index') }}">Counties</a>
+            <a class="rounded border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100" href="{{ route('iran-locations.admin.official-districts.index') }}">Official districts</a>
+            <a class="rounded border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100" href="{{ route('iran-locations.admin.rural-districts.index') }}">Rural districts</a>
             <a class="rounded border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100" href="{{ route('iran-locations.admin.cities.index') }}">Cities</a>
             <a class="rounded border border-slate-300 bg-white px-3 py-2 hover:bg-slate-100" href="{{ route('iran-locations.admin.neighborhoods.index') }}">Neighborhoods</a>
         </nav>

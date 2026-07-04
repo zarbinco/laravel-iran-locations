@@ -8,8 +8,11 @@ use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 
 trait CreatesLocationTestData
 {
@@ -19,7 +22,7 @@ trait CreatesLocationTestData
     }
 
     /**
-     * @return array<string, Province|City|CityRegion|CityArea|Neighborhood>
+     * @return array<string, Province|County|OfficialDistrict|RuralDistrict|City|CityRegion|CityArea|Neighborhood>
      */
     protected function createLocationGraph(string $suffix = 'main'): array
     {
@@ -29,8 +32,34 @@ trait CreatesLocationTestData
         ]);
         $province->save();
 
+        $county = new County([
+            'province_id' => $province->getKey(),
+            'code' => 'county-'.$suffix,
+            'name_fa' => 'County '.$suffix,
+        ]);
+        $county->save();
+
+        $officialDistrict = new OfficialDistrict([
+            'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'code' => 'official-district-'.$suffix,
+            'name_fa' => 'Official District '.$suffix,
+        ]);
+        $officialDistrict->save();
+
+        $ruralDistrict = new RuralDistrict([
+            'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'official_district_id' => $officialDistrict->getKey(),
+            'code' => 'rural-district-'.$suffix,
+            'name_fa' => 'Rural District '.$suffix,
+        ]);
+        $ruralDistrict->save();
+
         $city = new City([
             'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'official_district_id' => $officialDistrict->getKey(),
             'code' => 'city-'.$suffix,
             'name_fa' => 'City '.$suffix,
             'is_province_capital' => true,
@@ -71,6 +100,9 @@ trait CreatesLocationTestData
 
         return [
             'province' => $province,
+            'county' => $county,
+            'officialDistrict' => $officialDistrict,
+            'ruralDistrict' => $ruralDistrict,
             'city' => $city,
             'region' => $region,
             'area' => $area,
