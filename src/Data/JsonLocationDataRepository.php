@@ -31,12 +31,27 @@ class JsonLocationDataRepository implements LocationDataRepository
 
         return is_string($version) && $version !== ''
             ? $version
-            : (string) config('iran-locations.data.current_version', '0.1.0-dev');
+            : (string) config('iran-locations.data.current_version', '0.2.0-dev');
     }
 
     public function provinces(): array
     {
         return $this->all('provinces');
+    }
+
+    public function counties(): array
+    {
+        return $this->all('counties');
+    }
+
+    public function officialDistricts(): array
+    {
+        return $this->all('official_districts');
+    }
+
+    public function ruralDistricts(): array
+    {
+        return $this->all('rural_districts');
     }
 
     public function cities(): array
@@ -57,6 +72,11 @@ class JsonLocationDataRepository implements LocationDataRepository
     public function neighborhoods(): array
     {
         return $this->all('neighborhoods');
+    }
+
+    public function neighborhoodRegion(): array
+    {
+        return $this->all('neighborhood_region');
     }
 
     public function aliases(): array

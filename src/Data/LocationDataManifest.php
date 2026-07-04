@@ -17,10 +17,14 @@ final class LocationDataManifest
     {
         return [
             'provinces' => 'provinces.json',
+            'counties' => 'counties.json',
+            'official_districts' => 'official_districts.json',
+            'rural_districts' => 'rural_districts.json',
             'cities' => 'cities.json',
             'city_regions' => 'city_regions.json',
             'city_areas' => 'city_areas.json',
             'neighborhoods' => 'neighborhoods.json',
+            'neighborhood_region' => 'neighborhood_region.json',
             'aliases' => 'aliases.json',
         ];
     }

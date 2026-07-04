@@ -17,10 +17,14 @@ class LocationDatabaseInspector
     {
         return [
             'provinces' => 'province',
+            'counties' => 'county',
+            'official_districts' => 'official_district',
+            'rural_districts' => 'rural_district',
             'cities' => 'city',
             'city_regions' => 'city_region',
             'city_areas' => 'city_area',
             'neighborhoods' => 'neighborhood',
+            'neighborhood_region' => 'neighborhood_region',
             'aliases' => 'location_alias',
         ];
     }
@@ -100,7 +104,7 @@ class LocationDatabaseInspector
 
             $query->where('source', 'package');
 
-            if ($dataset !== 'aliases') {
+            if (! in_array($dataset, ['aliases', 'neighborhood_region'], true)) {
                 if (! Schema::hasColumn($table, 'is_active') || ! Schema::hasColumn($table, 'deprecated_at')) {
                     $counts[$dataset] = null;
 
@@ -123,7 +127,7 @@ class LocationDatabaseInspector
     {
         $models = [];
 
-        foreach (['province', 'city', 'city_region', 'city_area', 'neighborhood', 'location_alias', 'data_version'] as $key) {
+        foreach (['province', 'county', 'official_district', 'rural_district', 'city', 'city_region', 'city_area', 'neighborhood', 'location_alias', 'data_version'] as $key) {
             $class = LocationModelResolver::model($key);
             $models[$key] = class_exists($class) && is_subclass_of($class, Model::class);
         }

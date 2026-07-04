@@ -18,7 +18,7 @@ class DataCommandTest extends TestCase
         $output = Artisan::output();
 
         self::assertStringContainsString('Package data status', $output);
-        self::assertStringContainsString('Data version: 0.1.0-dev', $output);
+        self::assertStringContainsString('Data version: 0.2.0-dev', $output);
 
         foreach ($counts as $dataset => $count) {
             self::assertStringContainsString("{$dataset}: {$count}", $output);

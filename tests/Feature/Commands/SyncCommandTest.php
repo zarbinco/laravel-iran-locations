@@ -6,10 +6,14 @@ namespace Zarbin\IranLocations\Tests\Feature\Commands;
 
 use Illuminate\Support\Facades\Artisan;
 use Zarbin\IranLocations\Models\City;
+use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\LocationDataVersion;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 use Zarbin\IranLocations\Tests\TestCase;
 
 class SyncCommandTest extends TestCase
@@ -30,8 +34,13 @@ class SyncCommandTest extends TestCase
         self::assertSame(0, $exitCode);
         self::assertStringContainsString('Mode: dry-run', $output);
         self::assertStringContainsString('provinces: +31', $output);
-        self::assertStringContainsString('cities: +1226', $output);
-        self::assertStringContainsString('neighborhoods: +505', $output);
+        self::assertStringContainsString('counties: +484', $output);
+        self::assertStringContainsString('official_districts: +1087', $output);
+        self::assertStringContainsString('rural_districts: +73', $output);
+        self::assertStringContainsString('cities: +1456', $output);
+        self::assertStringContainsString('city_regions: +22', $output);
+        self::assertStringContainsString('neighborhoods: +568', $output);
+        self::assertStringContainsString('neighborhood_region: +568', $output);
         self::assertStringContainsString('No database changes were made.', $output);
         self::assertSame(0, Province::query()->count());
         self::assertSame(0, LocationDataVersion::query()->count());
@@ -45,11 +54,17 @@ class SyncCommandTest extends TestCase
         self::assertSame(0, $exitCode);
         self::assertStringContainsString('Mode: apply', $output);
         self::assertStringContainsString('provinces: +31', $output);
-        self::assertStringContainsString('cities: +1226', $output);
+        self::assertStringContainsString('counties: +484', $output);
+        self::assertStringContainsString('official_districts: +1087', $output);
+        self::assertStringContainsString('rural_districts: +73', $output);
+        self::assertStringContainsString('cities: +1456', $output);
         self::assertStringContainsString('Database changes were applied safely.', $output);
         self::assertSame(31, Province::query()->count());
-        self::assertSame(1226, City::query()->count());
-        self::assertSame(505, Neighborhood::query()->count());
+        self::assertSame(484, County::query()->count());
+        self::assertSame(1087, OfficialDistrict::query()->count());
+        self::assertSame(73, RuralDistrict::query()->count());
+        self::assertSame(1456, City::query()->count());
+        self::assertSame(568, Neighborhood::query()->count());
         self::assertSame(1, LocationDataVersion::query()->count());
     }
 
@@ -60,9 +75,9 @@ class SyncCommandTest extends TestCase
         $output = Artisan::output();
 
         self::assertStringContainsString('Database tables: ready', $output);
-        self::assertStringContainsString('database cities: 1226', $output);
-        self::assertStringContainsString('database package active cities: 1226', $output);
-        self::assertStringContainsString('Latest applied database data version: 0.1.0-dev', $output);
+        self::assertStringContainsString('database cities: 1456', $output);
+        self::assertStringContainsString('database package active cities: 1456', $output);
+        self::assertStringContainsString('Latest applied database data version: 0.2.0-dev', $output);
         self::assertStringContainsString('Database appears synced: yes', $output);
     }
 
@@ -124,14 +139,14 @@ class SyncCommandTest extends TestCase
     {
         Artisan::call('iran-locations:sync');
 
-        $city = City::query()->where('code', 'ir.city.001.0001')->firstOrFail();
+        $region = CityRegion::query()->where('code', 'ir.city.tehran.region.01')->firstOrFail();
 
-        CityRegion::query()->create([
-            'city_id' => $city->getKey(),
-            'code' => 'ir.city-region.local-status',
+        CityArea::query()->create([
+            'city_region_id' => $region->getKey(),
+            'code' => 'ir.city-area.local-status',
             'number' => 1,
-            'name_fa' => 'Local Region',
-            'normalized_name' => 'local region',
+            'name_fa' => 'Local Area',
+            'normalized_name' => 'local area',
             'source' => 'package',
             'data_version' => 'local',
         ]);
@@ -139,8 +154,8 @@ class SyncCommandTest extends TestCase
         Artisan::call('iran-locations:status');
         $output = Artisan::output();
 
-        self::assertStringContainsString('database city_regions: 1', $output);
-        self::assertStringContainsString('database package active city_regions: 1', $output);
+        self::assertStringContainsString('database city_areas: 1', $output);
+        self::assertStringContainsString('database package active city_areas: 1', $output);
         self::assertStringContainsString('Database appears synced: yes', $output);
     }
 
@@ -148,14 +163,14 @@ class SyncCommandTest extends TestCase
     {
         Artisan::call('iran-locations:sync');
 
-        City::query()->where('code', 'ir.city.001.0001')->update([
+        City::query()->where('code', 'ir.city.001.001.001.001')->update([
             'is_active' => false,
         ]);
 
         Artisan::call('iran-locations:status');
         $output = Artisan::output();
 
-        self::assertStringContainsString('database package active cities: 1225', $output);
+        self::assertStringContainsString('database package active cities: 1455', $output);
         self::assertStringContainsString('Database appears synced: no', $output);
     }
 
@@ -184,7 +199,7 @@ class SyncCommandTest extends TestCase
         $output = Artisan::output();
 
         self::assertSame(0, $exitCode);
-        self::assertStringContainsString('Sync summary: +1762', $output);
+        self::assertStringContainsString('Sync summary: +4289', $output);
         self::assertSame(31, Province::query()->count());
         self::assertSame(1, LocationDataVersion::query()->count());
     }

@@ -10,10 +10,14 @@ use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Data\LocationDataManifest;
 use Zarbin\IranLocations\Data\LocationDataValidator;
 use Zarbin\IranLocations\Models\City;
+use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\LocationDataVersion;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 use Zarbin\IranLocations\Support\LocationDatabaseInspector;
 use Zarbin\IranLocations\Sync\LocationSyncException;
 use Zarbin\IranLocations\Sync\LocationSyncOptions;
@@ -39,8 +43,13 @@ class LocationSyncServiceTest extends TestCase
         self::assertTrue($result->hasChanges());
         self::assertTrue($result->isSuccessful());
         self::assertSame(31, $datasets['provinces']->totals()['created']);
-        self::assertSame(1226, $datasets['cities']->totals()['created']);
-        self::assertSame(505, $datasets['neighborhoods']->totals()['created']);
+        self::assertSame(484, $datasets['counties']->totals()['created']);
+        self::assertSame(1087, $datasets['official_districts']->totals()['created']);
+        self::assertSame(73, $datasets['rural_districts']->totals()['created']);
+        self::assertSame(1456, $datasets['cities']->totals()['created']);
+        self::assertSame(22, $datasets['city_regions']->totals()['created']);
+        self::assertSame(568, $datasets['neighborhoods']->totals()['created']);
+        self::assertSame(568, $datasets['neighborhood_region']->totals()['created']);
         self::assertSame(0, Province::query()->count());
         self::assertSame(0, City::query()->count());
         self::assertSame(0, Neighborhood::query()->count());
@@ -53,19 +62,29 @@ class LocationSyncServiceTest extends TestCase
 
         self::assertTrue($result->isSuccessful());
         self::assertSame(31, Province::query()->count());
-        self::assertSame(1226, City::query()->count());
-        self::assertSame(505, Neighborhood::query()->count());
+        self::assertSame(484, County::query()->count());
+        self::assertSame(1087, OfficialDistrict::query()->count());
+        self::assertSame(73, RuralDistrict::query()->count());
+        self::assertSame(1456, City::query()->count());
+        self::assertSame(22, CityRegion::query()->count());
+        self::assertSame(568, Neighborhood::query()->count());
         self::assertSame(1, LocationDataVersion::query()->count());
-        self::assertSame('0.1.0-dev', LocationDataVersion::latestAppliedVersion());
+        self::assertSame('0.2.0-dev', LocationDataVersion::latestAppliedVersion());
         self::assertSame(0, City::query()->whereDoesntHave('province')->count());
+        self::assertSame(0, City::query()->whereDoesntHave('county')->count());
+        self::assertSame(0, City::query()->whereDoesntHave('officialDistrict')->count());
         self::assertSame(0, Neighborhood::query()->whereDoesntHave('city')->count());
 
-        $city = City::query()->where('code', 'ir.city.001.0001')->firstOrFail();
+        $city = City::query()->where('code', 'ir.city.001.001.001.001')->firstOrFail();
         $province = Province::query()->where('code', 'ir.province.001')->firstOrFail();
+        $county = County::query()->where('code', 'ir.county.001.001')->firstOrFail();
+        $officialDistrict = OfficialDistrict::query()->where('code', 'ir.official_district.001.001.001')->firstOrFail();
 
         self::assertSame($province->getKey(), $city->getAttribute('province_id'));
+        self::assertSame($county->getKey(), $city->getAttribute('county_id'));
+        self::assertSame($officialDistrict->getKey(), $city->getAttribute('official_district_id'));
         self::assertSame('package', $city->getAttribute('source'));
-        self::assertSame('0.1.0-dev', $city->getAttribute('data_version'));
+        self::assertSame('0.2.0-dev', $city->getAttribute('data_version'));
         self::assertNotEmpty($city->getAttribute('normalized_name'));
     }
 
@@ -111,6 +130,53 @@ class LocationSyncServiceTest extends TestCase
         self::assertTrue(Province::query()->where('code', 'custom.province.keep')->exists());
     }
 
+    public function test_custom_official_hierarchy_records_are_preserved_and_not_overwritten(): void
+    {
+        $province = Province::query()->create([
+            'code' => 'ir.province.001',
+            'name_fa' => 'Custom Tehran',
+            'normalized_name' => 'custom tehran',
+            'source' => 'custom',
+            'data_version' => 'custom',
+        ]);
+        $county = County::query()->create([
+            'province_id' => $province->getKey(),
+            'code' => 'ir.county.001.001',
+            'name_fa' => 'Custom County',
+            'normalized_name' => 'custom county',
+            'source' => 'custom',
+            'data_version' => 'custom',
+        ]);
+        $officialDistrict = OfficialDistrict::query()->create([
+            'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'code' => 'ir.official_district.001.001.001',
+            'name_fa' => 'Custom Official District',
+            'normalized_name' => 'custom official district',
+            'source' => 'custom',
+            'data_version' => 'custom',
+        ]);
+        RuralDistrict::query()->create([
+            'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'official_district_id' => $officialDistrict->getKey(),
+            'code' => 'ir.rural_district.001.001.001.001',
+            'name_fa' => 'Custom Rural District',
+            'normalized_name' => 'custom rural district',
+            'source' => 'custom',
+            'data_version' => 'custom',
+        ]);
+
+        $result = $this->app->make(LocationSyncService::class)->sync();
+
+        self::assertSame(1, $result->datasetsByName()['counties']->totals()['skipped']);
+        self::assertSame(1, $result->datasetsByName()['official_districts']->totals()['skipped']);
+        self::assertSame(1, $result->datasetsByName()['rural_districts']->totals()['skipped']);
+        self::assertSame('Custom County', County::query()->where('code', 'ir.county.001.001')->firstOrFail()->getAttribute('name_fa'));
+        self::assertSame('Custom Official District', OfficialDistrict::query()->where('code', 'ir.official_district.001.001.001')->firstOrFail()->getAttribute('name_fa'));
+        self::assertSame('Custom Rural District', RuralDistrict::query()->where('code', 'ir.rural_district.001.001.001.001')->firstOrFail()->getAttribute('name_fa'));
+    }
+
     public function test_missing_package_records_are_deprecated_by_default(): void
     {
         $stale = Province::query()->create([
@@ -125,6 +191,32 @@ class LocationSyncServiceTest extends TestCase
         $stale->refresh();
 
         self::assertSame(1, $result->datasetsByName()['provinces']->totals()['deprecated']);
+        self::assertFalse((bool) $stale->getAttribute('is_active'));
+        self::assertNotNull($stale->getAttribute('deprecated_at'));
+    }
+
+    public function test_missing_package_county_records_are_deprecated_by_default(): void
+    {
+        $province = Province::query()->create([
+            'code' => 'ir.province.001',
+            'name_fa' => 'Tehran',
+            'normalized_name' => 'tehran',
+            'source' => 'package',
+            'data_version' => 'old',
+        ]);
+        $stale = County::query()->create([
+            'province_id' => $province->getKey(),
+            'code' => 'ir.county.stale',
+            'name_fa' => 'Stale County',
+            'normalized_name' => 'stale county',
+            'source' => 'package',
+            'data_version' => 'old',
+        ]);
+
+        $result = $this->app->make(LocationSyncService::class)->sync(LocationSyncOptions::make(datasets: ['counties']));
+        $stale->refresh();
+
+        self::assertSame(1, $result->datasetsByName()['counties']->totals()['deprecated']);
         self::assertFalse((bool) $stale->getAttribute('is_active'));
         self::assertNotNull($stale->getAttribute('deprecated_at'));
     }
@@ -156,29 +248,29 @@ class LocationSyncServiceTest extends TestCase
 
         $service->sync();
 
-        $city = City::query()->where('code', 'ir.city.001.0001')->firstOrFail();
-        $region = CityRegion::query()->create([
-            'city_id' => $city->getKey(),
-            'code' => 'ir.city-region.stale',
+        $region = CityRegion::query()->where('code', 'ir.city.tehran.region.01')->firstOrFail();
+        $area = CityArea::query()->create([
+            'city_region_id' => $region->getKey(),
+            'code' => 'ir.city-area.stale',
             'number' => 1,
-            'name_fa' => 'Stale Region',
-            'normalized_name' => 'stale region',
+            'name_fa' => 'Stale Area',
+            'normalized_name' => 'stale area',
             'source' => 'package',
             'data_version' => 'old',
         ]);
 
         $service->sync();
-        $region->refresh();
+        $area->refresh();
 
-        self::assertTrue((bool) $region->getAttribute('is_active'));
-        self::assertNull($region->getAttribute('deprecated_at'));
+        self::assertTrue((bool) $area->getAttribute('is_active'));
+        self::assertNull($area->getAttribute('deprecated_at'));
 
-        $result = $service->sync(LocationSyncOptions::make(datasets: ['city_regions']));
-        $region->refresh();
+        $result = $service->sync(LocationSyncOptions::make(datasets: ['city_areas']));
+        $area->refresh();
 
-        self::assertSame(1, $result->datasetsByName()['city_regions']->totals()['deprecated']);
-        self::assertFalse((bool) $region->getAttribute('is_active'));
-        self::assertNotNull($region->getAttribute('deprecated_at'));
+        self::assertSame(1, $result->datasetsByName()['city_areas']->totals()['deprecated']);
+        self::assertFalse((bool) $area->getAttribute('is_active'));
+        self::assertNotNull($area->getAttribute('deprecated_at'));
     }
 
     public function test_package_updates_preserve_display_override_and_restore_deprecated_records(): void
@@ -208,6 +300,9 @@ class LocationSyncServiceTest extends TestCase
     {
         $repository = new ArrayLocationDataRepository([
             'provinces' => [],
+            'counties' => [],
+            'official_districts' => [],
+            'rural_districts' => [],
             'cities' => [[
                 'code' => 'ir.city.missing-parent',
                 'province_code' => 'ir.province.missing',
@@ -221,6 +316,7 @@ class LocationSyncServiceTest extends TestCase
             'city_regions' => [],
             'city_areas' => [],
             'neighborhoods' => [],
+            'neighborhood_region' => [],
             'aliases' => [],
         ]);
         $service = $this->serviceFor($repository);
@@ -308,6 +404,21 @@ class ArrayLocationDataRepository implements LocationDataRepository
         return $this->all('provinces');
     }
 
+    public function counties(): array
+    {
+        return $this->all('counties');
+    }
+
+    public function officialDistricts(): array
+    {
+        return $this->all('official_districts');
+    }
+
+    public function ruralDistricts(): array
+    {
+        return $this->all('rural_districts');
+    }
+
     public function cities(): array
     {
         return $this->all('cities');
@@ -326,6 +437,11 @@ class ArrayLocationDataRepository implements LocationDataRepository
     public function neighborhoods(): array
     {
         return $this->all('neighborhoods');
+    }
+
+    public function neighborhoodRegion(): array
+    {
+        return $this->all('neighborhood_region');
     }
 
     public function aliases(): array

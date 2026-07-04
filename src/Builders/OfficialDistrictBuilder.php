@@ -7,7 +7,7 @@ namespace Zarbin\IranLocations\Builders;
 use Illuminate\Database\Eloquent\Model;
 use Zarbin\IranLocations\Filters\LocationFilterHelpers;
 
-class CityBuilder extends LocationBuilder
+class OfficialDistrictBuilder extends LocationBuilder
 {
     public function forProvince(mixed $province): static
     {
@@ -35,34 +35,6 @@ class CityBuilder extends LocationBuilder
     public function forProvinceCode(string $code): static
     {
         $this->whereHas('province', fn ($query) => $query->where('code', $code));
-
-        return $this;
-    }
-
-    public function capital(): static
-    {
-        $this->where('is_province_capital', true);
-
-        return $this;
-    }
-
-    public function notCapital(): static
-    {
-        $this->where('is_province_capital', false);
-
-        return $this;
-    }
-
-    public function hasRegions(): static
-    {
-        $this->has('regions');
-
-        return $this;
-    }
-
-    public function hasNeighborhoods(): static
-    {
-        $this->has('neighborhoods');
 
         return $this;
     }
@@ -97,32 +69,16 @@ class CityBuilder extends LocationBuilder
         return $this;
     }
 
-    public function forOfficialDistrict(mixed $district): static
+    public function hasCities(): static
     {
-        if ($district instanceof Model) {
-            $this->where('official_district_id', $district->getKey());
+        $this->has('cities');
 
-            return $this;
-        }
-
-        $value = LocationFilterHelpers::string($district);
-
-        if ($value === null) {
-            return $this;
-        }
-
-        if (is_numeric($value)) {
-            $this->where('official_district_id', (int) $value);
-
-            return $this;
-        }
-
-        return $this->forOfficialDistrictCode($value);
+        return $this;
     }
 
-    public function forOfficialDistrictCode(string $code): static
+    public function hasRuralDistricts(): static
     {
-        $this->whereHas('officialDistrict', fn ($query) => $query->where('code', $code));
+        $this->has('ruralDistricts');
 
         return $this;
     }
@@ -135,12 +91,8 @@ class CityBuilder extends LocationBuilder
             $this->forProvince($filters['province_id']);
         }
 
-        if (($code = LocationFilterHelpers::string($filters['province_code'] ?? null)) !== null) {
-            $this->forProvinceCode($code);
-        }
-
-        if (($capital = LocationFilterHelpers::boolean($filters['is_capital'] ?? null)) !== null) {
-            $capital ? $this->capital() : $this->notCapital();
+        if (($provinceCode = LocationFilterHelpers::string($filters['province_code'] ?? null)) !== null) {
+            $this->forProvinceCode($provinceCode);
         }
 
         if (array_key_exists('county_id', $filters)) {
@@ -151,20 +103,12 @@ class CityBuilder extends LocationBuilder
             $this->forCountyCode($countyCode);
         }
 
-        if (array_key_exists('official_district_id', $filters)) {
-            $this->forOfficialDistrict($filters['official_district_id']);
+        if (($hasCities = LocationFilterHelpers::boolean($filters['has_cities'] ?? null)) !== null) {
+            $hasCities ? $this->hasCities() : $this->doesntHave('cities');
         }
 
-        if (($districtCode = LocationFilterHelpers::string($filters['official_district_code'] ?? null)) !== null) {
-            $this->forOfficialDistrictCode($districtCode);
-        }
-
-        if (($hasRegions = LocationFilterHelpers::boolean($filters['has_regions'] ?? null)) !== null) {
-            $hasRegions ? $this->hasRegions() : $this->doesntHave('regions');
-        }
-
-        if (($hasNeighborhoods = LocationFilterHelpers::boolean($filters['has_neighborhoods'] ?? null)) !== null) {
-            $hasNeighborhoods ? $this->hasNeighborhoods() : $this->doesntHave('neighborhoods');
+        if (($hasRuralDistricts = LocationFilterHelpers::boolean($filters['has_rural_districts'] ?? null)) !== null) {
+            $hasRuralDistricts ? $this->hasRuralDistricts() : $this->doesntHave('ruralDistricts');
         }
 
         return $this;
@@ -175,7 +119,6 @@ class CityBuilder extends LocationBuilder
         return array_merge(parent::sortColumns(), [
             'province' => 'province_id',
             'county' => 'county_id',
-            'official_district' => 'official_district_id',
         ]);
     }
 }

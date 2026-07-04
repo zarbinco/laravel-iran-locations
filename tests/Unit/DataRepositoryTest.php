@@ -15,10 +15,14 @@ class DataRepositoryTest extends TestCase
     {
         $repository = $this->app->make(LocationDataRepository::class);
 
-        self::assertSame('0.1.0-dev', $repository->dataVersion());
+        self::assertSame('0.2.0-dev', $repository->dataVersion());
         $manifest = $repository->manifest();
 
         self::assertSame('IR', $manifest['country_code']);
+        self::assertCount($manifest['counts']['counties'], $repository->counties());
+        self::assertCount($manifest['counts']['official_districts'], $repository->officialDistricts());
+        self::assertCount($manifest['counts']['rural_districts'], $repository->ruralDistricts());
+        self::assertCount($manifest['counts']['neighborhood_region'], $repository->neighborhoodRegion());
 
         foreach (LocationDataManifest::datasets() as $dataset) {
             self::assertCount($manifest['counts'][$dataset], $repository->all($dataset));

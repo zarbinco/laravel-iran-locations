@@ -80,9 +80,11 @@ class LocationSyncService
         $results = [];
 
         foreach ($datasets as $dataset) {
-            $results[] = $dataset === 'aliases'
-                ? $this->syncAliases($options)
-                : $this->syncModelDataset($dataset, $options, $dataVersion);
+            $results[] = match ($dataset) {
+                'aliases' => $this->syncAliases($options),
+                'neighborhood_region' => $this->syncNeighborhoodRegion($options),
+                default => $this->syncModelDataset($dataset, $options, $dataVersion),
+            };
         }
 
         return new LocationSyncResult($dataVersion, $options->dryRun, $results);
@@ -241,6 +243,88 @@ class LocationSyncService
         return $result;
     }
 
+    private function syncNeighborhoodRegion(LocationSyncOptions $options): LocationSyncDatasetResult
+    {
+        $dataset = 'neighborhood_region';
+        $result = new LocationSyncDatasetResult($dataset);
+        $table = LocationModelResolver::table('neighborhood_region');
+
+        foreach ($this->repository->neighborhoodRegion() as $index => $record) {
+            $neighborhoodCode = $this->string($record['neighborhood_code'] ?? null);
+            $cityRegionCode = $this->string($record['city_region_code'] ?? null);
+            $changeCode = ($neighborhoodCode ?? "record-{$index}").':'.($cityRegionCode ?? 'city-region');
+            $neighborhoodId = $this->resolveId('neighborhoods', $neighborhoodCode);
+            $cityRegionId = $this->resolveId('city_regions', $cityRegionCode);
+
+            if ($neighborhoodId === null || $cityRegionId === null) {
+                $result->add(new LocationSyncChange($dataset, $changeCode, 'fail', after: $record, message: 'Neighborhood-region dependency is missing.'));
+
+                continue;
+            }
+
+            $payload = [
+                'neighborhood_id' => $neighborhoodId,
+                'city_region_id' => $cityRegionId,
+                'is_primary' => $this->boolean($record['is_primary'] ?? true),
+                'source' => $this->string($record['source'] ?? null) ?? 'package',
+                'confidence' => $this->integer($record['confidence'] ?? null),
+            ];
+
+            $existing = DB::table($table)
+                ->where('neighborhood_id', $neighborhoodId)
+                ->where('city_region_id', $cityRegionId)
+                ->first();
+
+            if ($existing === null) {
+                $result->add(new LocationSyncChange($dataset, $changeCode, 'create', after: $payload));
+
+                if (! $options->dryRun) {
+                    DB::table($table)->insert([
+                        ...$payload,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+
+                continue;
+            }
+
+            if (($existing->source ?? null) === 'custom') {
+                $result->add(new LocationSyncChange($dataset, $changeCode, 'skip', before: (array) $existing, after: $payload, message: 'Custom neighborhood-region mapping was preserved.'));
+
+                continue;
+            }
+
+            $changes = [];
+
+            foreach (['is_primary', 'source', 'confidence'] as $key) {
+                if (! $this->sameValue($existing->{$key} ?? null, $payload[$key])) {
+                    $changes[$key] = $payload[$key];
+                }
+            }
+
+            if ($changes === []) {
+                $result->add(new LocationSyncChange($dataset, $changeCode, 'unchanged', before: (array) $existing, after: $payload));
+
+                continue;
+            }
+
+            $result->add(new LocationSyncChange($dataset, $changeCode, 'update', before: (array) $existing, after: array_merge((array) $existing, $changes)));
+
+            if (! $options->dryRun) {
+                DB::table($table)
+                    ->where('neighborhood_id', $neighborhoodId)
+                    ->where('city_region_id', $cityRegionId)
+                    ->update([
+                        ...$changes,
+                        'updated_at' => now(),
+                    ]);
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * @param  array<string, true>  $incomingCodes
      * @param  array<int, array<string, mixed>>  $records
@@ -311,6 +395,9 @@ class LocationSyncService
 
         return match ($dataset) {
             'provinces' => $this->provincePayload($record, $dataVersion),
+            'counties' => $this->countyPayload($record, $dataVersion, $message),
+            'official_districts' => $this->officialDistrictPayload($record, $dataVersion, $message),
+            'rural_districts' => $this->ruralDistrictPayload($record, $dataVersion, $message),
             'cities' => $this->cityPayload($record, $dataVersion, $message),
             'city_regions' => $this->cityRegionPayload($record, $dataVersion, $message),
             'city_areas' => $this->cityAreaPayload($record, $dataVersion, $message),
@@ -335,7 +422,7 @@ class LocationSyncService
      * @param  array<string, mixed>  $record
      * @return array<string, mixed>|null
      */
-    private function cityPayload(array $record, string $dataVersion, ?string &$message): ?array
+    private function countyPayload(array $record, string $dataVersion, ?string &$message): ?array
     {
         $provinceCode = $this->string($record['province_code'] ?? null);
         $provinceId = $this->resolveId('provinces', $provinceCode);
@@ -348,6 +435,117 @@ class LocationSyncService
 
         return $this->withLifecycle([
             'province_id' => $provinceId,
+            'code' => $this->string($record['code'] ?? null),
+            ...$this->namePayload($record, includeEnglishName: true),
+        ], $record, $dataVersion);
+    }
+
+    /**
+     * @param  array<string, mixed>  $record
+     * @return array<string, mixed>|null
+     */
+    private function officialDistrictPayload(array $record, string $dataVersion, ?string &$message): ?array
+    {
+        $provinceCode = $this->string($record['province_code'] ?? null);
+        $countyCode = $this->string($record['county_code'] ?? null);
+        $provinceId = $this->resolveId('provinces', $provinceCode);
+        $countyId = $this->resolveId('counties', $countyCode);
+
+        if ($provinceId === null) {
+            $message = "Missing province dependency [{$provinceCode}].";
+
+            return null;
+        }
+
+        if ($countyId === null) {
+            $message = "Missing county dependency [{$countyCode}].";
+
+            return null;
+        }
+
+        return $this->withLifecycle([
+            'province_id' => $provinceId,
+            'county_id' => $countyId,
+            'code' => $this->string($record['code'] ?? null),
+            ...$this->namePayload($record, includeEnglishName: true),
+        ], $record, $dataVersion);
+    }
+
+    /**
+     * @param  array<string, mixed>  $record
+     * @return array<string, mixed>|null
+     */
+    private function ruralDistrictPayload(array $record, string $dataVersion, ?string &$message): ?array
+    {
+        $provinceCode = $this->string($record['province_code'] ?? null);
+        $countyCode = $this->string($record['county_code'] ?? null);
+        $districtCode = $this->string($record['official_district_code'] ?? null);
+        $provinceId = $this->resolveId('provinces', $provinceCode);
+        $countyId = $this->resolveId('counties', $countyCode);
+        $districtId = $this->resolveId('official_districts', $districtCode);
+
+        if ($provinceId === null) {
+            $message = "Missing province dependency [{$provinceCode}].";
+
+            return null;
+        }
+
+        if ($countyId === null) {
+            $message = "Missing county dependency [{$countyCode}].";
+
+            return null;
+        }
+
+        if ($districtId === null) {
+            $message = "Missing official district dependency [{$districtCode}].";
+
+            return null;
+        }
+
+        return $this->withLifecycle([
+            'province_id' => $provinceId,
+            'county_id' => $countyId,
+            'official_district_id' => $districtId,
+            'code' => $this->string($record['code'] ?? null),
+            ...$this->namePayload($record, includeEnglishName: true),
+        ], $record, $dataVersion);
+    }
+
+    /**
+     * @param  array<string, mixed>  $record
+     * @return array<string, mixed>|null
+     */
+    private function cityPayload(array $record, string $dataVersion, ?string &$message): ?array
+    {
+        $provinceCode = $this->string($record['province_code'] ?? null);
+        $countyCode = $this->string($record['county_code'] ?? null);
+        $districtCode = $this->string($record['official_district_code'] ?? null);
+        $provinceId = $this->resolveId('provinces', $provinceCode);
+        $countyId = $countyCode === null ? null : $this->resolveId('counties', $countyCode);
+        $districtId = $districtCode === null ? null : $this->resolveId('official_districts', $districtCode);
+
+        if ($provinceId === null) {
+            $message = "Missing province dependency [{$provinceCode}].";
+
+            return null;
+        }
+
+        if ($countyCode !== null && $countyId === null) {
+            $message = "Missing county dependency [{$countyCode}].";
+
+            return null;
+        }
+
+        if ($districtCode !== null && $districtId === null) {
+            $message = "Missing official district dependency [{$districtCode}].";
+
+            return null;
+        }
+
+        return $this->withLifecycle([
+            'province_id' => $provinceId,
+            'county_id' => $countyId,
+            'official_district_id' => $districtId,
             'code' => $this->string($record['code'] ?? null),
             ...$this->namePayload($record, includeEnglishName: true),
             'is_province_capital' => $this->boolean($record['is_province_capital'] ?? false),
@@ -639,6 +837,9 @@ class LocationSyncService
     {
         $key = match ($dataset) {
             'provinces' => 'province',
+            'counties' => 'county',
+            'official_districts' => 'official_district',
+            'rural_districts' => 'rural_district',
             'cities' => 'city',
             'city_regions' => 'city_region',
             'city_areas' => 'city_area',

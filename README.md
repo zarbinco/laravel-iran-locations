@@ -4,7 +4,7 @@ Laravel Iran Locations provides Iran location data, Eloquent models, safe databa
 
 ## Features
 
-- Iran provinces, cities, and neighborhood-style records from a packaged dataset
+- Iran provinces, counties, official districts, rural districts, cities, and Tehran municipal records from a packaged dataset
 - Versioned package data with manifest counts and checksums
 - Persian text normalization through `zarbinco/laravel-persian-core`
 - Safe database sync with dry-run support
@@ -59,10 +59,14 @@ The sync engine never truncates package tables. Custom records are preserved. Pa
 The current packaged dataset includes:
 
 - 31 provinces
-- 1226 cities
-- 505 neighborhood or urban-place style records
+- 484 counties
+- 1087 official districts
+- 73 rural districts
+- 1456 cities
+- 22 Tehran city regions
+- 568 Tehran neighborhood or urban-place style records
 
-City regions, city areas, and aliases are structurally supported but are empty in the packaged dataset unless your application adds records. The package does not currently claim complete official coverage for county, bakhsh, rural district, village, boundary, or geo data. Verify the packaged data and licensing suitability for your own use case.
+The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. The municipal hierarchy remains separate: city region, city area, and neighborhood. City areas and aliases are structurally supported but are empty in the packaged dataset unless your application adds records. Verify the packaged data and licensing suitability for your own use case.
 
 ## Normalization
 

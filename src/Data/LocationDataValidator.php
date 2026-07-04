@@ -101,6 +101,31 @@ class LocationDataValidator
     {
         $codes = [];
 
+        if ($dataset === 'neighborhood_region') {
+            $pairs = [];
+
+            foreach ($records as $index => $record) {
+                $neighborhoodCode = $record['neighborhood_code'] ?? null;
+                $cityRegionCode = $record['city_region_code'] ?? null;
+
+                if (! is_string($neighborhoodCode) || ! is_string($cityRegionCode)) {
+                    continue;
+                }
+
+                $pair = $neighborhoodCode.'|'.$cityRegionCode;
+
+                if (isset($pairs[$pair])) {
+                    $errors[] = "Dataset [neighborhood_region] contains duplicate pair [{$pair}].";
+                }
+
+                $pairs[$pair] = true;
+            }
+
+            $checks[] = 'Dataset [neighborhood_region] has unique pairs.';
+
+            return;
+        }
+
         foreach ($records as $index => $record) {
             $code = $record['code'] ?? null;
 
@@ -153,10 +178,14 @@ class LocationDataValidator
     {
         return match ($dataset) {
             'provinces' => ['code', 'source_id', 'name_fa', 'name_en', 'slug', 'normalized_name', 'display_name_fa', 'is_active', 'source', 'source_version', 'data_version'],
-            'cities' => ['code', 'source_id', 'province_code', 'province_source_id', 'name_fa', 'name_en', 'slug', 'normalized_name', 'display_name_fa', 'is_province_capital', 'latitude', 'longitude', 'is_active', 'source', 'source_version', 'data_version'],
+            'counties' => ['code', 'source_id', 'province_code', 'province_source_id', 'name_fa', 'name_en', 'slug', 'normalized_name', 'display_name_fa', 'is_active', 'source', 'source_version', 'data_version'],
+            'official_districts' => ['code', 'source_id', 'province_code', 'county_code', 'county_source_id', 'name_fa', 'name_en', 'slug', 'normalized_name', 'display_name_fa', 'is_active', 'source', 'source_version', 'data_version'],
+            'rural_districts' => ['code', 'source_id', 'province_code', 'county_code', 'official_district_code', 'name_fa', 'name_en', 'slug', 'normalized_name', 'display_name_fa', 'is_active', 'source', 'source_version', 'data_version'],
+            'cities' => ['code', 'source_id', 'province_code', 'province_source_id', 'county_code', 'county_source_id', 'official_district_code', 'official_district_source_id', 'name_fa', 'name_en', 'slug', 'normalized_name', 'display_name_fa', 'is_province_capital', 'latitude', 'longitude', 'is_active', 'source', 'source_version', 'data_version'],
             'city_regions' => ['code', 'source_id', 'city_code', 'city_source_id', 'name_fa', 'slug', 'normalized_name', 'is_active', 'source', 'source_version', 'data_version'],
             'city_areas' => ['code', 'source_id', 'city_region_code', 'city_region_source_id', 'name_fa', 'slug', 'normalized_name', 'is_active', 'source', 'source_version', 'data_version'],
             'neighborhoods' => ['code', 'source_id', 'city_code', 'city_source_id', 'name_fa', 'name_en', 'slug', 'normalized_name', 'display_name_fa', 'type', 'latitude', 'longitude', 'is_active', 'source', 'source_version', 'data_version'],
+            'neighborhood_region' => ['neighborhood_code', 'city_region_code', 'is_primary', 'source'],
             'aliases' => ['location_type', 'location_code', 'alias', 'normalized_alias', 'source'],
             default => [],
         };
@@ -190,13 +219,66 @@ class LocationDataValidator
     private function validateReferences(array $datasets, array &$errors, array &$checks): void
     {
         $provinceCodes = $this->codes($datasets['provinces'] ?? []);
+        $countyCodes = $this->codes($datasets['counties'] ?? []);
+        $officialDistrictCodes = $this->codes($datasets['official_districts'] ?? []);
         $cityCodes = $this->codes($datasets['cities'] ?? []);
+        $cityRegionCodes = $this->codes($datasets['city_regions'] ?? []);
+        $neighborhoodCodes = $this->codes($datasets['neighborhoods'] ?? []);
+
+        foreach ($datasets['counties'] ?? [] as $index => $county) {
+            $provinceCode = $county['province_code'] ?? null;
+
+            if (! is_string($provinceCode) || ! isset($provinceCodes[$provinceCode])) {
+                $errors[] = "Dataset [counties] record [{$index}] references missing province_code [{$provinceCode}].";
+            }
+        }
+
+        foreach ($datasets['official_districts'] ?? [] as $index => $district) {
+            $provinceCode = $district['province_code'] ?? null;
+            $countyCode = $district['county_code'] ?? null;
+
+            if (! is_string($provinceCode) || ! isset($provinceCodes[$provinceCode])) {
+                $errors[] = "Dataset [official_districts] record [{$index}] references missing province_code [{$provinceCode}].";
+            }
+
+            if (! is_string($countyCode) || ! isset($countyCodes[$countyCode])) {
+                $errors[] = "Dataset [official_districts] record [{$index}] references missing county_code [{$countyCode}].";
+            }
+        }
+
+        foreach ($datasets['rural_districts'] ?? [] as $index => $district) {
+            $provinceCode = $district['province_code'] ?? null;
+            $countyCode = $district['county_code'] ?? null;
+            $officialDistrictCode = $district['official_district_code'] ?? null;
+
+            if (! is_string($provinceCode) || ! isset($provinceCodes[$provinceCode])) {
+                $errors[] = "Dataset [rural_districts] record [{$index}] references missing province_code [{$provinceCode}].";
+            }
+
+            if (! is_string($countyCode) || ! isset($countyCodes[$countyCode])) {
+                $errors[] = "Dataset [rural_districts] record [{$index}] references missing county_code [{$countyCode}].";
+            }
+
+            if (! is_string($officialDistrictCode) || ! isset($officialDistrictCodes[$officialDistrictCode])) {
+                $errors[] = "Dataset [rural_districts] record [{$index}] references missing official_district_code [{$officialDistrictCode}].";
+            }
+        }
 
         foreach ($datasets['cities'] ?? [] as $index => $city) {
             $provinceCode = $city['province_code'] ?? null;
+            $countyCode = $city['county_code'] ?? null;
+            $officialDistrictCode = $city['official_district_code'] ?? null;
 
             if (! is_string($provinceCode) || ! isset($provinceCodes[$provinceCode])) {
                 $errors[] = "Dataset [cities] record [{$index}] references missing province_code [{$provinceCode}].";
+            }
+
+            if (! blank($countyCode) && (! is_string($countyCode) || ! isset($countyCodes[$countyCode]))) {
+                $errors[] = "Dataset [cities] record [{$index}] references missing county_code [{$countyCode}].";
+            }
+
+            if (! blank($officialDistrictCode) && (! is_string($officialDistrictCode) || ! isset($officialDistrictCodes[$officialDistrictCode]))) {
+                $errors[] = "Dataset [cities] record [{$index}] references missing official_district_code [{$officialDistrictCode}].";
             }
         }
 
@@ -205,6 +287,19 @@ class LocationDataValidator
 
             if (! is_string($cityCode) || ! isset($cityCodes[$cityCode])) {
                 $errors[] = "Dataset [neighborhoods] record [{$index}] references missing city_code [{$cityCode}].";
+            }
+        }
+
+        foreach ($datasets['neighborhood_region'] ?? [] as $index => $record) {
+            $neighborhoodCode = $record['neighborhood_code'] ?? null;
+            $cityRegionCode = $record['city_region_code'] ?? null;
+
+            if (! is_string($neighborhoodCode) || ! isset($neighborhoodCodes[$neighborhoodCode])) {
+                $errors[] = "Dataset [neighborhood_region] record [{$index}] references missing neighborhood_code [{$neighborhoodCode}].";
+            }
+
+            if (! is_string($cityRegionCode) || ! isset($cityRegionCodes[$cityRegionCode])) {
+                $errors[] = "Dataset [neighborhood_region] record [{$index}] references missing city_region_code [{$cityRegionCode}].";
             }
         }
 

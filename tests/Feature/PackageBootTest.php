@@ -52,7 +52,7 @@ class PackageBootTest extends TestCase
 
         self::assertSame('iran_cities', $manager->table('cities'));
         self::assertSame(Province::class, $manager->model('province'));
-        self::assertSame('0.1.0-dev', $manager->dataVersion());
+        self::assertSame('0.2.0-dev', $manager->dataVersion());
     }
 
     public function test_commands_are_registered(): void

@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\LocationAlias;
 use Zarbin\IranLocations\Models\LocationDataVersion;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 use Zarbin\IranLocations\Tests\TestCase;
 
 class ModelConfigurationTest extends TestCase
@@ -19,6 +22,9 @@ class ModelConfigurationTest extends TestCase
     public function test_default_table_names_work(): void
     {
         self::assertSame('iran_provinces', (new Province)->getTable());
+        self::assertSame('iran_counties', (new County)->getTable());
+        self::assertSame('iran_official_districts', (new OfficialDistrict)->getTable());
+        self::assertSame('iran_rural_districts', (new RuralDistrict)->getTable());
         self::assertSame('iran_cities', (new City)->getTable());
         self::assertSame('iran_city_regions', (new CityRegion)->getTable());
         self::assertSame('iran_city_areas', (new CityArea)->getTable());
@@ -55,14 +61,33 @@ class ModelConfigurationTest extends TestCase
     public function test_configured_model_classes_are_used_in_relationships(): void
     {
         config()->set('iran-locations.models.province', ConfiguredProvince::class);
+        config()->set('iran-locations.models.county', ConfiguredCounty::class);
+        config()->set('iran-locations.models.official_district', ConfiguredOfficialDistrict::class);
+        config()->set('iran-locations.models.rural_district', ConfiguredRuralDistrict::class);
         config()->set('iran-locations.models.city', ConfiguredCity::class);
         config()->set('iran-locations.models.city_region', ConfiguredCityRegion::class);
         config()->set('iran-locations.models.city_area', ConfiguredCityArea::class);
         config()->set('iran-locations.models.neighborhood', ConfiguredNeighborhood::class);
         config()->set('iran-locations.models.location_alias', ConfiguredLocationAlias::class);
 
+        self::assertInstanceOf(ConfiguredCounty::class, (new Province)->counties()->getRelated());
+        self::assertInstanceOf(ConfiguredOfficialDistrict::class, (new Province)->officialDistricts()->getRelated());
+        self::assertInstanceOf(ConfiguredRuralDistrict::class, (new Province)->ruralDistricts()->getRelated());
         self::assertInstanceOf(ConfiguredCity::class, (new Province)->cities()->getRelated());
+        self::assertInstanceOf(ConfiguredProvince::class, (new County)->province()->getRelated());
+        self::assertInstanceOf(ConfiguredOfficialDistrict::class, (new County)->officialDistricts()->getRelated());
+        self::assertInstanceOf(ConfiguredCity::class, (new County)->cities()->getRelated());
+        self::assertInstanceOf(ConfiguredRuralDistrict::class, (new County)->ruralDistricts()->getRelated());
+        self::assertInstanceOf(ConfiguredProvince::class, (new OfficialDistrict)->province()->getRelated());
+        self::assertInstanceOf(ConfiguredCounty::class, (new OfficialDistrict)->county()->getRelated());
+        self::assertInstanceOf(ConfiguredCity::class, (new OfficialDistrict)->cities()->getRelated());
+        self::assertInstanceOf(ConfiguredRuralDistrict::class, (new OfficialDistrict)->ruralDistricts()->getRelated());
+        self::assertInstanceOf(ConfiguredProvince::class, (new RuralDistrict)->province()->getRelated());
+        self::assertInstanceOf(ConfiguredCounty::class, (new RuralDistrict)->county()->getRelated());
+        self::assertInstanceOf(ConfiguredOfficialDistrict::class, (new RuralDistrict)->officialDistrict()->getRelated());
         self::assertInstanceOf(ConfiguredProvince::class, (new City)->province()->getRelated());
+        self::assertInstanceOf(ConfiguredCounty::class, (new City)->county()->getRelated());
+        self::assertInstanceOf(ConfiguredOfficialDistrict::class, (new City)->officialDistrict()->getRelated());
         self::assertInstanceOf(ConfiguredCityRegion::class, (new City)->regions()->getRelated());
         self::assertInstanceOf(ConfiguredNeighborhood::class, (new City)->neighborhoods()->getRelated());
         self::assertInstanceOf(ConfiguredCity::class, (new CityRegion)->city()->getRelated());
@@ -96,6 +121,9 @@ class ModelConfigurationTest extends TestCase
     {
         $models = [
             new Province(['name_fa' => 'Tehran']),
+            new County(['name_fa' => 'Tehran']),
+            new OfficialDistrict(['name_fa' => 'Central']),
+            new RuralDistrict(['name_fa' => 'Siahroud']),
             new City(['name_fa' => 'Tehran']),
             new CityRegion(['name_fa' => 'Region 1']),
             new CityArea(['name_fa' => 'Area 1']),
@@ -150,6 +178,12 @@ class ModelConfigurationTest extends TestCase
 }
 
 class ConfiguredProvince extends Province {}
+
+class ConfiguredCounty extends County {}
+
+class ConfiguredOfficialDistrict extends OfficialDistrict {}
+
+class ConfiguredRuralDistrict extends RuralDistrict {}
 
 class ConfiguredCity extends City {}
 

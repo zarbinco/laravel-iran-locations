@@ -21,6 +21,21 @@ interface LocationDataRepository
     /**
      * @return array<int, array<string, mixed>>
      */
+    public function counties(): array;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function officialDistricts(): array;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function ruralDistricts(): array;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
     public function cities(): array;
 
     /**
@@ -37,6 +52,11 @@ interface LocationDataRepository
      * @return array<int, array<string, mixed>>
      */
     public function neighborhoods(): array;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function neighborhoodRegion(): array;
 
     /**
      * @return array<int, array<string, mixed>>

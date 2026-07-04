@@ -10,8 +10,11 @@ use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 use Zarbin\IranLocations\Tests\TestCase;
 
 class LocationBuilderTest extends TestCase
@@ -128,6 +131,14 @@ class LocationBuilderTest extends TestCase
         self::assertTrue(City::query()->forProvince($records['province']->getKey())->first()->is($records['city']));
         self::assertTrue(City::query()->forProvince($records['province']->getAttribute('code'))->first()->is($records['city']));
         self::assertTrue(City::query()->forProvinceCode($records['province']->getAttribute('code'))->first()->is($records['city']));
+        self::assertTrue(City::query()->forCounty($records['county'])->first()->is($records['city']));
+        self::assertTrue(City::query()->forCounty($records['county']->getKey())->first()->is($records['city']));
+        self::assertTrue(City::query()->forCounty($records['county']->getAttribute('code'))->first()->is($records['city']));
+        self::assertTrue(City::query()->forCountyCode($records['county']->getAttribute('code'))->first()->is($records['city']));
+        self::assertTrue(City::query()->forOfficialDistrict($records['officialDistrict'])->first()->is($records['city']));
+        self::assertTrue(City::query()->forOfficialDistrict($records['officialDistrict']->getKey())->first()->is($records['city']));
+        self::assertTrue(City::query()->forOfficialDistrict($records['officialDistrict']->getAttribute('code'))->first()->is($records['city']));
+        self::assertTrue(City::query()->forOfficialDistrictCode($records['officialDistrict']->getAttribute('code'))->first()->is($records['city']));
         self::assertTrue(City::query()->capital()->first()->is($records['city']));
         self::assertTrue(City::query()->notCapital()->first()->is($other['city']));
         self::assertTrue(City::query()->hasRegions()->first()->is($records['city']));
@@ -136,12 +147,77 @@ class LocationBuilderTest extends TestCase
         $filtered = City::query()->filter([
             'province_id' => $records['province']->getKey(),
             'province_code' => $records['province']->getAttribute('code'),
+            'county_id' => $records['county']->getKey(),
+            'county_code' => $records['county']->getAttribute('code'),
+            'official_district_id' => $records['officialDistrict']->getKey(),
+            'official_district_code' => $records['officialDistrict']->getAttribute('code'),
             'is_capital' => '1',
             'has_regions' => 'true',
             'has_neighborhoods' => 'yes',
         ])->first();
 
         self::assertTrue($filtered->is($records['city']));
+    }
+
+    public function test_official_hierarchy_builder_specific_filters_work(): void
+    {
+        $records = $this->createGraph('official');
+
+        self::assertTrue(County::query()->forProvince($records['province'])->first()->is($records['county']));
+        self::assertTrue(County::query()->forProvince($records['province']->getKey())->first()->is($records['county']));
+        self::assertTrue(County::query()->forProvince($records['province']->getAttribute('code'))->first()->is($records['county']));
+        self::assertTrue(County::query()->forProvinceCode($records['province']->getAttribute('code'))->first()->is($records['county']));
+        self::assertTrue(County::query()->hasCities()->first()->is($records['county']));
+        self::assertTrue(County::query()->hasOfficialDistricts()->first()->is($records['county']));
+
+        $county = County::query()->filter([
+            'province_id' => $records['province']->getKey(),
+            'province_code' => $records['province']->getAttribute('code'),
+            'has_cities' => true,
+            'has_official_districts' => true,
+        ])->first();
+
+        self::assertTrue($county->is($records['county']));
+
+        self::assertTrue(OfficialDistrict::query()->forProvince($records['province'])->first()->is($records['officialDistrict']));
+        self::assertTrue(OfficialDistrict::query()->forProvinceCode($records['province']->getAttribute('code'))->first()->is($records['officialDistrict']));
+        self::assertTrue(OfficialDistrict::query()->forCounty($records['county'])->first()->is($records['officialDistrict']));
+        self::assertTrue(OfficialDistrict::query()->forCounty($records['county']->getKey())->first()->is($records['officialDistrict']));
+        self::assertTrue(OfficialDistrict::query()->forCounty($records['county']->getAttribute('code'))->first()->is($records['officialDistrict']));
+        self::assertTrue(OfficialDistrict::query()->forCountyCode($records['county']->getAttribute('code'))->first()->is($records['officialDistrict']));
+        self::assertTrue(OfficialDistrict::query()->hasCities()->first()->is($records['officialDistrict']));
+        self::assertTrue(OfficialDistrict::query()->hasRuralDistricts()->first()->is($records['officialDistrict']));
+
+        $officialDistrict = OfficialDistrict::query()->filter([
+            'province_id' => $records['province']->getKey(),
+            'province_code' => $records['province']->getAttribute('code'),
+            'county_id' => $records['county']->getKey(),
+            'county_code' => $records['county']->getAttribute('code'),
+            'has_cities' => true,
+            'has_rural_districts' => true,
+        ])->first();
+
+        self::assertTrue($officialDistrict->is($records['officialDistrict']));
+
+        self::assertTrue(RuralDistrict::query()->forProvince($records['province'])->first()->is($records['ruralDistrict']));
+        self::assertTrue(RuralDistrict::query()->forProvinceCode($records['province']->getAttribute('code'))->first()->is($records['ruralDistrict']));
+        self::assertTrue(RuralDistrict::query()->forCounty($records['county'])->first()->is($records['ruralDistrict']));
+        self::assertTrue(RuralDistrict::query()->forCountyCode($records['county']->getAttribute('code'))->first()->is($records['ruralDistrict']));
+        self::assertTrue(RuralDistrict::query()->forOfficialDistrict($records['officialDistrict'])->first()->is($records['ruralDistrict']));
+        self::assertTrue(RuralDistrict::query()->forOfficialDistrict($records['officialDistrict']->getKey())->first()->is($records['ruralDistrict']));
+        self::assertTrue(RuralDistrict::query()->forOfficialDistrict($records['officialDistrict']->getAttribute('code'))->first()->is($records['ruralDistrict']));
+        self::assertTrue(RuralDistrict::query()->forOfficialDistrictCode($records['officialDistrict']->getAttribute('code'))->first()->is($records['ruralDistrict']));
+
+        $ruralDistrict = RuralDistrict::query()->filter([
+            'province_id' => $records['province']->getKey(),
+            'province_code' => $records['province']->getAttribute('code'),
+            'county_id' => $records['county']->getKey(),
+            'county_code' => $records['county']->getAttribute('code'),
+            'official_district_id' => $records['officialDistrict']->getKey(),
+            'official_district_code' => $records['officialDistrict']->getAttribute('code'),
+        ])->first();
+
+        self::assertTrue($ruralDistrict->is($records['ruralDistrict']));
     }
 
     public function test_city_region_builder_specific_filters_work(): void
@@ -240,7 +316,7 @@ class LocationBuilderTest extends TestCase
     }
 
     /**
-     * @return array<string, Province|City|CityRegion|CityArea|Neighborhood>
+     * @return array<string, Province|County|OfficialDistrict|RuralDistrict|City|CityRegion|CityArea|Neighborhood>
      */
     private function createGraph(string $suffix): array
     {
@@ -250,8 +326,34 @@ class LocationBuilderTest extends TestCase
         ]);
         $province->save();
 
+        $county = new County([
+            'province_id' => $province->getKey(),
+            'code' => 'county-'.$suffix,
+            'name_fa' => 'County '.$suffix,
+        ]);
+        $county->save();
+
+        $officialDistrict = new OfficialDistrict([
+            'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'code' => 'official-district-'.$suffix,
+            'name_fa' => 'Official District '.$suffix,
+        ]);
+        $officialDistrict->save();
+
+        $ruralDistrict = new RuralDistrict([
+            'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'official_district_id' => $officialDistrict->getKey(),
+            'code' => 'rural-district-'.$suffix,
+            'name_fa' => 'Rural District '.$suffix,
+        ]);
+        $ruralDistrict->save();
+
         $city = new City([
             'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'official_district_id' => $officialDistrict->getKey(),
             'code' => 'city-'.$suffix,
             'name_fa' => 'City '.$suffix,
             'is_province_capital' => $suffix !== 'other',
@@ -292,6 +394,9 @@ class LocationBuilderTest extends TestCase
 
         return [
             'province' => $province,
+            'county' => $county,
+            'officialDistrict' => $officialDistrict,
+            'ruralDistrict' => $ruralDistrict,
             'city' => $city,
             'region' => $region,
             'area' => $area,

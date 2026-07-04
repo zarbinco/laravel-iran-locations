@@ -2,6 +2,8 @@
 
 The sync engine imports packaged JSON data into your application database through configured models and table names.
 
+Default sync order follows data dependencies: provinces, counties, official districts, rural districts, cities, municipal regions and areas, neighborhoods, neighborhood-region mappings, and aliases.
+
 ## Dry Run
 
 Always inspect a sync first:

@@ -7,7 +7,7 @@ namespace Zarbin\IranLocations\Builders;
 use Illuminate\Database\Eloquent\Model;
 use Zarbin\IranLocations\Filters\LocationFilterHelpers;
 
-class CityBuilder extends LocationBuilder
+class RuralDistrictBuilder extends LocationBuilder
 {
     public function forProvince(mixed $province): static
     {
@@ -35,34 +35,6 @@ class CityBuilder extends LocationBuilder
     public function forProvinceCode(string $code): static
     {
         $this->whereHas('province', fn ($query) => $query->where('code', $code));
-
-        return $this;
-    }
-
-    public function capital(): static
-    {
-        $this->where('is_province_capital', true);
-
-        return $this;
-    }
-
-    public function notCapital(): static
-    {
-        $this->where('is_province_capital', false);
-
-        return $this;
-    }
-
-    public function hasRegions(): static
-    {
-        $this->has('regions');
-
-        return $this;
-    }
-
-    public function hasNeighborhoods(): static
-    {
-        $this->has('neighborhoods');
 
         return $this;
     }
@@ -135,12 +107,8 @@ class CityBuilder extends LocationBuilder
             $this->forProvince($filters['province_id']);
         }
 
-        if (($code = LocationFilterHelpers::string($filters['province_code'] ?? null)) !== null) {
-            $this->forProvinceCode($code);
-        }
-
-        if (($capital = LocationFilterHelpers::boolean($filters['is_capital'] ?? null)) !== null) {
-            $capital ? $this->capital() : $this->notCapital();
+        if (($provinceCode = LocationFilterHelpers::string($filters['province_code'] ?? null)) !== null) {
+            $this->forProvinceCode($provinceCode);
         }
 
         if (array_key_exists('county_id', $filters)) {
@@ -157,14 +125,6 @@ class CityBuilder extends LocationBuilder
 
         if (($districtCode = LocationFilterHelpers::string($filters['official_district_code'] ?? null)) !== null) {
             $this->forOfficialDistrictCode($districtCode);
-        }
-
-        if (($hasRegions = LocationFilterHelpers::boolean($filters['has_regions'] ?? null)) !== null) {
-            $hasRegions ? $this->hasRegions() : $this->doesntHave('regions');
-        }
-
-        if (($hasNeighborhoods = LocationFilterHelpers::boolean($filters['has_neighborhoods'] ?? null)) !== null) {
-            $hasNeighborhoods ? $this->hasNeighborhoods() : $this->doesntHave('neighborhoods');
         }
 
         return $this;

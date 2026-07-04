@@ -119,8 +119,10 @@ class LocationApiTest extends ApiTestCase
 
         $this->getJson('/iran-locations/api/status')
             ->assertOk()
-            ->assertJsonPath('data_version', '0.1.0-dev')
+            ->assertJsonPath('data_version', '0.2.0-dev')
             ->assertJsonPath('manifest.counts.provinces', 31)
+            ->assertJsonPath('manifest.counts.counties', 484)
+            ->assertJsonPath('manifest.contains.official_districts', true)
             ->assertJsonPath('manifest.contains.cities', true)
             ->assertJsonPath('database.counts.provinces', 1);
     }

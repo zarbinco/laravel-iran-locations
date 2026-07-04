@@ -36,7 +36,7 @@ Application-owned records should use `source = custom`. The sync engine preserve
 
 ## Aliases
 
-Aliases are polymorphic and available on provinces, cities, city regions, city areas, and neighborhoods. Alias normalization uses the configured `LocationNormalizer` contract.
+Aliases are polymorphic and available on provinces, counties, official districts, rural districts, cities, city regions, city areas, and neighborhoods. Alias normalization uses the configured `LocationNormalizer` contract.
 
 ## Normalization Contract
 

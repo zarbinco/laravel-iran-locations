@@ -13,10 +13,14 @@ class GeneratedDataTest extends TestCase
     {
         $expected = [
             'provinces' => 31,
-            'cities' => 1226,
-            'city_regions' => 0,
+            'counties' => 484,
+            'official_districts' => 1087,
+            'rural_districts' => 73,
+            'cities' => 1456,
+            'city_regions' => 22,
             'city_areas' => 0,
-            'neighborhoods' => 505,
+            'neighborhoods' => 568,
+            'neighborhood_region' => 568,
             'aliases' => 0,
         ];
 
@@ -33,12 +37,23 @@ class GeneratedDataTest extends TestCase
     {
         $manifest = $this->readJson('manifest.json');
 
-        self::assertSame('0.1.0-dev', $manifest['data_version']);
+        self::assertSame('0.2.0-dev', $manifest['data_version']);
         self::assertSame('IR', $manifest['country_code']);
+        self::assertSame('excel-import', $manifest['source']['name']);
+        self::assertSame('excel-initial', $manifest['source']['version']);
+        self::assertSame([
+            'iran-city.xlsx',
+            'tehran-province-city.xlsx',
+            'tehran-state-neighbers.xlsx',
+        ], $manifest['source']['files']);
         self::assertTrue($manifest['contains']['provinces']);
+        self::assertTrue($manifest['contains']['counties']);
+        self::assertTrue($manifest['contains']['official_districts']);
+        self::assertTrue($manifest['contains']['rural_districts']);
         self::assertTrue($manifest['contains']['cities']);
+        self::assertTrue($manifest['contains']['city_regions']);
         self::assertTrue($manifest['contains']['neighborhoods']);
-        self::assertFalse($manifest['contains']['city_regions']);
+        self::assertTrue($manifest['contains']['neighborhood_region']);
         self::assertFalse($manifest['contains']['city_areas']);
         self::assertFalse($manifest['contains']['aliases']);
         self::assertIsString($manifest['checksum']);
@@ -49,6 +64,8 @@ class GeneratedDataTest extends TestCase
     {
         self::assertNotContains('districts', LocationDataManifest::datasets());
         self::assertFileDoesNotExist(dirname(__DIR__, 2).'/data/districts.json');
+        self::assertFileDoesNotExist(dirname(__DIR__, 2).'/src/Models/District.php');
+        self::assertNotContains('iran_districts', config('iran-locations.tables'));
     }
 
     public function test_generated_neighborhood_records_include_type_when_present(): void

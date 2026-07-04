@@ -32,6 +32,50 @@ class MigrationTest extends TestCase
             'replaced_by_id',
         ]));
 
+        self::assertTrue(Schema::hasColumns(config('iran-locations.tables.counties'), [
+            'id',
+            'province_id',
+            'code',
+            'name_fa',
+            'normalized_name',
+            'is_active',
+            'source',
+            'replaced_by_id',
+        ]));
+
+        self::assertTrue(Schema::hasColumns(config('iran-locations.tables.official_districts'), [
+            'id',
+            'province_id',
+            'county_id',
+            'code',
+            'name_fa',
+            'normalized_name',
+            'is_active',
+            'source',
+            'replaced_by_id',
+        ]));
+
+        self::assertTrue(Schema::hasColumns(config('iran-locations.tables.rural_districts'), [
+            'id',
+            'province_id',
+            'county_id',
+            'official_district_id',
+            'code',
+            'name_fa',
+            'normalized_name',
+            'is_active',
+            'source',
+            'replaced_by_id',
+        ]));
+
+        self::assertTrue(Schema::hasColumns(config('iran-locations.tables.cities'), [
+            'province_id',
+            'county_id',
+            'official_district_id',
+            'code',
+            'name_fa',
+        ]));
+
         self::assertTrue(Schema::hasColumns(config('iran-locations.tables.neighborhoods'), [
             'city_id',
             'default_city_region_id',
@@ -40,5 +84,7 @@ class MigrationTest extends TestCase
             'latitude',
             'longitude',
         ]));
+
+        self::assertFalse(Schema::hasTable('iran_districts'));
     }
 }

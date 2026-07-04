@@ -8,10 +8,13 @@ use InvalidArgumentException;
 use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\LocationAlias;
 use Zarbin\IranLocations\Models\LocationDataVersion;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 
 final class LocationModelResolver
 {
@@ -75,6 +78,9 @@ final class LocationModelResolver
     {
         return [
             'province' => 'provinces',
+            'county' => 'counties',
+            'official_district' => 'official_districts',
+            'rural_district' => 'rural_districts',
             'city' => 'cities',
             'city_region' => 'city_regions',
             'city_area' => 'city_areas',
@@ -91,6 +97,9 @@ final class LocationModelResolver
     {
         return [
             'province' => Province::class,
+            'county' => County::class,
+            'official_district' => OfficialDistrict::class,
+            'rural_district' => RuralDistrict::class,
             'city' => City::class,
             'city_region' => CityRegion::class,
             'city_area' => CityArea::class,
@@ -108,6 +117,12 @@ final class LocationModelResolver
         return [
             'province' => 'iran_provinces',
             'provinces' => 'iran_provinces',
+            'county' => 'iran_counties',
+            'counties' => 'iran_counties',
+            'official_district' => 'iran_official_districts',
+            'official_districts' => 'iran_official_districts',
+            'rural_district' => 'iran_rural_districts',
+            'rural_districts' => 'iran_rural_districts',
             'city' => 'iran_cities',
             'cities' => 'iran_cities',
             'city_region' => 'iran_city_regions',

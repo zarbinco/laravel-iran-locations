@@ -5,4 +5,5 @@
 /storage/logs/
 /runtime/cache/
 /.env
+/_source/
 *.zip

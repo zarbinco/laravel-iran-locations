@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Zarbin\IranLocations\Tests\Feature\Admin;
 
 use Zarbin\IranLocations\Models\City;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\LocationDataVersion;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 
 class AdminDashboardDataTest extends AdminTestCase
 {
@@ -44,8 +47,11 @@ class AdminDashboardDataTest extends AdminTestCase
             ->assertRedirect(route('iran-locations.admin.data.index'));
 
         self::assertSame(31, Province::query()->count());
-        self::assertSame(1226, City::query()->count());
-        self::assertSame(505, Neighborhood::query()->count());
+        self::assertSame(484, County::query()->count());
+        self::assertSame(1087, OfficialDistrict::query()->count());
+        self::assertSame(73, RuralDistrict::query()->count());
+        self::assertSame(1456, City::query()->count());
+        self::assertSame(568, Neighborhood::query()->count());
         self::assertSame(1, LocationDataVersion::query()->count());
 
         $this->get(route('iran-locations.admin.data.index'))

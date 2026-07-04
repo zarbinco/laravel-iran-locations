@@ -47,6 +47,62 @@ class LocationDataValidatorTest extends TestCase
         self::assertContains('Dataset [cities] record [0] references missing province_code [ir.province.999].', $result['errors']);
     }
 
+    public function test_validator_catches_county_with_missing_province_code(): void
+    {
+        $path = $this->makeDataPath([
+            'counties' => [
+                $this->county(['province_code' => 'ir.province.999']),
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Dataset [counties] record [0] references missing province_code [ir.province.999].', $result['errors']);
+    }
+
+    public function test_validator_catches_official_district_with_missing_county_code(): void
+    {
+        $path = $this->makeDataPath([
+            'official_districts' => [
+                $this->officialDistrict(['county_code' => 'ir.county.001.999']),
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Dataset [official_districts] record [0] references missing county_code [ir.county.001.999].', $result['errors']);
+    }
+
+    public function test_validator_catches_rural_district_with_missing_official_district_code(): void
+    {
+        $path = $this->makeDataPath([
+            'rural_districts' => [
+                $this->ruralDistrict(['official_district_code' => 'ir.official_district.001.001.999']),
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Dataset [rural_districts] record [0] references missing official_district_code [ir.official_district.001.001.999].', $result['errors']);
+    }
+
+    public function test_validator_catches_city_with_missing_official_district_code(): void
+    {
+        $path = $this->makeDataPath([
+            'cities' => [
+                $this->city(['official_district_code' => 'ir.official_district.001.001.999']),
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Dataset [cities] record [0] references missing official_district_code [ir.official_district.001.001.999].', $result['errors']);
+    }
+
     public function test_validator_catches_neighborhood_with_missing_city_code(): void
     {
         $path = $this->makeDataPath([
@@ -87,10 +143,14 @@ class LocationDataValidatorTest extends TestCase
 
         $datasets = array_replace([
             'provinces' => [$this->province()],
+            'counties' => [$this->county()],
+            'official_districts' => [$this->officialDistrict()],
+            'rural_districts' => [$this->ruralDistrict()],
             'cities' => [$this->city()],
-            'city_regions' => [],
+            'city_regions' => [$this->cityRegion()],
             'city_areas' => [],
             'neighborhoods' => [$this->neighborhood()],
+            'neighborhood_region' => [$this->neighborhoodRegion()],
             'aliases' => [],
         ], $datasets);
 
@@ -105,19 +165,23 @@ class LocationDataValidatorTest extends TestCase
         }
 
         $manifest = array_replace_recursive([
-            'data_version' => '0.1.0-dev',
+            'data_version' => '0.2.0-dev',
             'country_code' => 'IR',
             'source' => [
                 'name' => 'test',
-                'version' => 'initial',
+                'version' => 'excel-initial',
                 'files' => [],
             ],
             'contains' => [
                 'provinces' => true,
+                'counties' => true,
+                'official_districts' => true,
+                'rural_districts' => true,
                 'cities' => true,
-                'city_regions' => false,
+                'city_regions' => true,
                 'city_areas' => false,
                 'neighborhoods' => true,
+                'neighborhood_region' => true,
                 'aliases' => false,
             ],
             'generated_at' => null,
@@ -154,8 +218,79 @@ class LocationDataValidatorTest extends TestCase
             'display_name_fa' => null,
             'is_active' => true,
             'source' => 'package',
-            'source_version' => 'initial',
-            'data_version' => '0.1.0-dev',
+            'source_version' => 'excel-initial',
+            'data_version' => '0.2.0-dev',
+        ], $overrides);
+    }
+
+    /**
+     * @param  array<string, mixed>  $overrides
+     * @return array<string, mixed>
+     */
+    private function county(array $overrides = []): array
+    {
+        return array_replace([
+            'code' => 'ir.county.001.001',
+            'source_id' => 1,
+            'province_code' => 'ir.province.001',
+            'province_source_id' => 1,
+            'name_fa' => 'تهران',
+            'name_en' => null,
+            'slug' => 'tehran-county',
+            'normalized_name' => 'تهران',
+            'display_name_fa' => null,
+            'is_active' => true,
+            'source' => 'package',
+            'source_version' => 'excel-initial',
+            'data_version' => '0.2.0-dev',
+        ], $overrides);
+    }
+
+    /**
+     * @param  array<string, mixed>  $overrides
+     * @return array<string, mixed>
+     */
+    private function officialDistrict(array $overrides = []): array
+    {
+        return array_replace([
+            'code' => 'ir.official_district.001.001.001',
+            'source_id' => 1,
+            'province_code' => 'ir.province.001',
+            'county_code' => 'ir.county.001.001',
+            'county_source_id' => 1,
+            'name_fa' => 'مرکزی',
+            'name_en' => null,
+            'slug' => 'markazi',
+            'normalized_name' => 'مرکزی',
+            'display_name_fa' => null,
+            'is_active' => true,
+            'source' => 'package',
+            'source_version' => 'excel-initial',
+            'data_version' => '0.2.0-dev',
+        ], $overrides);
+    }
+
+    /**
+     * @param  array<string, mixed>  $overrides
+     * @return array<string, mixed>
+     */
+    private function ruralDistrict(array $overrides = []): array
+    {
+        return array_replace([
+            'code' => 'ir.rural_district.001.001.001.001',
+            'source_id' => 1,
+            'province_code' => 'ir.province.001',
+            'county_code' => 'ir.county.001.001',
+            'official_district_code' => 'ir.official_district.001.001.001',
+            'name_fa' => 'سیاهرود',
+            'name_en' => null,
+            'slug' => 'siahroud',
+            'normalized_name' => 'سیاهرود',
+            'display_name_fa' => null,
+            'is_active' => true,
+            'source' => 'package',
+            'source_version' => 'excel-initial',
+            'data_version' => '0.2.0-dev',
         ], $overrides);
     }
 
@@ -166,13 +301,17 @@ class LocationDataValidatorTest extends TestCase
     private function city(array $overrides = []): array
     {
         return array_replace([
-            'code' => 'ir.city.001.0001',
+            'code' => 'ir.city.001.001.001.001',
             'source_id' => 1,
             'province_code' => 'ir.province.001',
             'province_source_id' => 1,
+            'county_code' => 'ir.county.001.001',
+            'county_source_id' => 1,
+            'official_district_code' => 'ir.official_district.001.001.001',
+            'official_district_source_id' => 1,
             'name_fa' => 'تهران',
             'name_en' => null,
-            'slug' => 'city-1-1',
+            'slug' => 'tehran',
             'normalized_name' => 'تهران',
             'display_name_fa' => null,
             'is_province_capital' => false,
@@ -180,8 +319,29 @@ class LocationDataValidatorTest extends TestCase
             'longitude' => null,
             'is_active' => true,
             'source' => 'package',
-            'source_version' => 'initial',
-            'data_version' => '0.1.0-dev',
+            'source_version' => 'excel-initial',
+            'data_version' => '0.2.0-dev',
+        ], $overrides);
+    }
+
+    /**
+     * @param  array<string, mixed>  $overrides
+     * @return array<string, mixed>
+     */
+    private function cityRegion(array $overrides = []): array
+    {
+        return array_replace([
+            'code' => 'ir.city.tehran.region.01',
+            'source_id' => 1,
+            'city_code' => 'ir.city.001.001.001.001',
+            'city_source_id' => 1,
+            'name_fa' => 'منطقه ۱ تهران',
+            'slug' => 'tehran-region-01',
+            'normalized_name' => 'منطقه ۱ تهران',
+            'is_active' => true,
+            'source' => 'package',
+            'source_version' => 'excel-initial',
+            'data_version' => '0.2.0-dev',
         ], $overrides);
     }
 
@@ -194,7 +354,7 @@ class LocationDataValidatorTest extends TestCase
         return array_replace([
             'code' => 'ir.neighborhood.001.0001.0001',
             'source_id' => 1,
-            'city_code' => 'ir.city.001.0001',
+            'city_code' => 'ir.city.001.001.001.001',
             'city_source_id' => 1,
             'name_fa' => 'آجودانیه',
             'name_en' => null,
@@ -206,8 +366,22 @@ class LocationDataValidatorTest extends TestCase
             'longitude' => null,
             'is_active' => true,
             'source' => 'package',
-            'source_version' => 'initial',
-            'data_version' => '0.1.0-dev',
+            'source_version' => 'excel-initial',
+            'data_version' => '0.2.0-dev',
+        ], $overrides);
+    }
+
+    /**
+     * @param  array<string, mixed>  $overrides
+     * @return array<string, mixed>
+     */
+    private function neighborhoodRegion(array $overrides = []): array
+    {
+        return array_replace([
+            'neighborhood_code' => 'ir.neighborhood.001.0001.0001',
+            'city_region_code' => 'ir.city.tehran.region.01',
+            'is_primary' => true,
+            'source' => 'package',
         ], $overrides);
     }
 

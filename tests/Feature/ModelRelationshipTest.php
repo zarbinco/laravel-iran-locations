@@ -7,8 +7,11 @@ namespace Zarbin\IranLocations\Tests\Feature;
 use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 use Zarbin\IranLocations\Tests\TestCase;
 
 class ModelRelationshipTest extends TestCase
@@ -27,6 +30,12 @@ class ModelRelationshipTest extends TestCase
 
         /** @var Province $province */
         $province = $records['province'];
+        /** @var County $county */
+        $county = $records['county'];
+        /** @var OfficialDistrict $officialDistrict */
+        $officialDistrict = $records['officialDistrict'];
+        /** @var RuralDistrict $ruralDistrict */
+        $ruralDistrict = $records['ruralDistrict'];
         /** @var City $city */
         $city = $records['city'];
         /** @var CityRegion $region */
@@ -42,8 +51,24 @@ class ModelRelationshipTest extends TestCase
             'confidence' => 100,
         ]);
 
+        self::assertTrue($province->counties()->first()->is($county));
+        self::assertTrue($province->officialDistricts()->first()->is($officialDistrict));
+        self::assertTrue($province->ruralDistricts()->first()->is($ruralDistrict));
         self::assertTrue($province->cities()->first()->is($city));
+        self::assertTrue($county->province->is($province));
+        self::assertTrue($county->officialDistricts()->first()->is($officialDistrict));
+        self::assertTrue($county->cities()->first()->is($city));
+        self::assertTrue($county->ruralDistricts()->first()->is($ruralDistrict));
+        self::assertTrue($officialDistrict->province->is($province));
+        self::assertTrue($officialDistrict->county->is($county));
+        self::assertTrue($officialDistrict->cities()->first()->is($city));
+        self::assertTrue($officialDistrict->ruralDistricts()->first()->is($ruralDistrict));
+        self::assertTrue($ruralDistrict->province->is($province));
+        self::assertTrue($ruralDistrict->county->is($county));
+        self::assertTrue($ruralDistrict->officialDistrict->is($officialDistrict));
         self::assertTrue($city->province->is($province));
+        self::assertTrue($city->county->is($county));
+        self::assertTrue($city->officialDistrict->is($officialDistrict));
         self::assertTrue($city->regions()->first()->is($region));
         self::assertTrue($city->neighborhoods()->first()->is($neighborhood));
         self::assertTrue($region->city->is($city));
@@ -61,7 +86,7 @@ class ModelRelationshipTest extends TestCase
     {
         $records = $this->createLocationGraph();
 
-        foreach (['province', 'city', 'region', 'area', 'neighborhood'] as $key) {
+        foreach (['province', 'county', 'officialDistrict', 'ruralDistrict', 'city', 'region', 'area', 'neighborhood'] as $key) {
             $model = $records[$key];
             $alias = $model->aliases()->create([
                 'alias' => $key.' alias',
@@ -88,7 +113,7 @@ class ModelRelationshipTest extends TestCase
     }
 
     /**
-     * @return array<string, Province|City|CityRegion|CityArea|Neighborhood>
+     * @return array<string, Province|County|OfficialDistrict|RuralDistrict|City|CityRegion|CityArea|Neighborhood>
      */
     private function createLocationGraph(string $suffix = ''): array
     {
@@ -98,8 +123,34 @@ class ModelRelationshipTest extends TestCase
         ]);
         $province->save();
 
+        $county = new County([
+            'province_id' => $province->getKey(),
+            'code' => 'county'.$suffix,
+            'name_fa' => 'County '.$suffix,
+        ]);
+        $county->save();
+
+        $officialDistrict = new OfficialDistrict([
+            'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'code' => 'official-district'.$suffix,
+            'name_fa' => 'Official District '.$suffix,
+        ]);
+        $officialDistrict->save();
+
+        $ruralDistrict = new RuralDistrict([
+            'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'official_district_id' => $officialDistrict->getKey(),
+            'code' => 'rural-district'.$suffix,
+            'name_fa' => 'Rural District '.$suffix,
+        ]);
+        $ruralDistrict->save();
+
         $city = new City([
             'province_id' => $province->getKey(),
+            'county_id' => $county->getKey(),
+            'official_district_id' => $officialDistrict->getKey(),
             'code' => 'city'.$suffix,
             'name_fa' => 'City '.$suffix,
         ]);
@@ -130,6 +181,9 @@ class ModelRelationshipTest extends TestCase
 
         return [
             'province' => $province,
+            'county' => $county,
+            'officialDistrict' => $officialDistrict,
+            'ruralDistrict' => $ruralDistrict,
             'city' => $city,
             'region' => $region,
             'area' => $area,
@@ -138,7 +192,7 @@ class ModelRelationshipTest extends TestCase
     }
 
     /**
-     * @return array<int, array{0: Province|City|CityRegion|CityArea|Neighborhood, 1: Province|City|CityRegion|CityArea|Neighborhood}>
+     * @return array<int, array{0: Province|County|OfficialDistrict|RuralDistrict|City|CityRegion|CityArea|Neighborhood, 1: Province|County|OfficialDistrict|RuralDistrict|City|CityRegion|CityArea|Neighborhood}>
      */
     private function createReplacementPairs(): array
     {
@@ -147,6 +201,9 @@ class ModelRelationshipTest extends TestCase
 
         return [
             [$first['province'], $second['province']],
+            [$first['county'], $second['county']],
+            [$first['officialDistrict'], $second['officialDistrict']],
+            [$first['ruralDistrict'], $second['ruralDistrict']],
             [$first['city'], $second['city']],
             [$first['region'], $second['region']],
             [$first['area'], $second['area']],

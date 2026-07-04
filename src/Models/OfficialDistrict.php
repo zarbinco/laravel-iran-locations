@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Zarbin\IranLocations\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Zarbin\IranLocations\Builders\ProvinceBuilder;
+use Zarbin\IranLocations\Builders\OfficialDistrictBuilder;
 use Zarbin\IranLocations\Models\Concerns\HasConfigurableTable;
 use Zarbin\IranLocations\Models\Concerns\HasDisplayName;
 use Zarbin\IranLocations\Models\Concerns\HasLocationAliases;
@@ -17,7 +18,7 @@ use Zarbin\IranLocations\Models\Concerns\HasStableCode;
 use Zarbin\IranLocations\Models\Concerns\NormalizesLocationName;
 use Zarbin\IranLocations\Support\LocationModelResolver;
 
-class Province extends Model
+class OfficialDistrict extends Model
 {
     use HasConfigurableTable;
     use HasDisplayName;
@@ -28,11 +29,13 @@ class Province extends Model
     use HasStableCode;
     use NormalizesLocationName;
 
-    protected string $tableConfigKey = 'province';
+    protected string $tableConfigKey = 'official_district';
 
-    protected string $modelConfigKey = 'province';
+    protected string $modelConfigKey = 'official_district';
 
     protected $fillable = [
+        'province_id',
+        'county_id',
         'code',
         'name_fa',
         'name_en',
@@ -52,28 +55,28 @@ class Province extends Model
         'deprecated_at' => 'datetime',
     ];
 
-    public function newEloquentBuilder($query): ProvinceBuilder
+    public function newEloquentBuilder($query): OfficialDistrictBuilder
     {
-        return new ProvinceBuilder($query);
+        return new OfficialDistrictBuilder($query);
+    }
+
+    public function province(): BelongsTo
+    {
+        return $this->belongsTo(LocationModelResolver::model('province'), 'province_id');
+    }
+
+    public function county(): BelongsTo
+    {
+        return $this->belongsTo(LocationModelResolver::model('county'), 'county_id');
     }
 
     public function cities(): HasMany
     {
-        return $this->hasMany(LocationModelResolver::model('city'), 'province_id');
-    }
-
-    public function counties(): HasMany
-    {
-        return $this->hasMany(LocationModelResolver::model('county'), 'province_id');
-    }
-
-    public function officialDistricts(): HasMany
-    {
-        return $this->hasMany(LocationModelResolver::model('official_district'), 'province_id');
+        return $this->hasMany(LocationModelResolver::model('city'), 'official_district_id');
     }
 
     public function ruralDistricts(): HasMany
     {
-        return $this->hasMany(LocationModelResolver::model('rural_district'), 'province_id');
+        return $this->hasMany(LocationModelResolver::model('rural_district'), 'official_district_id');
     }
 }

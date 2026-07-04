@@ -35,6 +35,8 @@ class City extends Model
 
     protected $fillable = [
         'province_id',
+        'county_id',
+        'official_district_id',
         'code',
         'name_fa',
         'name_en',
@@ -68,6 +70,16 @@ class City extends Model
     public function province(): BelongsTo
     {
         return $this->belongsTo(LocationModelResolver::model('province'), 'province_id');
+    }
+
+    public function county(): BelongsTo
+    {
+        return $this->belongsTo(LocationModelResolver::model('county'), 'county_id');
+    }
+
+    public function officialDistrict(): BelongsTo
+    {
+        return $this->belongsTo(LocationModelResolver::model('official_district'), 'official_district_id');
     }
 
     public function regions(): HasMany

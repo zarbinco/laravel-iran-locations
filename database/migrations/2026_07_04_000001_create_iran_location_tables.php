@@ -24,9 +24,58 @@ return new class extends Migration
             $table->index(['is_active', 'deprecated_at'], 'iran_provinces_status_idx');
         });
 
+        Schema::create($tables['counties'], function (Blueprint $table) use ($tables): void {
+            $table->id();
+            $table->foreignId('province_id')->constrained($tables['provinces'])->restrictOnDelete();
+            $table->string('code')->unique();
+            $this->nameColumns($table);
+            $this->lifecycleColumns($table);
+            $table->foreignId('replaced_by_id')->nullable()->constrained($tables['counties'])->nullOnDelete();
+            $table->timestamps();
+
+            $table->index(['province_id', 'is_active'], 'iran_counties_province_status_idx');
+            $table->index(['province_id', 'normalized_name'], 'iran_counties_province_search_idx');
+            $table->index(['is_active', 'deprecated_at'], 'iran_counties_status_idx');
+        });
+
+        Schema::create($tables['official_districts'], function (Blueprint $table) use ($tables): void {
+            $table->id();
+            $table->foreignId('province_id')->constrained($tables['provinces'])->restrictOnDelete();
+            $table->foreignId('county_id')->constrained($tables['counties'])->restrictOnDelete();
+            $table->string('code')->unique();
+            $this->nameColumns($table);
+            $this->lifecycleColumns($table);
+            $table->foreignId('replaced_by_id')->nullable()->constrained($tables['official_districts'])->nullOnDelete();
+            $table->timestamps();
+
+            $table->index(['province_id', 'is_active'], 'iran_official_districts_province_status_idx');
+            $table->index(['county_id', 'is_active'], 'iran_official_districts_county_status_idx');
+            $table->index(['county_id', 'normalized_name'], 'iran_official_districts_county_search_idx');
+            $table->index(['is_active', 'deprecated_at'], 'iran_official_districts_status_idx');
+        });
+
+        Schema::create($tables['rural_districts'], function (Blueprint $table) use ($tables): void {
+            $table->id();
+            $table->foreignId('province_id')->constrained($tables['provinces'])->restrictOnDelete();
+            $table->foreignId('county_id')->constrained($tables['counties'])->restrictOnDelete();
+            $table->foreignId('official_district_id')->constrained($tables['official_districts'])->restrictOnDelete();
+            $table->string('code')->unique();
+            $this->nameColumns($table);
+            $this->lifecycleColumns($table);
+            $table->foreignId('replaced_by_id')->nullable()->constrained($tables['rural_districts'])->nullOnDelete();
+            $table->timestamps();
+
+            $table->index(['province_id', 'is_active'], 'iran_rural_districts_province_status_idx');
+            $table->index(['county_id', 'is_active'], 'iran_rural_districts_county_status_idx');
+            $table->index(['official_district_id', 'is_active'], 'iran_rural_districts_official_status_idx');
+            $table->index(['is_active', 'deprecated_at'], 'iran_rural_districts_status_idx');
+        });
+
         Schema::create($tables['cities'], function (Blueprint $table) use ($tables): void {
             $table->id();
             $table->foreignId('province_id')->constrained($tables['provinces'])->restrictOnDelete();
+            $table->foreignId('county_id')->nullable()->constrained($tables['counties'])->nullOnDelete();
+            $table->foreignId('official_district_id')->nullable()->constrained($tables['official_districts'])->nullOnDelete();
             $table->string('code')->unique();
             $this->nameColumns($table);
             $table->boolean('is_province_capital')->default(false);
@@ -37,6 +86,8 @@ return new class extends Migration
 
             $table->index(['province_id', 'is_active'], 'iran_cities_province_status_idx');
             $table->index(['province_id', 'normalized_name'], 'iran_cities_province_search_idx');
+            $table->index(['county_id', 'is_active'], 'iran_cities_county_status_idx');
+            $table->index(['official_district_id', 'is_active'], 'iran_cities_official_status_idx');
             $table->index(['is_active', 'deprecated_at'], 'iran_cities_status_idx');
         });
 
@@ -137,6 +188,9 @@ return new class extends Migration
         Schema::dropIfExists($tables['city_areas']);
         Schema::dropIfExists($tables['city_regions']);
         Schema::dropIfExists($tables['cities']);
+        Schema::dropIfExists($tables['rural_districts']);
+        Schema::dropIfExists($tables['official_districts']);
+        Schema::dropIfExists($tables['counties']);
         Schema::dropIfExists($tables['provinces']);
     }
 
@@ -175,6 +229,9 @@ return new class extends Migration
     {
         return [
             'provinces' => LocationModelResolver::table('province'),
+            'counties' => LocationModelResolver::table('county'),
+            'official_districts' => LocationModelResolver::table('official_district'),
+            'rural_districts' => LocationModelResolver::table('rural_district'),
             'cities' => LocationModelResolver::table('city'),
             'city_regions' => LocationModelResolver::table('city_region'),
             'city_areas' => LocationModelResolver::table('city_area'),

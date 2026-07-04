@@ -5,17 +5,21 @@ Laravel Iran Locations ships versioned JSON data under the package `data/` direc
 ## Current Packaged Data
 
 - Provinces: 31
-- Cities: 1226
-- Neighborhoods: 505
-- City regions: 0
+- Counties: 484
+- Official districts: 1087
+- Rural districts: 73
+- Cities: 1456
+- City regions: 22
 - City areas: 0
+- Neighborhoods: 568
+- Neighborhood-region mappings: 568
 - Aliases: 0
 
-Neighborhood records are neighborhood or urban-place style records from the packaged dataset. City regions and city areas are supported in the schema, models, builders, admin UI, API, and components, but the packaged dataset does not populate them by default.
+The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. Municipal data remains separate: city regions, city areas, and neighborhoods. City areas are supported in the schema, models, builders, admin UI, API, and components, but the packaged dataset does not populate them by default.
 
 ## Scope And Limitations
 
-The package does not currently include complete official county, bakhsh, rural district, village, boundary, or geo data. It should not be treated as an always-current official administrative database without verification.
+The package does not currently include village, boundary, or geo-coordinate data. It should not be treated as an always-current official administrative database without verification.
 
 Review the data and its suitability for your application before using it in legal, regulatory, logistics, or high-stakes workflows.
 

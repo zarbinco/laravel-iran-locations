@@ -1,31 +1,39 @@
 {
-    "data_version": "0.1.0-dev",
+    "data_version": "0.2.0-dev",
     "country_code": "IR",
     "source": {
-        "name": "project-sql-import",
-        "version": "initial",
+        "name": "excel-import",
+        "version": "excel-initial",
         "files": [
-            "provinces.sql",
-            "cities.sql",
-            "districts.sql"
+            "iran-city.xlsx",
+            "tehran-province-city.xlsx",
+            "tehran-state-neighbers.xlsx"
         ]
     },
     "contains": {
         "provinces": true,
+        "counties": true,
+        "official_districts": true,
+        "rural_districts": true,
         "cities": true,
-        "city_regions": false,
+        "city_regions": true,
         "city_areas": false,
         "neighborhoods": true,
+        "neighborhood_region": true,
         "aliases": false
     },
     "generated_at": null,
     "counts": {
         "provinces": 31,
-        "cities": 1226,
-        "city_regions": 0,
+        "counties": 484,
+        "official_districts": 1087,
+        "rural_districts": 73,
+        "cities": 1456,
+        "city_regions": 22,
         "city_areas": 0,
-        "neighborhoods": 505,
+        "neighborhoods": 568,
+        "neighborhood_region": 568,
         "aliases": 0
     },
-    "checksum": "52980e382514f83979503e04ee81839fb4d1cc45f7cb6392011e6a0eff8f0097"
+    "checksum": "54da160dfd10e7ddf78a439ee6fd7d5b286e2aa007fad124f826ba481d5e5a2e"
 }

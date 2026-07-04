@@ -48,8 +48,10 @@ class PublicDocumentationTest extends TestCase
         self::assertIsString($readme);
         self::assertStringContainsString('Laravel Iran Locations', $readme);
         self::assertStringContainsString('31 provinces', $readme);
-        self::assertStringContainsString('1226 cities', $readme);
-        self::assertStringContainsString('505 neighborhood', $readme);
+        self::assertStringContainsString('484 counties', $readme);
+        self::assertStringContainsString('1087 official districts', $readme);
+        self::assertStringContainsString('1456 cities', $readme);
+        self::assertStringContainsString('568 Tehran neighborhood', $readme);
         self::assertStringContainsString('never truncates', $readme);
         self::assertStringContainsString('Custom records are preserved', $readme);
         self::assertStringContainsString('zarbinco/laravel-persian-core', $readme);

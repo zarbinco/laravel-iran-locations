@@ -147,3 +147,54 @@ Implement the first safe data lifecycle layer: source dataset contracts, data ve
 - Added regression tests for option lists beyond 500 records, inactive/deprecated option exclusion, and normalized alias searching.
 - Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
 - Skipped tests or failures: none.
+
+## API And Blade Component Notes
+
+- Added optional read-only API endpoints that load only when `iran-locations.api.enabled` is true and use the configured prefix and middleware.
+- Added API controllers, FormRequests, and JSON resources for status, grouped search, dataset lists, aliases, nested location lookups, and lightweight option responses.
+- API list and option endpoints use configured models and the existing package builders/filters where available, defaulting to active, non-deprecated records.
+- Search continues to use the builder search path and the bound `LocationNormalizer` contract, including existing alias-aware search behavior.
+- Option endpoints return plain JSON arrays with `value`, `code`, `label`, and `name_fa`.
+- Added pure Blade select components under the `iran-locations` component namespace for provinces, cities, city regions, city areas, and neighborhoods.
+- Component examples: `<x-iran-locations::province-select name="province_id" />`, `<x-iran-locations::city-select name="city_id" :province-id="$provinceId" />`, and `<x-iran-locations::neighborhood-select name="neighborhood_id" :city-id="$cityId" />`.
+- Components accept `name`, `selected`, `placeholder`, `disabled`, `required`, class attributes, old input, and parent filters without JavaScript or frontend dependencies.
+- Added tests for API route config, prefixes, middleware, list filters, pagination validation, nested 404 responses, grouped search, alias search, options, resources, and Blade component rendering/filtering.
+- Generated JSON data, raw SQL sources, sync behavior, admin UI behavior, official divisions, Tehran municipal data, and geo/boundary data were not changed.
+- Remaining out of scope: final public documentation/release audit, public package release checklist, official divisions, and geo data.
+- Verification run: `composer test`, `vendor/bin/pint --test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
+- Suggested next implementation step: perform the final release-facing documentation and package audit without changing data semantics.
+
+## Release Gate Notes
+
+- Final audit checked Composer metadata, PSR-4 autoloading, Laravel auto-discovery, service provider registration, config/migration/view publishing, route config gates, command registration, facade metadata, component namespace registration, and public documentation wording.
+- Composer metadata now has a more specific package description and scripts for `test`, `analyse`, `format`, `format:test`, and `test:coverage`.
+- Persian Core remains constrained to the stable `^1.0` requirement; no `dev-main` dependency is present.
+- Runtime dependencies remain limited to Illuminate packages and Persian Core; no frontend framework or Spatie Query Builder dependency was added.
+- Added GitHub Actions CI for Composer validation, dependency installation, PHPUnit, Pint, and PHPStan/Larastan across practical PHP/Laravel/Testbench matrix entries.
+- Laravel 13 is included in the CI matrix through the package's existing Illuminate `^13.0` and Testbench `^11.0` ranges; if Packagist availability changes, the matrix should be adjusted before tagging.
+- Added public package documentation: README, changelog, license, contributing guide, security policy, data docs, sync docs, admin docs, API docs, Blade component docs, extending docs, and release checklist.
+- Public docs intentionally avoid AI/process wording and include honest data scope limits for official divisions, geo data, city regions, city areas, and aliases.
+- Added release-gate tests for Composer metadata, public documentation guardrails, view publishing, and component namespace registration.
+- No generated JSON data, sync behavior, admin behavior, API behavior, frontend dependencies, Tehran municipal data, official divisions, geo data, raw SQL sources, or package caches were added.
+- Remaining optional after v1.0: municipal expansion, a geo module, and official administrative divisions beyond the current package scope.
+- Release blockers found: none at implementation time.
+- Verification run: `composer test`, `composer run-script format:test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
+- Suggested next step: tag the first stable release after CI passes on the target GitHub matrix and Packagist metadata is confirmed.
+
+## Excel Canonical Source Notes
+
+- Excel files used as the canonical package data source: `iran-city.xlsx`, `tehran-province-city.xlsx`, and `tehran-state-neighbers.xlsx`.
+- Sheets read: `لیست شهرهای ایران`, `1`, and `محله‌ها`. Summary formulas were not used for generated counts.
+- Final generated counts: provinces 31, counties 484, official districts 1087, rural districts 73, cities 1456, city regions 22, city areas 0, neighborhoods 568, neighborhood-region mappings 568, aliases 0.
+- Skipped rows: none in generated package data.
+- Missing references: none.
+- Duplicate source observations: 36 repeated Tehran municipal neighborhood names were reported and retained as distinct source rows. One Tehran official-division spelling conflict is retained through contract-based normalization without local spacing or ZWNJ replacement rules.
+- Added official division foundations for `County`, `OfficialDistrict`, and `RuralDistrict`, including migrations, models, relationships, builders, repository datasets, validation, and sync support.
+- Public docs now describe spreadsheet-generated package data and keep official administrative hierarchy separate from municipal hierarchy.
+- Raw `_source/` inputs remain ignored and excluded from the patch archive.
+- Deferred: full admin pages, public API endpoints, and Blade components for counties, official districts, and rural districts.
+- Verification run: `composer test`, `composer run-script format:test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
+- Suggested next step: add focused UI/API surfaces for the official division hierarchy after the backend contracts settle.
