@@ -64,8 +64,17 @@ class SyncCommandTest extends TestCase
         self::assertSame(1087, OfficialDistrict::query()->count());
         self::assertSame(73, RuralDistrict::query()->count());
         self::assertSame(1456, City::query()->count());
+        self::assertSame(22, CityRegion::query()->count());
+        self::assertSame(0, CityArea::query()->count());
         self::assertSame(568, Neighborhood::query()->count());
         self::assertSame(1, LocationDataVersion::query()->count());
+
+        $tehran = City::query()->where('code', 'ir.city.001.001.001.001')->firstOrFail();
+        $region5 = CityRegion::query()->where('code', 'ir.city.tehran.region.05')->firstOrFail();
+
+        self::assertSame(22, CityRegion::query()->forCityCode((string) $tehran->getAttribute('code'))->orderedByNumber()->count());
+        self::assertGreaterThan(0, Neighborhood::query()->forRegionCode((string) $region5->getAttribute('code'))->count());
+        self::assertSame(568, Neighborhood::query()->forCityCode((string) $tehran->getAttribute('code'))->ordered()->count());
     }
 
     public function test_status_after_sync_shows_latest_applied_version(): void

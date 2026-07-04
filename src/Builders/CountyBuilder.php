@@ -53,6 +53,27 @@ class CountyBuilder extends LocationBuilder
         return $this;
     }
 
+    public function hasRuralDistricts(): static
+    {
+        $this->has('ruralDistricts');
+
+        return $this;
+    }
+
+    public function hasRegions(): static
+    {
+        $this->whereHas('cities.regions');
+
+        return $this;
+    }
+
+    public function hasNeighborhoods(): static
+    {
+        $this->whereHas('cities.neighborhoods');
+
+        return $this;
+    }
+
     public function filter(array $filters): static
     {
         $this->applyCommonFilters($filters);
@@ -71,6 +92,18 @@ class CountyBuilder extends LocationBuilder
 
         if (($hasOfficialDistricts = LocationFilterHelpers::boolean($filters['has_official_districts'] ?? null)) !== null) {
             $hasOfficialDistricts ? $this->hasOfficialDistricts() : $this->doesntHave('officialDistricts');
+        }
+
+        if (($hasRuralDistricts = LocationFilterHelpers::boolean($filters['has_rural_districts'] ?? null)) !== null) {
+            $hasRuralDistricts ? $this->hasRuralDistricts() : $this->doesntHave('ruralDistricts');
+        }
+
+        if (($hasRegions = LocationFilterHelpers::boolean($filters['has_regions'] ?? null)) !== null) {
+            $hasRegions ? $this->hasRegions() : $this->whereDoesntHave('cities.regions');
+        }
+
+        if (($hasNeighborhoods = LocationFilterHelpers::boolean($filters['has_neighborhoods'] ?? null)) !== null) {
+            $hasNeighborhoods ? $this->hasNeighborhoods() : $this->whereDoesntHave('cities.neighborhoods');
         }
 
         return $this;

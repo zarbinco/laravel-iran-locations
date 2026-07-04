@@ -76,6 +76,8 @@ The package delegates Persian display, search, slug, and alias normalization to 
 
 ```php
 use Zarbin\IranLocations\Models\City;
+use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\Neighborhood;
 use Zarbin\IranLocations\Models\Province;
 
 $province = Province::query()->byCode('ir.province.001')->first();
@@ -98,6 +100,25 @@ $cities = City::query()
         'sort' => 'name',
     ])
     ->paginate(25);
+```
+
+Official and municipal hierarchy helpers can be combined naturally:
+
+```php
+$regions = CityRegion::query()
+    ->forCityCode('ir.city.001.001.001.001')
+    ->orderedByNumber()
+    ->get();
+
+$regionNeighborhoods = Neighborhood::query()
+    ->forRegionCode('ir.city.tehran.region.05')
+    ->ordered()
+    ->get();
+
+$countyNeighborhoods = Neighborhood::query()
+    ->forCountyCode('ir.county.001.001')
+    ->ordered()
+    ->get();
 ```
 
 ## Admin UI

@@ -63,6 +63,21 @@ class LocationApiTest extends ApiTestCase
             ->assertOk()
             ->assertJsonPath('data.0.code', 'region-filters-api');
 
+        $this->getJson('/iran-locations/api/city-regions?province_id='.$records['province']->getKey())
+            ->assertOk()
+            ->assertJsonPath('data.0.code', 'region-filters-api')
+            ->assertJsonMissing(['code' => 'region-filters-other-api']);
+
+        $this->getJson('/iran-locations/api/city-regions?county_id='.$records['county']->getKey())
+            ->assertOk()
+            ->assertJsonPath('data.0.code', 'region-filters-api')
+            ->assertJsonMissing(['code' => 'region-filters-other-api']);
+
+        $this->getJson('/iran-locations/api/city-regions?official_district_id='.$records['officialDistrict']->getKey().'&has_neighborhoods=1&has_areas=1')
+            ->assertOk()
+            ->assertJsonPath('data.0.code', 'region-filters-api')
+            ->assertJsonMissing(['code' => 'region-filters-other-api']);
+
         $this->getJson('/iran-locations/api/city-areas?region_id='.$records['region']->getKey())
             ->assertOk()
             ->assertJsonPath('data.0.code', 'area-filters-api');
@@ -71,10 +86,30 @@ class LocationApiTest extends ApiTestCase
             ->assertOk()
             ->assertJsonPath('data.0.code', 'area-filters-api');
 
+        $this->getJson('/iran-locations/api/city-areas?province_id='.$records['province']->getKey())
+            ->assertOk()
+            ->assertJsonPath('data.0.code', 'area-filters-api')
+            ->assertJsonMissing(['code' => 'area-filters-other-api']);
+
+        $this->getJson('/iran-locations/api/city-areas?county_id='.$records['county']->getKey().'&official_district_id='.$records['officialDistrict']->getKey().'&has_neighborhoods=1')
+            ->assertOk()
+            ->assertJsonPath('data.0.code', 'area-filters-api')
+            ->assertJsonMissing(['code' => 'area-filters-other-api']);
+
         $this->getJson('/iran-locations/api/neighborhoods?city_id='.$records['city']->getKey().'&region_id='.$records['region']->getKey().'&area_id='.$records['area']->getKey().'&type=neighborhood')
             ->assertOk()
             ->assertJsonPath('data.0.code', 'neighborhood-filters-api')
             ->assertJsonPath('data.0.city.code', 'city-filters-api');
+
+        $this->getJson('/iran-locations/api/neighborhoods?county_id='.$records['county']->getKey())
+            ->assertOk()
+            ->assertJsonPath('data.0.code', 'neighborhood-filters-api')
+            ->assertJsonMissing(['code' => 'neighborhood-filters-other-api']);
+
+        $this->getJson('/iran-locations/api/neighborhoods?official_district_id='.$records['officialDistrict']->getKey())
+            ->assertOk()
+            ->assertJsonPath('data.0.code', 'neighborhood-filters-api')
+            ->assertJsonMissing(['code' => 'neighborhood-filters-other-api']);
     }
 
     public function test_nested_endpoints_resolve_parents_by_id_code_and_slug(): void

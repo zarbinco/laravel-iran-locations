@@ -97,9 +97,44 @@ class SearchAndOptionApiTest extends ApiTestCase
             ->assertJsonPath('0.code', 'city-options-api')
             ->assertJsonMissing(['code' => 'city-options-other-api']);
 
+        $this->getJson('/iran-locations/api/options/city-regions?province_id='.$records['province']->getKey())
+            ->assertOk()
+            ->assertJsonPath('0.code', 'region-options-api')
+            ->assertJsonMissing(['code' => 'region-options-other-api']);
+
+        $this->getJson('/iran-locations/api/options/city-regions?county_id='.$records['county']->getKey())
+            ->assertOk()
+            ->assertJsonPath('0.code', 'region-options-api')
+            ->assertJsonMissing(['code' => 'region-options-other-api']);
+
+        $this->getJson('/iran-locations/api/options/city-regions?official_district_id='.$records['officialDistrict']->getKey())
+            ->assertOk()
+            ->assertJsonPath('0.code', 'region-options-api')
+            ->assertJsonMissing(['code' => 'region-options-other-api']);
+
+        $this->getJson('/iran-locations/api/options/city-areas?province_id='.$records['province']->getKey())
+            ->assertOk()
+            ->assertJsonPath('0.code', 'area-options-api')
+            ->assertJsonMissing(['code' => 'area-options-other-api']);
+
+        $this->getJson('/iran-locations/api/options/city-areas?county_id='.$records['county']->getKey())
+            ->assertOk()
+            ->assertJsonPath('0.code', 'area-options-api')
+            ->assertJsonMissing(['code' => 'area-options-other-api']);
+
         $this->getJson('/iran-locations/api/options/neighborhoods?city_id='.$records['city']->getKey().'&region_id='.$records['region']->getKey().'&type=neighborhood')
             ->assertOk()
             ->assertJsonPath('0.code', 'neighborhood-options-api');
+
+        $this->getJson('/iran-locations/api/options/neighborhoods?county_id='.$records['county']->getKey())
+            ->assertOk()
+            ->assertJsonPath('0.code', 'neighborhood-options-api')
+            ->assertJsonMissing(['code' => 'neighborhood-options-other-api']);
+
+        $this->getJson('/iran-locations/api/options/neighborhoods?official_district_id='.$records['officialDistrict']->getKey())
+            ->assertOk()
+            ->assertJsonPath('0.code', 'neighborhood-options-api')
+            ->assertJsonMissing(['code' => 'neighborhood-options-other-api']);
     }
 
     public function test_option_endpoints_support_query_and_limit(): void

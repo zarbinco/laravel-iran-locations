@@ -70,16 +70,56 @@ class ModelRelationshipTest extends TestCase
         self::assertTrue($city->county->is($county));
         self::assertTrue($city->officialDistrict->is($officialDistrict));
         self::assertTrue($city->regions()->first()->is($region));
+        self::assertTrue($city->areas()->first()->is($area));
         self::assertTrue($city->neighborhoods()->first()->is($neighborhood));
         self::assertTrue($region->city->is($city));
         self::assertTrue($region->areas()->first()->is($area));
         self::assertTrue($region->neighborhoods()->first()->is($neighborhood));
+        self::assertTrue($region->defaultNeighborhoods()->first()->is($neighborhood));
         self::assertTrue($area->region->is($region));
         self::assertTrue($area->neighborhoods()->first()->is($neighborhood));
         self::assertTrue($neighborhood->city->is($city));
         self::assertTrue($neighborhood->defaultRegion->is($region));
         self::assertTrue($neighborhood->defaultArea->is($area));
         self::assertTrue($neighborhood->regions()->first()->is($region));
+    }
+
+    public function test_city_region_all_neighborhoods_query_includes_pivot_and_default_region_records(): void
+    {
+        $records = $this->createLocationGraph('-all-neighborhoods');
+
+        /** @var City $city */
+        $city = $records['city'];
+        /** @var CityRegion $region */
+        $region = $records['region'];
+
+        $pivotOnly = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'code' => 'neighborhood-pivot-only',
+            'name_fa' => 'Pivot Only',
+        ]);
+        $pivotOnly->save();
+        $pivotOnly->regions()->attach($region->getKey(), [
+            'is_primary' => false,
+            'source' => 'custom',
+        ]);
+
+        $defaultOnly = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'default_city_region_id' => $region->getKey(),
+            'code' => 'neighborhood-default-only',
+            'name_fa' => 'Default Only',
+        ]);
+        $defaultOnly->save();
+
+        self::assertTrue($region->neighborhoods()->whereKey($pivotOnly->getKey())->exists());
+        self::assertTrue($region->defaultNeighborhoods()->whereKey($defaultOnly->getKey())->exists());
+
+        $ids = $region->allNeighborhoodsQuery()->pluck('id')->all();
+
+        self::assertContains($records['neighborhood']->getKey(), $ids);
+        self::assertContains($pivotOnly->getKey(), $ids);
+        self::assertContains($defaultOnly->getKey(), $ids);
     }
 
     public function test_alias_relationships_work_for_location_models(): void

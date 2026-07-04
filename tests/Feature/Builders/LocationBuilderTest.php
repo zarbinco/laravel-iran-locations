@@ -113,13 +113,24 @@ class LocationBuilderTest extends TestCase
                 'q' => 'Province a',
                 'status' => 'active',
                 'source' => 'package',
+                'has_counties' => 'yes',
+                'has_official_districts' => 'yes',
+                'has_rural_districts' => 'yes',
                 'has_cities' => 'yes',
+                'has_regions' => 'yes',
+                'has_neighborhoods' => 'yes',
                 'sort' => '-code',
             ])
             ->get();
 
         self::assertCount(1, $result);
         self::assertTrue($result->first()->is($records['province']));
+        self::assertTrue(Province::query()->hasCounties()->first()->is($records['province']));
+        self::assertTrue(Province::query()->hasOfficialDistricts()->first()->is($records['province']));
+        self::assertTrue(Province::query()->hasRuralDistricts()->first()->is($records['province']));
+        self::assertTrue(Province::query()->hasRegions()->first()->is($records['province']));
+        self::assertTrue(Province::query()->hasNeighborhoods()->first()->is($records['province']));
+        self::assertTrue(Province::query()->filter(['has_counties' => false])->first()->getAttribute('code') === 'province-empty');
     }
 
     public function test_city_builder_specific_filters_work(): void
@@ -169,12 +180,18 @@ class LocationBuilderTest extends TestCase
         self::assertTrue(County::query()->forProvinceCode($records['province']->getAttribute('code'))->first()->is($records['county']));
         self::assertTrue(County::query()->hasCities()->first()->is($records['county']));
         self::assertTrue(County::query()->hasOfficialDistricts()->first()->is($records['county']));
+        self::assertTrue(County::query()->hasRuralDistricts()->first()->is($records['county']));
+        self::assertTrue(County::query()->hasRegions()->first()->is($records['county']));
+        self::assertTrue(County::query()->hasNeighborhoods()->first()->is($records['county']));
 
         $county = County::query()->filter([
             'province_id' => $records['province']->getKey(),
             'province_code' => $records['province']->getAttribute('code'),
             'has_cities' => true,
             'has_official_districts' => true,
+            'has_rural_districts' => true,
+            'has_regions' => true,
+            'has_neighborhoods' => true,
         ])->first();
 
         self::assertTrue($county->is($records['county']));
@@ -223,48 +240,98 @@ class LocationBuilderTest extends TestCase
     public function test_city_region_builder_specific_filters_work(): void
     {
         $records = $this->createGraph('region');
+        $emptyRegion = CityRegion::create([
+            'city_id' => $records['city']->getKey(),
+            'code' => 'region-empty',
+            'number' => 9,
+            'name_fa' => 'Empty Region',
+            'type' => 'municipal_region',
+        ]);
 
         self::assertTrue(CityRegion::query()->forCity($records['city'])->first()->is($records['region']));
         self::assertTrue(CityRegion::query()->forCity($records['city']->getKey())->first()->is($records['region']));
         self::assertTrue(CityRegion::query()->forCity($records['city']->getAttribute('code'))->first()->is($records['region']));
         self::assertTrue(CityRegion::query()->forCityCode($records['city']->getAttribute('code'))->first()->is($records['region']));
+        self::assertTrue(CityRegion::query()->forProvince($records['province'])->whereKey($records['region']->getKey())->exists());
+        self::assertTrue(CityRegion::query()->forProvinceCode($records['province']->getAttribute('code'))->whereKey($records['region']->getKey())->exists());
+        self::assertTrue(CityRegion::query()->forCounty($records['county'])->whereKey($records['region']->getKey())->exists());
+        self::assertTrue(CityRegion::query()->forCountyCode($records['county']->getAttribute('code'))->whereKey($records['region']->getKey())->exists());
+        self::assertTrue(CityRegion::query()->forOfficialDistrict($records['officialDistrict'])->whereKey($records['region']->getKey())->exists());
+        self::assertTrue(CityRegion::query()->forOfficialDistrictCode($records['officialDistrict']->getAttribute('code'))->whereKey($records['region']->getKey())->exists());
         self::assertTrue(CityRegion::query()->number('3')->first()->is($records['region']));
         self::assertTrue(CityRegion::query()->municipal()->first()->is($records['region']));
         self::assertTrue(CityRegion::query()->type('municipal_region')->first()->is($records['region']));
         self::assertTrue(CityRegion::query()->orderedByNumber()->first()->is($records['region']));
+        self::assertTrue(CityRegion::query()->hasNeighborhoods()->first()->is($records['region']));
+        self::assertTrue(CityRegion::query()->missingNeighborhoods()->whereKey($emptyRegion->getKey())->exists());
+        self::assertTrue(CityRegion::query()->hasAreas()->first()->is($records['region']));
+        self::assertTrue(CityRegion::query()->missingAreas()->whereKey($emptyRegion->getKey())->exists());
 
         $filtered = CityRegion::query()->filter([
+            'province_id' => $records['province']->getKey(),
+            'province_code' => $records['province']->getAttribute('code'),
+            'county_id' => $records['county']->getKey(),
+            'county_code' => $records['county']->getAttribute('code'),
+            'official_district_id' => $records['officialDistrict']->getKey(),
+            'official_district_code' => $records['officialDistrict']->getAttribute('code'),
             'city_id' => $records['city']->getKey(),
             'city_code' => $records['city']->getAttribute('code'),
             'number' => 3,
             'type' => 'municipal_region',
+            'has_neighborhoods' => true,
+            'has_areas' => true,
         ])->first();
 
         self::assertTrue($filtered->is($records['region']));
+        self::assertTrue(CityRegion::query()->filter(['has_neighborhoods' => false])->whereKey($emptyRegion->getKey())->exists());
+        self::assertTrue(CityRegion::query()->filter(['has_areas' => false])->whereKey($emptyRegion->getKey())->exists());
     }
 
     public function test_city_area_builder_specific_filters_work(): void
     {
         $records = $this->createGraph('area');
+        $emptyArea = CityArea::create([
+            'city_region_id' => $records['region']->getKey(),
+            'code' => 'area-empty',
+            'number' => 8,
+            'name_fa' => 'Empty Area',
+        ]);
 
         self::assertTrue(CityArea::query()->forRegion($records['region'])->first()->is($records['area']));
         self::assertTrue(CityArea::query()->forRegion($records['region']->getKey())->first()->is($records['area']));
         self::assertTrue(CityArea::query()->forRegion($records['region']->getAttribute('code'))->first()->is($records['area']));
+        self::assertTrue(CityArea::query()->forRegionCode($records['region']->getAttribute('code'))->whereKey($records['area']->getKey())->exists());
         self::assertTrue(CityArea::query()->forCity($records['city'])->first()->is($records['area']));
         self::assertTrue(CityArea::query()->forCity($records['city']->getKey())->first()->is($records['area']));
         self::assertTrue(CityArea::query()->forCityCode($records['city']->getAttribute('code'))->first()->is($records['area']));
+        self::assertTrue(CityArea::query()->forProvince($records['province'])->whereKey($records['area']->getKey())->exists());
+        self::assertTrue(CityArea::query()->forProvinceCode($records['province']->getAttribute('code'))->whereKey($records['area']->getKey())->exists());
+        self::assertTrue(CityArea::query()->forCounty($records['county'])->whereKey($records['area']->getKey())->exists());
+        self::assertTrue(CityArea::query()->forCountyCode($records['county']->getAttribute('code'))->whereKey($records['area']->getKey())->exists());
+        self::assertTrue(CityArea::query()->forOfficialDistrict($records['officialDistrict'])->whereKey($records['area']->getKey())->exists());
+        self::assertTrue(CityArea::query()->forOfficialDistrictCode($records['officialDistrict']->getAttribute('code'))->whereKey($records['area']->getKey())->exists());
         self::assertTrue(CityArea::query()->number('7')->first()->is($records['area']));
         self::assertTrue(CityArea::query()->orderedByNumber()->first()->is($records['area']));
+        self::assertTrue(CityArea::query()->hasNeighborhoods()->first()->is($records['area']));
+        self::assertTrue(CityArea::query()->missingNeighborhoods()->whereKey($emptyArea->getKey())->exists());
 
         $filtered = CityArea::query()->filter([
+            'province_id' => $records['province']->getKey(),
+            'province_code' => $records['province']->getAttribute('code'),
+            'county_id' => $records['county']->getKey(),
+            'county_code' => $records['county']->getAttribute('code'),
+            'official_district_id' => $records['officialDistrict']->getKey(),
+            'official_district_code' => $records['officialDistrict']->getAttribute('code'),
             'city_id' => $records['city']->getKey(),
             'city_code' => $records['city']->getAttribute('code'),
             'region_id' => $records['region']->getKey(),
             'region_code' => $records['region']->getAttribute('code'),
             'number' => 7,
+            'has_neighborhoods' => true,
         ])->first();
 
         self::assertTrue($filtered->is($records['area']));
+        self::assertTrue(CityArea::query()->filter(['has_neighborhoods' => false])->whereKey($emptyArea->getKey())->exists());
     }
 
     public function test_neighborhood_builder_specific_filters_work(): void
@@ -280,11 +347,21 @@ class LocationBuilderTest extends TestCase
         self::assertTrue(Neighborhood::query()->forCity($records['city'])->whereKey($records['neighborhood']->getKey())->exists());
         self::assertTrue(Neighborhood::query()->forCity($records['city']->getKey())->whereKey($records['neighborhood']->getKey())->exists());
         self::assertTrue(Neighborhood::query()->forCityCode($records['city']->getAttribute('code'))->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forProvince($records['province'])->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forProvince($records['province']->getKey())->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forProvinceCode($records['province']->getAttribute('code'))->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forCounty($records['county'])->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forCounty($records['county']->getKey())->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forCountyCode($records['county']->getAttribute('code'))->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forOfficialDistrict($records['officialDistrict'])->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forOfficialDistrict($records['officialDistrict']->getKey())->whereKey($records['neighborhood']->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->forOfficialDistrictCode($records['officialDistrict']->getAttribute('code'))->whereKey($records['neighborhood']->getKey())->exists());
         self::assertTrue(Neighborhood::query()->forRegion($records['region'])->first()->is($records['neighborhood']));
         self::assertTrue(Neighborhood::query()->forRegion($records['region']->getKey())->first()->is($records['neighborhood']));
         self::assertTrue(Neighborhood::query()->forRegionCode($records['region']->getAttribute('code'))->first()->is($records['neighborhood']));
         self::assertTrue(Neighborhood::query()->forArea($records['area'])->first()->is($records['neighborhood']));
         self::assertTrue(Neighborhood::query()->forArea($records['area']->getKey())->first()->is($records['neighborhood']));
+        self::assertTrue(Neighborhood::query()->forAreaCode($records['area']->getAttribute('code'))->first()->is($records['neighborhood']));
         self::assertTrue(Neighborhood::query()->type('neighborhood')->first()->is($records['neighborhood']));
         self::assertTrue(Neighborhood::query()->neighborhoods()->first()->is($records['neighborhood']));
         self::assertTrue(Neighborhood::query()->streets()->first()->is($missingRegion));
@@ -300,6 +377,10 @@ class LocationBuilderTest extends TestCase
         $filtered = Neighborhood::query()->filter([
             'province_id' => $records['province']->getKey(),
             'province_code' => $records['province']->getAttribute('code'),
+            'county_id' => $records['county']->getKey(),
+            'county_code' => $records['county']->getAttribute('code'),
+            'official_district_id' => $records['officialDistrict']->getKey(),
+            'official_district_code' => $records['officialDistrict']->getAttribute('code'),
             'city_id' => $records['city']->getKey(),
             'city_code' => $records['city']->getAttribute('code'),
             'region_id' => $records['region']->getKey(),

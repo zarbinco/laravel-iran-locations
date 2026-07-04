@@ -229,3 +229,20 @@ Implement the first safe data lifecycle layer: source dataset contracts, data ve
 - Fixes made: added `docs/consumer-smoke-test.md`, linked it from public docs, and added it to public documentation guardrail coverage.
 - Release blockers: none found in the consumer smoke test.
 - Release readiness: ready pending Persian Core stable tag availability and CI.
+
+## Query Surface Hardening Notes
+
+- Added `City::areas()` as a has-many-through relation from city regions to city areas.
+- Added `CityRegion::defaultNeighborhoods()` and `CityRegion::allNeighborhoodsQuery()` so default-region and pivot-mapped neighborhoods are both discoverable.
+- Added neighborhood builder filters for province, county, official district, and area code parents.
+- Added city region builder filters for province, county, official district, neighborhood presence, and area presence.
+- Added city area builder filters for province, county, official district, region code, and neighborhood presence.
+- Added province builder helpers for counties, official districts, rural districts, regions, and neighborhoods.
+- Added county builder helpers for rural districts, regions, and neighborhoods.
+- API request validation now accepts the expanded city region, city area, and neighborhood filter sets.
+- Blade city-region, city-area, and neighborhood selects now accept official-hierarchy parent filters without JavaScript or frontend dependencies.
+- Tests added or updated for model relationships, builders, API filters, option filters, component filters, sync regression counts, Tehran region/neighborhood queries, and the absence of ambiguous public `District` artifacts.
+- Generated JSON data, data semantics, Persian normalization behavior, raw source files, geo data, villages, and frontend dependencies were not changed.
+- Verification run: `vendor\bin\phpunit` focused query/API/component/sync tests, `composer test`, `composer run-script format`, `composer run-script format:test`, `composer analyse`, and `composer validate --strict` passed.
+- Skipped tests or failures: none.
+- Release blockers: none found.

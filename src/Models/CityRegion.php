@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Zarbin\IranLocations\Builders\CityRegionBuilder;
+use Zarbin\IranLocations\Builders\NeighborhoodBuilder;
 use Zarbin\IranLocations\Models\Concerns\HasConfigurableTable;
 use Zarbin\IranLocations\Models\Concerns\HasDisplayName;
 use Zarbin\IranLocations\Models\Concerns\HasLocationAliases;
@@ -81,5 +83,27 @@ class CityRegion extends Model
             'city_region_id',
             'neighborhood_id',
         )->withPivot(['is_primary', 'source', 'confidence'])->withTimestamps();
+    }
+
+    public function defaultNeighborhoods(): HasMany
+    {
+        return $this->hasMany(LocationModelResolver::model('neighborhood'), 'default_city_region_id');
+    }
+
+    /**
+     * @return NeighborhoodBuilder|Builder
+     */
+    public function allNeighborhoodsQuery(): Builder
+    {
+        /** @var class-string<Model> $class */
+        $class = LocationModelResolver::model('neighborhood');
+        $query = (new $class)->newQuery();
+
+        if ($query instanceof NeighborhoodBuilder) {
+            return $query->forRegion($this);
+        }
+
+        return $query->where('default_city_region_id', $this->getKey())
+            ->orWhereHas('regions', fn (Builder $regionQuery) => $regionQuery->whereKey($this->getKey()));
     }
 }

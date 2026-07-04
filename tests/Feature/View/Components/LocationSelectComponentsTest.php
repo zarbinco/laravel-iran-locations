@@ -79,6 +79,27 @@ class LocationSelectComponentsTest extends TestCase
         self::assertStringContainsString('Region component-filters', $regions);
         self::assertStringNotContainsString('Region component-filters-other', $regions);
 
+        $regionsByProvince = Blade::render(
+            '<x-iran-locations::city-region-select name="region_id" :province-id="$provinceId" />',
+            ['provinceId' => $records['province']->getKey()],
+        );
+        self::assertStringContainsString('Region component-filters', $regionsByProvince);
+        self::assertStringNotContainsString('Region component-filters-other', $regionsByProvince);
+
+        $regionsByCounty = Blade::render(
+            '<x-iran-locations::city-region-select name="region_id" :county-id="$countyId" />',
+            ['countyId' => $records['county']->getKey()],
+        );
+        self::assertStringContainsString('Region component-filters', $regionsByCounty);
+        self::assertStringNotContainsString('Region component-filters-other', $regionsByCounty);
+
+        $regionsByOfficialDistrict = Blade::render(
+            '<x-iran-locations::city-region-select name="region_id" :official-district-id="$officialDistrictId" />',
+            ['officialDistrictId' => $records['officialDistrict']->getKey()],
+        );
+        self::assertStringContainsString('Region component-filters', $regionsByOfficialDistrict);
+        self::assertStringNotContainsString('Region component-filters-other', $regionsByOfficialDistrict);
+
         $areas = Blade::render(
             '<x-iran-locations::city-area-select name="area_id" :city-region-id="$regionId" />',
             ['regionId' => $records['region']->getKey()],
@@ -86,12 +107,47 @@ class LocationSelectComponentsTest extends TestCase
         self::assertStringContainsString('Area component-filters', $areas);
         self::assertStringNotContainsString('Area component-filters-other', $areas);
 
+        $areasByProvince = Blade::render(
+            '<x-iran-locations::city-area-select name="area_id" :province-id="$provinceId" />',
+            ['provinceId' => $records['province']->getKey()],
+        );
+        self::assertStringContainsString('Area component-filters', $areasByProvince);
+        self::assertStringNotContainsString('Area component-filters-other', $areasByProvince);
+
+        $areasByCounty = Blade::render(
+            '<x-iran-locations::city-area-select name="area_id" :county-id="$countyId" />',
+            ['countyId' => $records['county']->getKey()],
+        );
+        self::assertStringContainsString('Area component-filters', $areasByCounty);
+        self::assertStringNotContainsString('Area component-filters-other', $areasByCounty);
+
+        $areasByOfficialDistrict = Blade::render(
+            '<x-iran-locations::city-area-select name="area_id" :official-district-id="$officialDistrictId" />',
+            ['officialDistrictId' => $records['officialDistrict']->getKey()],
+        );
+        self::assertStringContainsString('Area component-filters', $areasByOfficialDistrict);
+        self::assertStringNotContainsString('Area component-filters-other', $areasByOfficialDistrict);
+
         $neighborhoods = Blade::render(
             '<x-iran-locations::neighborhood-select name="neighborhood_id" :city-id="$cityId" :city-region-id="$regionId" type="neighborhood" />',
             ['cityId' => $records['city']->getKey(), 'regionId' => $records['region']->getKey()],
         );
         self::assertStringContainsString('Neighborhood component-filters', $neighborhoods);
         self::assertStringNotContainsString('Neighborhood component-filters-other', $neighborhoods);
+
+        $neighborhoodsByCounty = Blade::render(
+            '<x-iran-locations::neighborhood-select name="neighborhood_id" :county-id="$countyId" />',
+            ['countyId' => $records['county']->getKey()],
+        );
+        self::assertStringContainsString('Neighborhood component-filters', $neighborhoodsByCounty);
+        self::assertStringNotContainsString('Neighborhood component-filters-other', $neighborhoodsByCounty);
+
+        $neighborhoodsByOfficialDistrict = Blade::render(
+            '<x-iran-locations::neighborhood-select name="neighborhood_id" :official-district-id="$officialDistrictId" />',
+            ['officialDistrictId' => $records['officialDistrict']->getKey()],
+        );
+        self::assertStringContainsString('Neighborhood component-filters', $neighborhoodsByOfficialDistrict);
+        self::assertStringNotContainsString('Neighborhood component-filters-other', $neighborhoodsByOfficialDistrict);
     }
 
     public function test_official_division_selects_apply_parent_filters(): void

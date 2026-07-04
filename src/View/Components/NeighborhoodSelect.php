@@ -27,6 +27,12 @@ class NeighborhoodSelect extends LocationSelect
         public int|string|null $cityAreaId = null,
         public ?string $cityAreaCode = null,
         public ?string $type = null,
+        public int|string|null $provinceId = null,
+        public ?string $provinceCode = null,
+        public int|string|null $countyId = null,
+        public ?string $countyCode = null,
+        public int|string|null $officialDistrictId = null,
+        public ?string $officialDistrictCode = null,
     ) {
         parent::__construct($name, $selected, $placeholder, $disabled, $required);
     }
@@ -37,6 +43,12 @@ class NeighborhoodSelect extends LocationSelect
     public function options(): Collection
     {
         return $this->optionRecords('neighborhood', [
+            'province_id' => $this->provinceId,
+            'province_code' => $this->provinceCode,
+            'county_id' => $this->countyId,
+            'county_code' => $this->countyCode,
+            'official_district_id' => $this->officialDistrictId,
+            'official_district_code' => $this->officialDistrictCode,
             'city_id' => $this->cityId,
             'city_code' => $this->cityCode,
             'region_id' => $this->cityRegionId ?? $this->regionId,

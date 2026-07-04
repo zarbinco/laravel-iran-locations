@@ -7,6 +7,7 @@ namespace Zarbin\IranLocations\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Zarbin\IranLocations\Builders\CityBuilder;
 use Zarbin\IranLocations\Models\Concerns\HasConfigurableTable;
 use Zarbin\IranLocations\Models\Concerns\HasDisplayName;
@@ -90,5 +91,17 @@ class City extends Model
     public function neighborhoods(): HasMany
     {
         return $this->hasMany(LocationModelResolver::model('neighborhood'), 'city_id');
+    }
+
+    public function areas(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            LocationModelResolver::model('city_area'),
+            LocationModelResolver::model('city_region'),
+            'city_id',
+            'city_region_id',
+            $this->getKeyName(),
+            'id',
+        );
     }
 }

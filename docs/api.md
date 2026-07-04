@@ -53,7 +53,7 @@ Route parameters can resolve records by id, code, or slug where practical.
 
 ## Filters
 
-List endpoints support builder-backed filters such as `q`, `status`, `source`, `code`, `slug`, `sort`, `province_id`, `province_code`, `county_id`, `county_code`, `official_district_id`, `official_district_code`, `city_id`, `city_code`, `region_id`, `region_code`, `area_id`, `area_code`, and `type` where relevant.
+List endpoints support builder-backed filters such as `q`, `status`, `source`, `code`, `slug`, `sort`, `province_id`, `province_code`, `county_id`, `county_code`, `official_district_id`, `official_district_code`, `city_id`, `city_code`, `region_id`, `region_code`, `area_id`, `area_code`, `type`, `has_neighborhoods`, and `has_areas` where relevant.
 
 Pagination uses `per_page` and `page` with the configured maximum.
 
