@@ -1,0 +1,84 @@
+# API
+
+The optional API is disabled by default and read-only.
+
+## Enable
+
+```php
+'api' => [
+    'enabled' => true,
+    'prefix' => 'iran-locations/api',
+    'middleware' => ['web'],
+],
+```
+
+Route names use `iran-locations.api.*`.
+
+## Endpoints
+
+- `GET /status`
+- `GET /search?q=...`
+- `GET /provinces`
+- `GET /provinces/{province}/cities`
+- `GET /cities`
+- `GET /cities/{city}/regions`
+- `GET /cities/{city}/areas`
+- `GET /cities/{city}/neighborhoods`
+- `GET /city-regions`
+- `GET /city-regions/{region}/areas`
+- `GET /city-regions/{region}/neighborhoods`
+- `GET /city-areas`
+- `GET /city-areas/{area}/neighborhoods`
+- `GET /neighborhoods`
+- `GET /aliases`
+- `GET /options/provinces`
+- `GET /options/cities`
+- `GET /options/city-regions`
+- `GET /options/city-areas`
+- `GET /options/neighborhoods`
+
+Route parameters can resolve records by id, code, or slug where practical.
+
+## Filters
+
+List endpoints support builder-backed filters such as `q`, `status`, `source`, `code`, `slug`, `sort`, `province_id`, `province_code`, `city_id`, `city_code`, `region_id`, `region_code`, `area_id`, `area_code`, and `type` where relevant.
+
+Pagination uses `per_page` and `page` with the configured maximum.
+
+## Search
+
+```http
+GET /iran-locations/api/search?q=تهران
+```
+
+Search returns grouped results:
+
+```json
+{
+  "query": "تهران",
+  "results": {
+    "provinces": [],
+    "cities": [],
+    "city_regions": [],
+    "city_areas": [],
+    "neighborhoods": []
+  }
+}
+```
+
+Search terms are normalized through the configured `LocationNormalizer`.
+
+## Options
+
+Option endpoints return small dropdown-friendly arrays:
+
+```json
+[
+  {
+    "value": 1,
+    "code": "ir.province.001",
+    "label": "Tehran",
+    "name_fa": "Tehran"
+  }
+]
+```

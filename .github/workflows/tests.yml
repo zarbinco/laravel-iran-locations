@@ -1,0 +1,75 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }} / Laravel ${{ matrix.laravel }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.2'
+            laravel: '11.*'
+            testbench: '^9.0'
+          - php: '8.3'
+            laravel: '11.*'
+            testbench: '^9.0'
+          - php: '8.4'
+            laravel: '11.*'
+            testbench: '^9.0'
+          - php: '8.2'
+            laravel: '12.*'
+            testbench: '^10.0'
+          - php: '8.3'
+            laravel: '12.*'
+            testbench: '^10.0'
+          - php: '8.4'
+            laravel: '12.*'
+            testbench: '^10.0'
+          - php: '8.3'
+            laravel: '13.*'
+            testbench: '^11.0'
+          - php: '8.4'
+            laravel: '13.*'
+            testbench: '^11.0'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer metadata
+        run: composer validate --strict
+
+      - name: Select Laravel dependencies
+        run: |
+          composer require --no-update \
+            "illuminate/contracts:${{ matrix.laravel }}" \
+            "illuminate/database:${{ matrix.laravel }}" \
+            "illuminate/routing:${{ matrix.laravel }}" \
+            "illuminate/support:${{ matrix.laravel }}"
+          composer require --dev --no-update "orchestra/testbench:${{ matrix.testbench }}"
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress --with-all-dependencies
+
+      - name: Run tests
+        run: composer test
+
+      - name: Check code style
+        run: composer run-script format:test
+
+      - name: Run static analysis
+        run: composer analyse

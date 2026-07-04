@@ -1,6 +1,6 @@
 {
     "name": "zarbinco/laravel-iran-locations",
-    "description": "Laravel package for Iran location data management.",
+    "description": "Iran provinces, cities, neighborhoods, safe sync, and Persian normalization for Laravel.",
     "type": "library",
     "keywords": [
         "iran",
@@ -53,7 +53,9 @@
     "scripts": {
         "analyse": "phpstan analyse",
         "format": "pint",
-        "test": "phpunit"
+        "format:test": "pint --test",
+        "test": "phpunit",
+        "test:coverage": "phpunit --coverage-text"
     },
     "config": {
         "sort-packages": true,

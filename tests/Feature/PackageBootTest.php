@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Zarbin\IranLocations\Tests\Feature;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\View;
+use Illuminate\View\Compilers\BladeCompiler;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\IranLocationsManager;
 use Zarbin\IranLocations\IranLocationsServiceProvider;
@@ -66,5 +68,31 @@ class PackageBootTest extends TestCase
         ] as $command) {
             self::assertArrayHasKey($command, $commands);
         }
+    }
+
+    public function test_views_publish_groups_and_component_namespace_are_registered(): void
+    {
+        self::assertTrue(View::exists('iran-locations::admin.layout'));
+        self::assertTrue(View::exists('iran-locations::components.province-select'));
+
+        self::assertNotEmpty(IranLocationsServiceProvider::pathsToPublish(
+            IranLocationsServiceProvider::class,
+            'iran-locations-config',
+        ));
+        self::assertNotEmpty(IranLocationsServiceProvider::pathsToPublish(
+            IranLocationsServiceProvider::class,
+            'iran-locations-migrations',
+        ));
+        self::assertNotEmpty(IranLocationsServiceProvider::pathsToPublish(
+            IranLocationsServiceProvider::class,
+            'iran-locations-views',
+        ));
+
+        $compiler = app(BladeCompiler::class);
+
+        self::assertSame(
+            'Zarbin\\IranLocations\\View\\Components',
+            $compiler->getClassComponentNamespaces()['iran-locations'] ?? null,
+        );
     }
 }
