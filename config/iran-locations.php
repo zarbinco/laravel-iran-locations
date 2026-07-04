@@ -69,6 +69,10 @@ return [
         'enabled' => false,
         'prefix' => 'iran-locations/api',
         'middleware' => ['web'],
+        'pagination' => [
+            'per_page' => 25,
+            'max_per_page' => 100,
+        ],
     ],
 
     'search' => [

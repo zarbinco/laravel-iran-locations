@@ -1,0 +1,91 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Zarbin\IranLocations\Tests\Feature\Api;
+
+use Zarbin\IranLocations\Models\City;
+
+class SearchAndOptionApiTest extends ApiTestCase
+{
+    public function test_search_endpoint_requires_query(): void
+    {
+        $this->getJson('/iran-locations/api/search')
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('q');
+    }
+
+    public function test_search_endpoint_uses_builder_normalization_and_returns_grouped_results(): void
+    {
+        $records = $this->createLocationGraph('search-api');
+
+        $this->getJson('/iran-locations/api/search?q=City search-api&limit=1')
+            ->assertOk()
+            ->assertJsonPath('query', 'City search-api')
+            ->assertJsonPath('results.cities.0.code', 'city-search-api')
+            ->assertJsonPath('results.provinces', [])
+            ->assertJsonStructure([
+                'results' => ['provinces', 'cities', 'city_regions', 'city_areas', 'neighborhoods'],
+            ]);
+
+        $records['province']->aliases()->create([
+            'alias' => 'Alias Search Province',
+        ]);
+
+        $this->getJson('/iran-locations/api/search?q=Alias Search Province&limit=1')
+            ->assertOk()
+            ->assertJsonPath('results.provinces.0.code', 'province-search-api');
+    }
+
+    public function test_alias_endpoint_filters_aliases(): void
+    {
+        $records = $this->createLocationGraph('alias-api');
+
+        $alias = $records['city']->aliases()->create([
+            'alias' => 'Alias City API',
+            'source' => 'custom',
+        ]);
+
+        $this->getJson('/iran-locations/api/aliases?q=Alias City&location_type=city&source=custom')
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $alias->getKey())
+            ->assertJsonPath('data.0.location_id', $records['city']->getKey())
+            ->assertJsonPath('data.0.normalized_alias', 'normalized:Alias City API');
+    }
+
+    public function test_option_endpoints_return_lightweight_active_records_with_parent_filters(): void
+    {
+        $records = $this->createLocationGraph('options-api');
+        $this->createLocationGraph('options-other-api');
+
+        City::create([
+            'province_id' => $records['province']->getKey(),
+            'code' => 'city-inactive-options-api',
+            'name_fa' => 'Inactive City',
+            'is_active' => false,
+        ]);
+
+        $this->getJson('/iran-locations/api/options/cities?province_id='.$records['province']->getKey().'&limit=3')
+            ->assertOk()
+            ->assertJsonPath('0.value', $records['city']->getKey())
+            ->assertJsonPath('0.code', 'city-options-api')
+            ->assertJsonPath('0.label', 'City options-api')
+            ->assertJsonMissing(['code' => 'city-options-other-api'])
+            ->assertJsonMissing(['code' => 'city-inactive-options-api']);
+
+        $this->getJson('/iran-locations/api/options/neighborhoods?city_id='.$records['city']->getKey().'&region_id='.$records['region']->getKey().'&type=neighborhood')
+            ->assertOk()
+            ->assertJsonPath('0.code', 'neighborhood-options-api');
+    }
+
+    public function test_option_endpoints_support_query_and_limit(): void
+    {
+        $this->createLocationGraph('limit-a-api');
+        $this->createLocationGraph('limit-b-api');
+
+        $this->getJson('/iran-locations/api/options/provinces?q=Province limit&limit=1')
+            ->assertOk()
+            ->assertJsonCount(1)
+            ->assertJsonPath('0.name_fa', 'Province limit-a-api');
+    }
+}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Zarbin\IranLocations\Commands\DoctorCommand;
@@ -50,6 +51,8 @@ class IranLocationsServiceProvider extends ServiceProvider
         if (is_dir($viewsPath)) {
             $this->loadViewsFrom($viewsPath, 'iran-locations');
         }
+
+        Blade::componentNamespace('Zarbin\\IranLocations\\View\\Components', 'iran-locations');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
