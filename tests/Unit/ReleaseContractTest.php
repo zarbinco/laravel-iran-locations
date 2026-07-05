@@ -61,4 +61,27 @@ class ReleaseContractTest extends TestCase
         self::assertIsString($contents);
         self::assertSame(2, substr_count($contents, 'extensions: zip'));
     }
+
+    public function test_ci_workflow_uses_temporary_matrix_constraints_without_mutating_composer_metadata(): void
+    {
+        $contents = file_get_contents(dirname(__DIR__, 2).'/.github/workflows/tests.yml');
+
+        self::assertIsString($contents);
+        self::assertStringNotContainsString('composer require --no-update', $contents);
+        self::assertStringNotContainsString('composer require --dev --no-update', $contents);
+
+        foreach ([
+            '"illuminate/contracts:${{ matrix.laravel }}"',
+            '"illuminate/database:${{ matrix.laravel }}"',
+            '"illuminate/routing:${{ matrix.laravel }}"',
+            '"illuminate/support:${{ matrix.laravel }}"',
+            '"orchestra/testbench:${{ matrix.testbench }}"',
+        ] as $temporaryConstraint) {
+            self::assertStringContainsString($temporaryConstraint, $contents);
+        }
+
+        self::assertStringContainsString('composer update \\', $contents);
+        self::assertStringContainsString('--with-all-dependencies', $contents);
+        self::assertSame(2, substr_count($contents, 'extensions: zip'));
+    }
 }

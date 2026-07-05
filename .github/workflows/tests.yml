@@ -53,17 +53,18 @@ jobs:
       - name: Validate composer metadata
         run: composer validate --strict
 
-      - name: Select Laravel dependencies
+      - name: Install dependencies
         run: |
-          composer require --no-update \
+          composer update \
+            --prefer-dist \
+            --no-interaction \
+            --no-progress \
+            --with-all-dependencies \
             "illuminate/contracts:${{ matrix.laravel }}" \
             "illuminate/database:${{ matrix.laravel }}" \
             "illuminate/routing:${{ matrix.laravel }}" \
-            "illuminate/support:${{ matrix.laravel }}"
-          composer require --dev --no-update "orchestra/testbench:${{ matrix.testbench }}"
-
-      - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --with-all-dependencies
+            "illuminate/support:${{ matrix.laravel }}" \
+            "orchestra/testbench:${{ matrix.testbench }}"
 
       - name: Run tests
         run: composer test
