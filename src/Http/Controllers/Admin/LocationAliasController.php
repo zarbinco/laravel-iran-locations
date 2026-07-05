@@ -103,7 +103,7 @@ class LocationAliasController extends AdminController
         }
 
         if (filled($filters['location_type'] ?? null)) {
-            $query->where('location_type', $this->locationTypeClass((string) $filters['location_type']));
+            $query->where('location_type', LocationModelResolver::normalizeLocationType((string) $filters['location_type']));
         }
 
         $sort = (string) ($filters['sort'] ?? '');
@@ -123,14 +123,9 @@ class LocationAliasController extends AdminController
      */
     private function aliasPayload(array $data, bool $creating = false): array
     {
-        $data['location_type'] = $this->locationTypeClass((string) $data['location_type']);
+        $data['location_type'] = LocationModelResolver::normalizeLocationType((string) $data['location_type']);
 
         return $this->payload($data, $creating);
-    }
-
-    private function locationTypeClass(string $type): string
-    {
-        return LocationModelResolver::model($type);
     }
 
     /**
@@ -138,12 +133,6 @@ class LocationAliasController extends AdminController
      */
     private function locationTypes(): array
     {
-        return [
-            'province' => 'Province',
-            'city' => 'City',
-            'city_region' => 'City region',
-            'city_area' => 'City area',
-            'neighborhood' => 'Neighborhood',
-        ];
+        return LocationModelResolver::locationTypeLabels();
     }
 }

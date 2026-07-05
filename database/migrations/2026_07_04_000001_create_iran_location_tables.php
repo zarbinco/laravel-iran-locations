@@ -155,25 +155,34 @@ return new class extends Migration
 
         Schema::create($tables['location_aliases'], function (Blueprint $table): void {
             $table->id();
-            $table->string('location_type');
+            $table->string('location_type', 64);
             $table->unsignedBigInteger('location_id');
             $table->string('alias');
             $table->string('normalized_alias')->index();
             $table->string('reason')->nullable();
-            $table->string('source')->default('package')->index();
+            $table->boolean('is_active')->default(true);
+            $table->string('source')->default('package');
+            $table->string('source_version')->nullable();
+            $table->string('data_version')->nullable();
+            $table->timestamp('deprecated_at')->nullable();
             $table->timestamps();
 
             $table->index(['location_type', 'location_id'], 'iran_location_aliases_location_idx');
+            $table->unique(['location_type', 'location_id', 'normalized_alias'], 'iran_location_aliases_target_alias_unique');
+            $table->index(['source', 'is_active', 'deprecated_at'], 'iran_location_aliases_source_status_idx');
+            $table->index(['is_active', 'deprecated_at'], 'iran_location_aliases_status_idx');
         });
 
         Schema::create($tables['data_versions'], function (Blueprint $table): void {
             $table->id();
             $table->string('data_version')->index();
             $table->string('package_version')->nullable();
-            $table->string('checksum')->nullable();
+            $table->string('checksum')->default('');
             $table->json('summary')->nullable();
             $table->timestamp('applied_at')->nullable();
             $table->timestamps();
+
+            $table->unique(['data_version', 'checksum'], 'iran_data_versions_version_checksum_unique');
         });
     }
 

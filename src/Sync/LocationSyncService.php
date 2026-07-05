@@ -7,6 +7,7 @@ namespace Zarbin\IranLocations\Sync;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 use Zarbin\IranLocations\Contracts\LocationDataRepository;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Data\LocationDataManifest;
@@ -81,7 +82,7 @@ class LocationSyncService
 
         foreach ($datasets as $dataset) {
             $results[] = match ($dataset) {
-                'aliases' => $this->syncAliases($options),
+                'aliases' => $this->syncAliases($options, $dataVersion),
                 'neighborhood_region' => $this->syncNeighborhoodRegion($options),
                 default => $this->syncModelDataset($dataset, $options, $dataVersion),
             };
@@ -185,14 +186,14 @@ class LocationSyncService
         }
     }
 
-    private function syncAliases(LocationSyncOptions $options): LocationSyncDatasetResult
+    private function syncAliases(LocationSyncOptions $options, string $dataVersion): LocationSyncDatasetResult
     {
         $dataset = 'aliases';
         $result = new LocationSyncDatasetResult($dataset);
 
         foreach ($this->repository->aliases() as $index => $record) {
             $code = $this->aliasCode($record, $index);
-            $payload = $this->aliasPayload($record, $message);
+            $payload = $this->aliasPayload($record, $dataVersion, $message);
 
             if ($payload === null) {
                 $result->add(new LocationSyncChange($dataset, $code, 'fail', after: $record, message: $message));
@@ -635,15 +636,23 @@ class LocationSyncService
      * @param  array<string, mixed>  $record
      * @return array<string, mixed>|null
      */
-    private function aliasPayload(array $record, ?string &$message): ?array
+    private function aliasPayload(array $record, string $dataVersion, ?string &$message): ?array
     {
         $message = null;
-        $locationType = $this->string($record['location_type'] ?? null);
+        $rawLocationType = $this->string($record['location_type'] ?? null);
         $locationCode = $this->string($record['location_code'] ?? null);
-        $dataset = $this->aliasDataset($locationType);
 
-        if ($dataset === null || $locationCode === null) {
+        if ($rawLocationType === null || $locationCode === null) {
             $message = 'Alias target type or code is missing.';
+
+            return null;
+        }
+
+        try {
+            $locationType = LocationModelResolver::normalizeLocationType($rawLocationType);
+            $dataset = LocationModelResolver::datasetForLocationType($locationType);
+        } catch (InvalidArgumentException) {
+            $message = "Unsupported alias target type [{$rawLocationType}].";
 
             return null;
         }
@@ -665,12 +674,16 @@ class LocationSyncService
         }
 
         return [
-            'location_type' => $this->modelClass($dataset),
+            'location_type' => $locationType,
             'location_id' => $locationId,
             'alias' => $alias,
             'normalized_alias' => $this->string($record['normalized_alias'] ?? null) ?? $this->normalizer->search($alias),
             'reason' => $this->string($record['reason'] ?? null),
             'source' => 'package',
+            'source_version' => $this->string($record['source_version'] ?? null) ?? $this->manifestSourceVersion(),
+            'data_version' => $dataVersion,
+            'is_active' => $this->boolean($record['is_active'] ?? true),
+            'deprecated_at' => null,
         ];
     }
 
@@ -855,18 +868,6 @@ class LocationSyncService
         return $class;
     }
 
-    private function aliasDataset(?string $type): ?string
-    {
-        return match ($type) {
-            'province', 'provinces' => 'provinces',
-            'city', 'cities' => 'cities',
-            'city_region', 'city_regions' => 'city_regions',
-            'city_area', 'city_areas' => 'city_areas',
-            'neighborhood', 'neighborhoods' => 'neighborhoods',
-            default => null,
-        };
-    }
-
     /**
      * @return array<int, string>
      */
@@ -998,15 +999,16 @@ class LocationSyncService
         $class = $this->modelClass('data_versions');
         $source = $manifest['source'] ?? null;
         $packageVersion = is_array($source) ? $this->string($source['version'] ?? null) : null;
-        $checksum = $this->string($manifest['checksum'] ?? null);
+        $checksum = $this->string($manifest['checksum'] ?? null) ?? '';
+        $model = new $class;
 
-        $model = new $class([
+        $model->newQuery()->updateOrCreate([
             'data_version' => $result->dataVersion,
-            'package_version' => $packageVersion,
             'checksum' => $checksum,
+        ], [
             'summary' => $result->summary(),
+            'package_version' => $packageVersion,
             'applied_at' => now(),
         ]);
-        $model->saveQuietly();
     }
 }

@@ -24,7 +24,8 @@ class LocationResourceAdminTest extends AdminTestCase
             'is_active' => '1',
         ])->assertRedirect();
 
-        $city = City::query()->where('code', 'admin.city')->firstOrFail();
+        $city = City::query()->where('code', 'admin.city')->first();
+        self::assertInstanceOf(City::class, $city);
         self::assertSame('custom', $city->getAttribute('source'));
 
         $this->get(route('iran-locations.admin.cities.index', ['q' => 'Admin', 'province_id' => $province->getKey()]))
@@ -72,8 +73,13 @@ class LocationResourceAdminTest extends AdminTestCase
 
         $alias = LocationAlias::query()->where('alias', 'Admin Alias')->firstOrFail();
 
-        self::assertSame(Neighborhood::class, $alias->getAttribute('location_type'));
+        self::assertSame('neighborhood', $alias->getAttribute('location_type'));
         self::assertSame('custom', $alias->getAttribute('source'));
+
+        $city->aliases()->create([
+            'alias' => 'City Alias Hidden From Neighborhood Filter',
+            'source' => 'custom',
+        ]);
 
         $this->get(route('iran-locations.admin.city-regions.index', ['q' => 'Region']))
             ->assertOk()
@@ -86,7 +92,17 @@ class LocationResourceAdminTest extends AdminTestCase
             ->assertSee('Admin Neighborhood');
         $this->get(route('iran-locations.admin.aliases.index', ['q' => 'Alias', 'location_type' => 'neighborhood']))
             ->assertOk()
-            ->assertSee('Admin Alias');
+            ->assertSee('Admin Alias')
+            ->assertDontSee('City Alias Hidden From Neighborhood Filter');
+
+        $this->put(route('iran-locations.admin.aliases.update', $alias->getKey()), [
+            'location_type' => 'city',
+            'location_id' => $city->getKey(),
+            'alias' => 'Admin Alias Updated',
+        ])->assertRedirect();
+
+        self::assertSame('city', $alias->refresh()->getAttribute('location_type'));
+        self::assertSame('Admin Alias Updated', $alias->getAttribute('alias'));
     }
 
     public function test_relationship_validation_is_enforced(): void

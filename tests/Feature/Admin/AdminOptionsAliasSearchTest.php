@@ -46,10 +46,11 @@ class AdminOptionsAliasSearchTest extends AdminTestCase
         $alias = new LocationAlias;
 
         DB::table($alias->getTable())->insert([
-            'location_type' => Province::class,
+            'location_type' => 'province',
             'location_id' => $province->getKey(),
             'alias' => 'Totally Different Alias',
             'normalized_alias' => 'normalized:needle',
+            'is_active' => true,
             'source' => 'custom',
             'created_at' => now(),
             'updated_at' => now(),

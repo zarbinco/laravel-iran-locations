@@ -9,11 +9,14 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Models\Concerns\HasConfigurableTable;
 use Zarbin\IranLocations\Models\Concerns\HasLocationSource;
+use Zarbin\IranLocations\Models\Concerns\HasLocationStatus;
+use Zarbin\IranLocations\Support\LocationModelResolver;
 
 class LocationAlias extends Model
 {
     use HasConfigurableTable;
     use HasLocationSource;
+    use HasLocationStatus;
 
     protected string $tableConfigKey = 'location_alias';
 
@@ -23,16 +26,32 @@ class LocationAlias extends Model
         'alias',
         'normalized_alias',
         'reason',
+        'is_active',
         'source',
+        'source_version',
+        'data_version',
+        'deprecated_at',
     ];
 
     protected $attributes = [
+        'is_active' => true,
         'source' => self::SOURCE_PACKAGE,
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'deprecated_at' => 'datetime',
     ];
 
     protected static function booted(): void
     {
         static::saving(static function (self $alias): void {
+            $type = $alias->getAttribute('location_type');
+
+            if (is_string($type) && $type !== '') {
+                $alias->setAttribute('location_type', LocationModelResolver::normalizeLocationType($type));
+            }
+
             if (! (bool) config('iran-locations.normalization.aliases', true)) {
                 return;
             }
@@ -52,5 +71,21 @@ class LocationAlias extends Model
     public function location(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function markDeprecated(?Model $replacement = null): static
+    {
+        $this->setAttribute('is_active', false);
+        $this->setAttribute('deprecated_at', $this->freshTimestamp());
+
+        return $this;
+    }
+
+    public function restoreFromDeprecation(): static
+    {
+        $this->setAttribute('is_active', true);
+        $this->setAttribute('deprecated_at', null);
+
+        return $this;
     }
 }

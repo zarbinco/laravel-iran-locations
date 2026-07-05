@@ -18,6 +18,106 @@ use Zarbin\IranLocations\Models\RuralDistrict;
 
 final class LocationModelResolver
 {
+    /**
+     * @return array<int, string>
+     */
+    public static function locationTypeKeys(): array
+    {
+        return array_keys(self::locationTypeDatasets());
+    }
+
+    /**
+     * @return array<string, class-string>
+     */
+    public static function morphMap(): array
+    {
+        $map = [];
+
+        foreach (self::locationTypeKeys() as $key) {
+            $map[$key] = self::model($key);
+        }
+
+        return $map;
+    }
+
+    public static function normalizeLocationType(string $type): string
+    {
+        $normalized = strtolower(trim($type));
+        $normalized = str_replace('-', '_', $normalized);
+
+        $aliases = [
+            'province' => 'province',
+            'provinces' => 'province',
+            'county' => 'county',
+            'counties' => 'county',
+            'official_district' => 'official_district',
+            'official_districts' => 'official_district',
+            'rural_district' => 'rural_district',
+            'rural_districts' => 'rural_district',
+            'city' => 'city',
+            'cities' => 'city',
+            'city_region' => 'city_region',
+            'city_regions' => 'city_region',
+            'city_area' => 'city_area',
+            'city_areas' => 'city_area',
+            'neighborhood' => 'neighborhood',
+            'neighborhoods' => 'neighborhood',
+        ];
+
+        $key = $aliases[$normalized] ?? null;
+
+        if ($key === null) {
+            throw new InvalidArgumentException("Unsupported Iran Locations location type [{$type}].");
+        }
+
+        return $key;
+    }
+
+    /**
+     * @return class-string
+     */
+    public static function modelForLocationType(string $type): string
+    {
+        return self::model(self::normalizeLocationType($type));
+    }
+
+    public static function locationTypeForModel(string|object $model): string
+    {
+        $class = is_object($model) ? $model::class : $model;
+
+        foreach (self::morphMap() as $key => $configuredModel) {
+            if ($class === $configuredModel || is_a($class, $configuredModel, true)) {
+                return $key;
+            }
+        }
+
+        throw new InvalidArgumentException("Unsupported Iran Locations location model [{$class}].");
+    }
+
+    public static function datasetForLocationType(string $type): string
+    {
+        $key = self::normalizeLocationType($type);
+
+        return self::locationTypeDatasets()[$key];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function locationTypeLabels(): array
+    {
+        return [
+            'province' => 'Province',
+            'county' => 'County',
+            'official_district' => 'Official district',
+            'rural_district' => 'Rural district',
+            'city' => 'City',
+            'city_region' => 'City region',
+            'city_area' => 'City area',
+            'neighborhood' => 'Neighborhood',
+        ];
+    }
+
     public static function model(string $key): string
     {
         $model = config("iran-locations.models.{$key}");
@@ -88,6 +188,23 @@ final class LocationModelResolver
             'location_alias' => 'location_aliases',
             'data_version' => 'data_versions',
         ][$key] ?? null;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private static function locationTypeDatasets(): array
+    {
+        return [
+            'province' => 'provinces',
+            'county' => 'counties',
+            'official_district' => 'official_districts',
+            'rural_district' => 'rural_districts',
+            'city' => 'cities',
+            'city_region' => 'city_regions',
+            'city_area' => 'city_areas',
+            'neighborhood' => 'neighborhoods',
+        ];
     }
 
     /**

@@ -60,6 +60,8 @@ When `q` is present, HTTP request validation enforces the configured `search.min
 
 Pagination uses `per_page` and `page` with the configured maximum.
 
+`GET /aliases` accepts `location_type` as one of the stable public keys: `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, or `neighborhood`. Responses return that same stable key. Class names and unsupported type strings are rejected by request validation.
+
 ## Search
 
 ```http

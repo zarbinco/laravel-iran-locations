@@ -10,9 +10,12 @@ use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
+use Zarbin\IranLocations\Models\County;
 use Zarbin\IranLocations\Models\LocationAlias;
 use Zarbin\IranLocations\Models\Neighborhood;
+use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
+use Zarbin\IranLocations\Models\RuralDistrict;
 use Zarbin\IranLocations\Tests\TestCase;
 
 class LocationAliasTest extends TestCase
@@ -21,6 +24,9 @@ class LocationAliasTest extends TestCase
     {
         $models = [
             'Province' => new Province,
+            'County' => new County,
+            'OfficialDistrict' => new OfficialDistrict,
+            'RuralDistrict' => new RuralDistrict,
             'City' => new City,
             'CityRegion' => new CityRegion,
             'CityArea' => new CityArea,
@@ -46,6 +52,20 @@ class LocationAliasTest extends TestCase
         $this->fireSavingEvent($alias);
 
         self::assertSame('search:Tehran', $alias->getAttribute('normalized_alias'));
+    }
+
+    public function test_location_alias_normalizes_plural_location_type_to_stable_key(): void
+    {
+        $alias = new LocationAlias([
+            'location_type' => 'cities',
+            'alias' => 'Tehran',
+        ]);
+
+        $this->fireSavingEvent($alias);
+
+        self::assertSame('city', $alias->getAttribute('location_type'));
+        self::assertTrue((bool) $alias->getAttribute('is_active'));
+        self::assertSame('package', $alias->getAttribute('source'));
     }
 
     public function test_location_alias_does_not_normalize_when_alias_normalization_is_disabled(): void

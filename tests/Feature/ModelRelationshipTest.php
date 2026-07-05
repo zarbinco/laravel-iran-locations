@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Tests\Feature;
 
+use Illuminate\Database\QueryException;
 use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
 use Zarbin\IranLocations\Models\County;
+use Zarbin\IranLocations\Models\LocationAlias;
 use Zarbin\IranLocations\Models\Neighborhood;
 use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
@@ -125,17 +127,75 @@ class ModelRelationshipTest extends TestCase
     public function test_alias_relationships_work_for_location_models(): void
     {
         $records = $this->createLocationGraph();
+        $expectedTypes = [
+            'province' => 'province',
+            'county' => 'county',
+            'officialDistrict' => 'official_district',
+            'ruralDistrict' => 'rural_district',
+            'city' => 'city',
+            'region' => 'city_region',
+            'area' => 'city_area',
+            'neighborhood' => 'neighborhood',
+        ];
 
         foreach (['province', 'county', 'officialDistrict', 'ruralDistrict', 'city', 'region', 'area', 'neighborhood'] as $key) {
             $model = $records[$key];
             $alias = $model->aliases()->create([
                 'alias' => $key.' alias',
             ]);
+            self::assertInstanceOf(LocationAlias::class, $alias);
+            $location = $alias->location()->first();
 
             self::assertTrue($model->aliases()->whereKey($alias->getKey())->exists());
+            self::assertSame($expectedTypes[$key], $alias->getAttribute('location_type'));
             self::assertSame($key.' alias', $alias->getAttribute('alias'));
             self::assertNotSame('', $alias->getAttribute('normalized_alias'));
+            self::assertNotNull($location);
+            self::assertTrue($location->is($model));
         }
+    }
+
+    public function test_alias_target_normalized_alias_unique_constraint_is_enforced(): void
+    {
+        $records = $this->createLocationGraph('-duplicate-alias');
+        $city = $records['city'];
+
+        $city->aliases()->create([
+            'alias' => 'Duplicate Alias',
+        ]);
+
+        $this->expectException(QueryException::class);
+
+        $city->aliases()->create([
+            'alias' => 'Duplicate Alias',
+        ]);
+    }
+
+    public function test_location_alias_deprecation_and_restore_do_not_require_replacement_column(): void
+    {
+        $records = $this->createLocationGraph('-alias-lifecycle');
+        $alias = $records['city']->aliases()->create([
+            'alias' => 'Lifecycle Alias',
+        ]);
+        self::assertInstanceOf(LocationAlias::class, $alias);
+
+        $alias->markDeprecated()->save();
+        $alias->refresh();
+
+        self::assertFalse($alias->isActive());
+        self::assertTrue($alias->isInactive());
+        self::assertTrue($alias->isDeprecated());
+        self::assertNotNull($alias->getAttribute('deprecated_at'));
+        self::assertArrayNotHasKey('replaced_by_id', $alias->getAttributes());
+
+        $alias->restoreFromDeprecation()->save();
+        $alias->refresh();
+
+        self::assertTrue($alias->isActive());
+        self::assertFalse($alias->isInactive());
+        self::assertFalse($alias->isDeprecated());
+        self::assertNull($alias->getAttribute('deprecated_at'));
+        self::assertArrayNotHasKey('replaced_by_id', $alias->getAttributes());
     }
 
     public function test_replaced_by_relationships_work_for_location_models(): void

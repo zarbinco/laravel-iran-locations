@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations;
 
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -17,6 +18,7 @@ use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Data\JsonLocationDataRepository;
 use Zarbin\IranLocations\Data\LocationDataValidator;
 use Zarbin\IranLocations\Support\LocationDatabaseInspector;
+use Zarbin\IranLocations\Support\LocationModelResolver;
 use Zarbin\IranLocations\Support\PersianCoreLocationNormalizer;
 use Zarbin\IranLocations\Sync\LocationSyncService;
 
@@ -47,6 +49,8 @@ class IranLocationsServiceProvider extends ServiceProvider
     {
         $viewsPath = $this->packagePath('resources/views');
         $migrationsPath = $this->packagePath('database/migrations');
+
+        Relation::morphMap(LocationModelResolver::morphMap(), true);
 
         if (is_dir($viewsPath)) {
             $this->loadViewsFrom($viewsPath, 'iran-locations');

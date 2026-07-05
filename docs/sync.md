@@ -21,6 +21,7 @@ php artisan iran-locations:sync
 ```
 
 Successful syncs write a data-version record with the package data version, checksum, and summary.
+Repeated successful syncs for the same `data_version` and checksum update that row with the latest summary and timestamps instead of creating duplicate data-version rows. Missing checksums are persisted as an empty string so the latest-state uniqueness contract remains enforceable.
 
 ## Safety Behavior
 
@@ -31,6 +32,7 @@ Successful syncs write a data-version record with the package data version, chec
 - Missing package-owned records are deprecated by default.
 - Hard delete behavior is rejected by the sync service.
 - Empty non-authoritative datasets are not used to deprecate records during default full sync.
+- Alias sync stores stable location type keys and package lifecycle fields. Alias deprecation uses `is_active` and `deprecated_at`; aliases do not use `replaced_by_id`. It does not perform full stale alias cleanup yet; broader alias and neighborhood-region stale policy is reserved for a later phase.
 
 `package_record_delete_behavior` supports the safe `deprecate` behavior. Configuring hard delete is intentionally rejected by the sync service. Admin direct mutation of package-owned records is controlled separately by `data.allow_package_record_direct_edit`.
 

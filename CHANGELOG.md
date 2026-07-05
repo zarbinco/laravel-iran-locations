@@ -26,3 +26,6 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Enforced `search.min_length` through API and admin HTTP request validation.
 - Enforced package-owned admin edit/delete protection through `data.allow_package_record_direct_edit`.
 - Removed misleading config keys that did not represent real runtime toggles: `normalization.on_sync` and `data.preserve_custom_records`.
+- Changed alias `location_type` storage, admin/API filters, resources, and sync payloads to use stable public morph-map keys instead of PHP class names.
+- Changed data-version sync tracking so repeated successful syncs for the same data version and checksum update the existing row instead of appending duplicates.
+- Clarified alias deprecation lifecycle so aliases do not persist `replaced_by_id`, and normalized missing data-version checksums to an empty string for database-enforced idempotence.

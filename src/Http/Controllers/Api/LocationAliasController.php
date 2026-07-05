@@ -11,6 +11,7 @@ use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Http\Controllers\Api\Concerns\ResolvesLocationApiModels;
 use Zarbin\IranLocations\Http\Requests\Api\AliasApiRequest;
 use Zarbin\IranLocations\Http\Resources\LocationAliasResource;
+use Zarbin\IranLocations\Support\LocationModelResolver;
 
 class LocationAliasController extends Controller
 {
@@ -46,7 +47,7 @@ class LocationAliasController extends Controller
         }
 
         if (filled($filters['location_type'] ?? null)) {
-            $query->where('location_type', $this->locationTypeClass((string) $filters['location_type']));
+            $query->where('location_type', LocationModelResolver::normalizeLocationType((string) $filters['location_type']));
         }
 
         $sort = (string) ($filters['sort'] ?? '');

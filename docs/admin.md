@@ -22,6 +22,8 @@ The admin UI includes screens for provinces, counties, official districts, rural
 
 County, official district, and rural district screens use the official administrative hierarchy. City region, city area, and neighborhood screens remain municipal hierarchy screens.
 
+Alias forms and filters use stable location type keys: `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, and `neighborhood`. Admin requests persist those keys directly and reject unsupported type values such as PHP class names.
+
 ## Authorization
 
 Set `iran-locations.admin.gate` to a Laravel gate name if you want package-level authorization. A null gate allows access when the configured middleware allows the request.

@@ -117,6 +117,78 @@ class LocationDataValidatorTest extends TestCase
         self::assertContains('Dataset [neighborhoods] record [0] references missing city_code [ir.city.001.9999].', $result['errors']);
     }
 
+    public function test_validator_accepts_alias_plural_type_and_existing_target(): void
+    {
+        $path = $this->makeDataPath([
+            'aliases' => [[
+                'location_type' => 'cities',
+                'location_code' => 'ir.city.001.001.001.001',
+                'alias' => 'Alias City',
+                'normalized_alias' => 'alias city',
+                'source' => 'package',
+            ]],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertTrue($result['ok'], implode(PHP_EOL, $result['errors']));
+    }
+
+    public function test_validator_catches_alias_unsupported_type_and_missing_target(): void
+    {
+        $path = $this->makeDataPath([
+            'aliases' => [
+                [
+                    'location_type' => 'Zarbin\\IranLocations\\Models\\City',
+                    'location_code' => 'ir.city.001.001.001.001',
+                    'alias' => 'Alias City',
+                    'normalized_alias' => 'alias city',
+                    'source' => 'package',
+                ],
+                [
+                    'location_type' => 'city',
+                    'location_code' => 'ir.city.missing',
+                    'alias' => 'Missing City Alias',
+                    'normalized_alias' => 'missing city alias',
+                    'source' => 'package',
+                ],
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Dataset [aliases] record [0] has unsupported location_type [Zarbin\\IranLocations\\Models\\City].', $result['errors']);
+        self::assertContains('Dataset [aliases] record [1] references missing cities code [ir.city.missing].', $result['errors']);
+    }
+
+    public function test_validator_catches_duplicate_alias_target(): void
+    {
+        $path = $this->makeDataPath([
+            'aliases' => [
+                [
+                    'location_type' => 'city',
+                    'location_code' => 'ir.city.001.001.001.001',
+                    'alias' => 'Alias City',
+                    'normalized_alias' => 'alias city',
+                    'source' => 'package',
+                ],
+                [
+                    'location_type' => 'cities',
+                    'location_code' => 'ir.city.001.001.001.001',
+                    'alias' => 'Alias City Again',
+                    'normalized_alias' => 'alias city',
+                    'source' => 'package',
+                ],
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Dataset [aliases] contains duplicate alias target [city|ir.city.001.001.001.001|alias city].', $result['errors']);
+    }
+
     public function test_validator_catches_manifest_count_mismatch(): void
     {
         $path = $this->makeDataPath([], [

@@ -37,3 +37,11 @@ By default, admin direct edits and delete/deprecate actions for package-owned re
 
 Records include package lifecycle fields such as `source`, `source_version`, `data_version`, `is_active`, and `deprecated_at`. These fields make it possible to track package data separately from application data.
 Package data is required to contain normalized/searchable fields. Sync writes those normalized fields and fills missing normalized or slug fields through the configured `LocationNormalizer`. Sync normalization is part of the package data contract and is not user-toggleable. Model save-time normalization for application/admin writes remains controlled by `normalization.on_save`.
+
+## Alias Location Types
+
+Alias records use stable public location type keys, not PHP class names. Supported keys are `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, and `neighborhood`. Package data validation also accepts plural dataset-style names such as `cities` and normalizes them to the stored singular key.
+
+The alias lifecycle columns are `is_active`, `source`, `source_version`, `data_version`, and `deprecated_at`. Alias rows are unique per `location_type`, `location_id`, and `normalized_alias`. Aliases do not have a replacement pointer; alias deprecation does not use `replaced_by_id`.
+
+Data-version rows store the latest applied state for each `data_version` and checksum pair. Missing package checksums are persisted as an empty string so the uniqueness contract remains enforceable across databases.

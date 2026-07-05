@@ -53,8 +53,16 @@ class SearchAndOptionApiTest extends ApiTestCase
         $this->getJson('/iran-locations/api/aliases?q=Alias City&location_type=city&source=custom')
             ->assertOk()
             ->assertJsonPath('data.0.id', $alias->getKey())
+            ->assertJsonPath('data.0.location_type', 'city')
             ->assertJsonPath('data.0.location_id', $records['city']->getKey())
             ->assertJsonPath('data.0.normalized_alias', 'normalized:Alias City API');
+    }
+
+    public function test_alias_endpoint_rejects_unsupported_location_type_filter(): void
+    {
+        $this->getJson('/iran-locations/api/aliases?location_type='.urlencode(City::class))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('location_type');
     }
 
     public function test_option_endpoints_return_lightweight_active_records_with_parent_filters(): void

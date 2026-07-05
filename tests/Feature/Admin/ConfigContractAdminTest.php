@@ -140,6 +140,24 @@ class ConfigContractAdminTest extends AdminTestCase
         self::assertTrue(LocationAlias::query()->whereKey($alias->getKey())->exists());
     }
 
+    public function test_package_owned_alias_destroy_deprecates_when_direct_edit_is_enabled(): void
+    {
+        config()->set('iran-locations.data.allow_package_record_direct_edit', true);
+
+        $records = $this->createLocationGraph('alias-destroy-enabled');
+        $alias = $this->packageAlias($records['city']);
+
+        $this->delete(route('iran-locations.admin.aliases.destroy', $alias->getKey()))
+            ->assertRedirect();
+
+        $alias->refresh();
+
+        self::assertTrue(LocationAlias::query()->whereKey($alias->getKey())->exists());
+        self::assertFalse((bool) $alias->getAttribute('is_active'));
+        self::assertNotNull($alias->getAttribute('deprecated_at'));
+        self::assertArrayNotHasKey('replaced_by_id', $alias->getAttributes());
+    }
+
     public function test_alias_package_record_update_is_allowed_when_direct_edit_is_enabled(): void
     {
         config()->set('iran-locations.data.allow_package_record_direct_edit', true);
@@ -161,7 +179,7 @@ class ConfigContractAdminTest extends AdminTestCase
     private function packageAlias(City $city): LocationAlias
     {
         $alias = new LocationAlias([
-            'location_type' => City::class,
+            'location_type' => 'city',
             'location_id' => $city->getKey(),
             'alias' => 'Package Alias',
             'normalized_alias' => 'package alias',

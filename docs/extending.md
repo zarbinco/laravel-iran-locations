@@ -41,6 +41,9 @@ Package data is versioned package data, not automatically complete, official, cu
 ## Aliases
 
 Aliases are polymorphic and available on provinces, counties, official districts, rural districts, cities, city regions, city areas, and neighborhoods. Alias normalization uses the configured `LocationNormalizer` contract.
+The package stores alias `location_type` values as stable morph-map keys: `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, and `neighborhood`.
+
+The service provider registers those keys with Eloquent using the configured model classes and merges the map with any existing application morph map. It does not require a global enforced morph map. If you override model classes, the alias morph map points to your configured models.
 
 ## Normalization Contract
 

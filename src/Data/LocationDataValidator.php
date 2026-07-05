@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Data;
 
+use InvalidArgumentException;
 use Throwable;
+use Zarbin\IranLocations\Support\LocationModelResolver;
 
 class LocationDataValidator
 {
@@ -126,6 +128,36 @@ class LocationDataValidator
             return;
         }
 
+        if ($dataset === 'aliases') {
+            $aliases = [];
+
+            foreach ($records as $index => $record) {
+                $locationType = $record['location_type'] ?? null;
+                $locationCode = $record['location_code'] ?? null;
+                $normalizedAlias = $record['normalized_alias'] ?? null;
+
+                if (! is_string($locationType) || ! is_string($locationCode) || ! is_string($normalizedAlias)) {
+                    continue;
+                }
+
+                try {
+                    $key = LocationModelResolver::normalizeLocationType($locationType).'|'.$locationCode.'|'.$normalizedAlias;
+                } catch (InvalidArgumentException) {
+                    continue;
+                }
+
+                if (isset($aliases[$key])) {
+                    $errors[] = "Dataset [aliases] contains duplicate alias target [{$key}].";
+                }
+
+                $aliases[$key] = true;
+            }
+
+            $checks[] = 'Dataset [aliases] has unique target aliases.';
+
+            return;
+        }
+
         foreach ($records as $index => $record) {
             $code = $record['code'] ?? null;
 
@@ -221,9 +253,21 @@ class LocationDataValidator
         $provinceCodes = $this->codes($datasets['provinces'] ?? []);
         $countyCodes = $this->codes($datasets['counties'] ?? []);
         $officialDistrictCodes = $this->codes($datasets['official_districts'] ?? []);
+        $ruralDistrictCodes = $this->codes($datasets['rural_districts'] ?? []);
         $cityCodes = $this->codes($datasets['cities'] ?? []);
         $cityRegionCodes = $this->codes($datasets['city_regions'] ?? []);
+        $cityAreaCodes = $this->codes($datasets['city_areas'] ?? []);
         $neighborhoodCodes = $this->codes($datasets['neighborhoods'] ?? []);
+        $codesByDataset = [
+            'provinces' => $provinceCodes,
+            'counties' => $countyCodes,
+            'official_districts' => $officialDistrictCodes,
+            'rural_districts' => $ruralDistrictCodes,
+            'cities' => $cityCodes,
+            'city_regions' => $cityRegionCodes,
+            'city_areas' => $cityAreaCodes,
+            'neighborhoods' => $neighborhoodCodes,
+        ];
 
         foreach ($datasets['counties'] ?? [] as $index => $county) {
             $provinceCode = $county['province_code'] ?? null;
@@ -303,6 +347,29 @@ class LocationDataValidator
             }
         }
 
+        foreach ($datasets['aliases'] ?? [] as $index => $record) {
+            $locationType = $record['location_type'] ?? null;
+            $locationCode = $record['location_code'] ?? null;
+
+            if (! is_string($locationType) || blank($locationType)) {
+                $errors[] = "Dataset [aliases] record [{$index}] has unsupported location_type [".$this->messageValue($locationType).'].';
+
+                continue;
+            }
+
+            try {
+                $dataset = LocationModelResolver::datasetForLocationType($locationType);
+            } catch (InvalidArgumentException) {
+                $errors[] = "Dataset [aliases] record [{$index}] has unsupported location_type [{$locationType}].";
+
+                continue;
+            }
+
+            if (! is_string($locationCode) || ! isset($codesByDataset[$dataset][$locationCode])) {
+                $errors[] = "Dataset [aliases] record [{$index}] references missing {$dataset} code [{$locationCode}].";
+            }
+        }
+
         $checks[] = 'Dataset foreign references were checked.';
     }
 
@@ -323,6 +390,15 @@ class LocationDataValidator
         }
 
         return $codes;
+    }
+
+    private function messageValue(mixed $value): string
+    {
+        if (is_scalar($value) || $value === null) {
+            return (string) $value;
+        }
+
+        return get_debug_type($value);
     }
 
     /**

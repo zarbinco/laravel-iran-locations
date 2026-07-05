@@ -1,12 +1,5 @@
 @php
-    $currentType = old('location_type');
-    if (! $currentType) {
-        foreach ($locationTypes as $key => $label) {
-            if ($alias->getAttribute('location_type') === config("iran-locations.models.{$key}")) {
-                $currentType = $key;
-            }
-        }
-    }
+    $currentType = old('location_type', $alias->getAttribute('location_type'));
 @endphp
 @php
     $allowsPackageSource = (bool) config('iran-locations.data.allow_package_record_direct_edit', false);

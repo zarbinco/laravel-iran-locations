@@ -13,6 +13,7 @@ use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
 use Zarbin\IranLocations\Models\CityRegion;
 use Zarbin\IranLocations\Models\County;
+use Zarbin\IranLocations\Models\LocationAlias;
 use Zarbin\IranLocations\Models\LocationDataVersion;
 use Zarbin\IranLocations\Models\Neighborhood;
 use Zarbin\IranLocations\Models\OfficialDistrict;
@@ -93,7 +94,13 @@ class LocationSyncServiceTest extends TestCase
         $service = $this->app->make(LocationSyncService::class);
 
         $service->sync();
+        $firstVersion = LocationDataVersion::query()->first();
+        self::assertInstanceOf(LocationDataVersion::class, $firstVersion);
+
         $result = $service->sync();
+        $secondVersion = LocationDataVersion::query()->first();
+        self::assertInstanceOf(LocationDataVersion::class, $secondVersion);
+
         $totals = $result->totals();
 
         self::assertTrue($result->isSuccessful());
@@ -101,7 +108,10 @@ class LocationSyncServiceTest extends TestCase
         self::assertSame(0, $totals['created']);
         self::assertSame(0, $totals['updated']);
         self::assertSame(0, $totals['deprecated']);
-        self::assertSame(2, LocationDataVersion::query()->count());
+        self::assertSame(1, LocationDataVersion::query()->count());
+        self::assertSame($firstVersion->getKey(), $secondVersion->getKey());
+        self::assertNotSame('', $secondVersion->getAttribute('checksum'));
+        self::assertNotEmpty($secondVersion->getAttribute('summary'));
     }
 
     public function test_custom_records_are_preserved_and_not_overwritten(): void
@@ -329,6 +339,59 @@ class LocationSyncServiceTest extends TestCase
         self::assertSame(0, LocationDataVersion::query()->count());
     }
 
+    public function test_sync_alias_payload_stores_stable_location_type_and_lifecycle_fields(): void
+    {
+        $repository = new ArrayLocationDataRepository([
+            'provinces' => [[
+                'code' => 'ir.province.alias-sync',
+                'name_fa' => 'Alias Sync Province',
+                'source_version' => 'source-province',
+            ]],
+            'aliases' => [[
+                'location_type' => 'provinces',
+                'location_code' => 'ir.province.alias-sync',
+                'alias' => 'Alias Sync Province Alias',
+                'normalized_alias' => 'alias sync province alias',
+                'source_version' => 'source-alias',
+            ]],
+        ]);
+        $service = $this->serviceFor($repository);
+
+        $result = $service->sync(LocationSyncOptions::make(datasets: ['provinces', 'aliases']));
+
+        $alias = LocationAlias::query()->firstOrFail();
+
+        self::assertTrue($result->isSuccessful());
+        self::assertSame(1, $result->datasetsByName()['aliases']->totals()['created']);
+        self::assertSame('province', $alias->getAttribute('location_type'));
+        self::assertSame('package', $alias->getAttribute('source'));
+        self::assertSame('source-alias', $alias->getAttribute('source_version'));
+        self::assertSame('test', $alias->getAttribute('data_version'));
+        self::assertTrue((bool) $alias->getAttribute('is_active'));
+        self::assertNull($alias->getAttribute('deprecated_at'));
+    }
+
+    public function test_repeated_sync_with_missing_checksum_uses_empty_checksum_and_updates_same_data_version_row(): void
+    {
+        $repository = new ArrayLocationDataRepository([
+            'provinces' => [],
+        ], omitChecksum: true);
+        $service = $this->serviceFor($repository);
+
+        $service->sync(LocationSyncOptions::make(datasets: ['provinces']));
+        $firstVersion = LocationDataVersion::query()->first();
+        self::assertInstanceOf(LocationDataVersion::class, $firstVersion);
+
+        $service->sync(LocationSyncOptions::make(datasets: ['provinces']));
+        $secondVersion = LocationDataVersion::query()->first();
+        self::assertInstanceOf(LocationDataVersion::class, $secondVersion);
+
+        self::assertSame(1, LocationDataVersion::query()->count());
+        self::assertSame($firstVersion->getKey(), $secondVersion->getKey());
+        self::assertSame('', $secondVersion->getAttribute('checksum'));
+        self::assertNotEmpty($secondVersion->getAttribute('summary'));
+    }
+
     public function test_hard_delete_behavior_is_rejected(): void
     {
         config()->set('iran-locations.data.package_record_delete_behavior', 'delete');
@@ -371,6 +434,8 @@ class ArrayLocationDataRepository implements LocationDataRepository
      */
     public function __construct(
         private readonly array $datasets,
+        private readonly array $manifestOverrides = [],
+        private readonly bool $omitChecksum = false,
     ) {}
 
     public function manifest(): array
@@ -381,7 +446,7 @@ class ArrayLocationDataRepository implements LocationDataRepository
             $counts[$dataset] = count($this->all($dataset));
         }
 
-        return [
+        $manifest = [
             'data_version' => 'test',
             'country_code' => 'IR',
             'source' => [
@@ -392,6 +457,12 @@ class ArrayLocationDataRepository implements LocationDataRepository
             'counts' => $counts,
             'checksum' => 'test-checksum',
         ];
+
+        if ($this->omitChecksum) {
+            unset($manifest['checksum']);
+        }
+
+        return array_replace_recursive($manifest, $this->manifestOverrides);
     }
 
     public function dataVersion(): string

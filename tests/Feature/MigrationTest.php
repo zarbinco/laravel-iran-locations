@@ -85,6 +85,19 @@ class MigrationTest extends TestCase
             'longitude',
         ]));
 
+        self::assertTrue(Schema::hasColumns(config('iran-locations.tables.location_aliases'), [
+            'location_type',
+            'location_id',
+            'alias',
+            'normalized_alias',
+            'is_active',
+            'source',
+            'source_version',
+            'data_version',
+            'deprecated_at',
+        ]));
+        self::assertFalse(Schema::hasColumn(config('iran-locations.tables.location_aliases'), 'replaced_by_id'));
+
         self::assertFalse(Schema::hasTable('iran_districts'));
     }
 }

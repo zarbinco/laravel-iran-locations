@@ -73,6 +73,12 @@ The packaged data is generated from spreadsheet source files. The official hiera
 
 Treat this as versioned package data, not automatically complete, official, current national coverage. It does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless explicitly documented. Verify source assumptions and licensing suitability before production, legal, regulatory, logistics, or high-stakes use.
 
+## Alias Contract
+
+Aliases store stable public location type keys instead of PHP class names: `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, and `neighborhood`. The package registers an Eloquent morph map for those keys and maps them to the configured model classes, so custom model configuration remains respected.
+
+Admin and API inputs accept the supported stable keys and reject unsupported values such as arbitrary class names. Package data and sync may normalize plural dataset-style aliases, for example `cities` to `city`.
+
 ## Normalization
 
 The package delegates Persian display, search, slug, and alias normalization to `zarbinco/laravel-persian-core` through the `LocationNormalizer` contract. It does not duplicate Persian character replacement or digit normalization logic locally.
