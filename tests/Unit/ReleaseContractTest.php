@@ -71,17 +71,18 @@ class ReleaseContractTest extends TestCase
         self::assertStringNotContainsString('composer require --dev --no-update', $contents);
 
         foreach ([
-            '"illuminate/contracts:${{ matrix.laravel }}"',
-            '"illuminate/database:${{ matrix.laravel }}"',
-            '"illuminate/routing:${{ matrix.laravel }}"',
-            '"illuminate/support:${{ matrix.laravel }}"',
-            '"orchestra/testbench:${{ matrix.testbench }}"',
+            '--with "illuminate/contracts:${{ matrix.laravel }}"',
+            '--with "illuminate/database:${{ matrix.laravel }}"',
+            '--with "illuminate/routing:${{ matrix.laravel }}"',
+            '--with "illuminate/support:${{ matrix.laravel }}"',
+            '--with "orchestra/testbench:${{ matrix.testbench }}"',
         ] as $temporaryConstraint) {
             self::assertStringContainsString($temporaryConstraint, $contents);
         }
 
         self::assertStringContainsString('composer update \\', $contents);
         self::assertStringContainsString('--with-all-dependencies', $contents);
+        self::assertStringNotContainsString("--with-all-dependencies \\\n            \"illuminate/contracts:", $contents);
         self::assertSame(2, substr_count($contents, 'extensions: zip'));
     }
 }

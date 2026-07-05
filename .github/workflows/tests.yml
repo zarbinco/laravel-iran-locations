@@ -60,11 +60,11 @@ jobs:
             --no-interaction \
             --no-progress \
             --with-all-dependencies \
-            "illuminate/contracts:${{ matrix.laravel }}" \
-            "illuminate/database:${{ matrix.laravel }}" \
-            "illuminate/routing:${{ matrix.laravel }}" \
-            "illuminate/support:${{ matrix.laravel }}" \
-            "orchestra/testbench:${{ matrix.testbench }}"
+            --with "illuminate/contracts:${{ matrix.laravel }}" \
+            --with "illuminate/database:${{ matrix.laravel }}" \
+            --with "illuminate/routing:${{ matrix.laravel }}" \
+            --with "illuminate/support:${{ matrix.laravel }}" \
+            --with "orchestra/testbench:${{ matrix.testbench }}"
 
       - name: Run tests
         run: composer test
