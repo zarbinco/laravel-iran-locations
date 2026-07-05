@@ -152,6 +152,21 @@ $countyNeighborhoods = Neighborhood::query()
 
 Normal `Neighborhood::regions()` and `CityRegion::neighborhoods()` relationships return active, non-deprecated mappings. Use `allRegions()` or `allNeighborhoods()` when maintenance code needs to inspect inactive or deprecated mapping rows. Admin record visibility continues to follow the package admin routes and settings.
 
+## Query Examples
+
+For practical examples using Tehran city across Eloquent builders, relationships, API endpoints, options, and nested filters, see [Query examples with Tehran city](docs/query-examples.md).
+
+```php
+$tehran = City::query()
+    ->byCode('ir.city.001.001.001.001')
+    ->firstOrFail();
+
+$regions = CityRegion::query()
+    ->forCity($tehran)
+    ->orderedByNumber()
+    ->get();
+```
+
 ## Admin UI
 
 The admin UI is disabled by default. Enable it in `config/iran-locations.php`:
@@ -216,6 +231,7 @@ The release/archive hygiene gate requires the PHP `zip` extension. It is declare
 ## More Documentation
 
 - [Data](docs/data.md)
+- [Query examples with Tehran city](docs/query-examples.md)
 - [Sync](docs/sync.md)
 - [Admin UI](docs/admin.md)
 - [API](docs/api.md)

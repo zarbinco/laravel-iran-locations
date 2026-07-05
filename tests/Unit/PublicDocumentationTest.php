@@ -106,6 +106,7 @@ class PublicDocumentationTest extends TestCase
             'docs/sync.md',
             'docs/admin.md',
             'docs/api.md',
+            'docs/query-examples.md',
             'docs/components.md',
             'docs/extending.md',
             'docs/consumer-smoke-test.md',

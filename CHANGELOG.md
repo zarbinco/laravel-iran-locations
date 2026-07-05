@@ -53,3 +53,4 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Expanded consumer smoke-test documentation with a Git Bash path repository flow and optional smoke report artifact.
 - Declared `ext-zip` as a development-only requirement for archive hygiene tooling and explicitly enabled `zip` in CI jobs.
 - Finalized release-readiness documentation, package scope notes, and manual checklist guidance for maintainer review.
+- Added Tehran-focused query examples for Eloquent builders, relationships, API endpoints, option endpoints, nested filters, aliases, and empty city-area behavior.

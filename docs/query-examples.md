@@ -1,0 +1,381 @@
+# Query Examples With Tehran City
+
+All examples in this document use Tehran city as the running scenario. Tehran exists in the packaged city dataset as `ir.city.001.001.001.001`, under Tehran province `ir.province.001`, Tehran county `ir.county.001.001`, and the official district `ir.official_district.001.001.001`. Tehran municipal city regions and neighborhoods are included in package data version `0.2.0-dev`; for example, municipal region 05 is `ir.city.tehran.region.05`.
+
+City areas and aliases are structurally supported, but the packaged `0.2.0-dev` data has zero city-area records and zero alias records. City-area and alias examples below show how queries behave once an application adds custom records. Database IDs are local to the consuming application and may differ after sync, so documentation examples prefer stable codes and slugs. If an example uses an ID, treat it as illustrative and resolve the record first.
+
+## Eloquent Model Queries
+
+### Province Queries
+
+```php
+use Zarbin\IranLocations\Models\Province;
+
+$tehranProvince = Province::query()
+    ->byCode('ir.province.001')
+    ->firstOrFail();
+
+$tehranProvinceCities = $tehranProvince->cities()
+    ->active()
+    ->ordered()
+    ->get();
+```
+
+This loads Tehran province by its stable package code, then lists active cities in that province. Tehran city is one of those cities in the packaged hierarchy.
+
+### County Queries
+
+```php
+use Zarbin\IranLocations\Models\County;
+
+$tehranCounty = County::query()
+    ->byCode('ir.county.001.001')
+    ->firstOrFail();
+
+$tehranCountyCities = $tehranCounty->cities()
+    ->active()
+    ->ordered()
+    ->get();
+```
+
+Tehran city belongs to Tehran county in the package hierarchy, so this finds the county first and then asks for active cities under it.
+
+### Official District Queries
+
+```php
+use Zarbin\IranLocations\Models\OfficialDistrict;
+
+$centralDistrict = OfficialDistrict::query()
+    ->byCode('ir.official_district.001.001.001')
+    ->firstOrFail();
+
+$cities = $centralDistrict->cities()
+    ->active()
+    ->ordered()
+    ->get();
+```
+
+Official districts are part of the official administrative hierarchy. Tehran city is linked to the official district `ir.official_district.001.001.001`. Do not confuse official districts with Tehran municipal city regions such as `ir.city.tehran.region.05`.
+
+### Rural District Queries
+
+```php
+use Zarbin\IranLocations\Models\RuralDistrict;
+
+$ruralDistricts = RuralDistrict::query()
+    ->forCountyCode('ir.county.001.001')
+    ->active()
+    ->ordered()
+    ->get();
+```
+
+This asks for rural districts under Tehran county if present. Rural district coverage is limited in `0.2.0-dev`, so applications should treat this as packaged source coverage rather than guaranteed full national rural-district coverage.
+
+### City Queries
+
+```php
+use Zarbin\IranLocations\Models\City;
+
+$tehran = City::query()
+    ->byCode('ir.city.001.001.001.001')
+    ->firstOrFail();
+
+$capitalCities = City::query()
+    ->filter(['is_capital' => true])
+    ->ordered()
+    ->get();
+
+$tehranSearch = City::query()
+    ->filter([
+        'province_code' => 'ir.province.001',
+        'q' => 'تهران',
+        'status' => 'active',
+        'sort' => 'name',
+    ])
+    ->get();
+```
+
+Tehran city can be resolved by stable code. Province capital flags are populated, so Tehran appears as the capital city for Tehran province. Search text in `q` is normalized by the package normalizer and must satisfy the configured `search.min_length` in API and admin request validation.
+
+### City Region Queries
+
+```php
+use Zarbin\IranLocations\Models\CityRegion;
+
+$tehranRegions = CityRegion::query()
+    ->forCityCode('ir.city.001.001.001.001')
+    ->orderedByNumber()
+    ->get();
+
+$regionFive = CityRegion::query()
+    ->byCode('ir.city.tehran.region.05')
+    ->firstOrFail();
+```
+
+City regions are Tehran municipal regions. They are separate from official districts and use their own stable region codes.
+
+### City Area Queries
+
+```php
+use Zarbin\IranLocations\Models\CityArea;
+
+$areas = CityArea::query()
+    ->forCityCode('ir.city.001.001.001.001')
+    ->active()
+    ->ordered()
+    ->get();
+```
+
+The schema supports city areas, but packaged data version `0.2.0-dev` does not populate city areas. This query may return an empty collection unless the application adds custom Tehran city-area records.
+
+### Neighborhood Queries
+
+```php
+use Zarbin\IranLocations\Models\Neighborhood;
+
+$regionFiveNeighborhoods = Neighborhood::query()
+    ->forRegionCode('ir.city.tehran.region.05')
+    ->active()
+    ->ordered()
+    ->get();
+
+$tehranNeighborhoods = Neighborhood::query()
+    ->forCityCode('ir.city.001.001.001.001')
+    ->active()
+    ->ordered()
+    ->paginate(25);
+
+$countyNeighborhoods = Neighborhood::query()
+    ->forCountyCode('ir.county.001.001')
+    ->ordered()
+    ->get();
+```
+
+Tehran neighborhoods are municipal or urban-place style records. Region-based filtering uses active neighborhood-region mappings. County filtering follows Tehran city through the official hierarchy.
+
+### Alias Queries
+
+```php
+$tehran->aliases()->create([
+    'alias' => 'تهرون',
+    'source' => 'custom',
+]);
+
+$matches = City::query()
+    ->search('تهرون')
+    ->get();
+```
+
+Aliases are structurally supported, but package data has no aliases by default in `0.2.0-dev`. Applications may add custom aliases for Tehran or other records. The model normalizes `alias` into `normalized_alias` when saved, and normal active search consumes active, non-deprecated aliases. Alias `location_type` values use stable public keys such as `city`, not PHP class names.
+
+## Builder Filter Examples
+
+```php
+City::query()->filter([
+    'q' => 'تهران',
+    'province_code' => 'ir.province.001',
+    'status' => 'active',
+    'source' => 'package',
+    'sort' => 'name',
+])->paginate(25);
+```
+
+This searches active package cities named like Tehran inside Tehran province and sorts them by normalized name.
+
+```php
+Neighborhood::query()->filter([
+    'city_code' => 'ir.city.001.001.001.001',
+    'region_code' => 'ir.city.tehran.region.05',
+    'q' => 'صادقیه',
+    'status' => 'active',
+])->get();
+```
+
+This asks for active Tehran neighborhoods matching the search term and associated with municipal region 05. The package contains Tehran neighborhoods and active neighborhood-region mappings; names such as `صادقیه` may appear in more than one Tehran region.
+
+```php
+CityRegion::query()->filter([
+    'city_code' => 'ir.city.001.001.001.001',
+    'has_neighborhoods' => true,
+    'sort' => 'number',
+])->get();
+```
+
+This lists Tehran municipal regions that have neighborhoods and sorts them by region number.
+
+Supported common filters include `q`, `status`, `source`, `code`, `slug`, `sort`, `per_page`, and `page`. `per_page` and `page` are API pagination inputs, not Eloquent builder methods. Hierarchy filters are available where the model supports them: `province_code`, `county_code`, `official_district_code`, `city_code`, `region_code`, and `area_code`. Relationship-presence filters are also model-specific: `has_neighborhoods` exists for city and city-region queries, while `has_areas` exists for city-region queries. Sort keys include `name`, `code`, `created_at`, `updated_at`, and model-specific keys such as `number` for city regions and city areas.
+
+## Relationship Examples
+
+```php
+$tehran = City::query()
+    ->byCode('ir.city.001.001.001.001')
+    ->firstOrFail();
+
+$regions = $tehran->regions()
+    ->orderedByNumber()
+    ->get();
+
+$neighborhoods = $tehran->neighborhoods()
+    ->ordered()
+    ->get();
+```
+
+This resolves Tehran city once, then loads its municipal regions and neighborhoods through relationships.
+
+```php
+$region = CityRegion::query()
+    ->byCode('ir.city.tehran.region.05')
+    ->firstOrFail();
+
+$activeNeighborhoods = $region->neighborhoods()
+    ->ordered()
+    ->get();
+
+$allNeighborhoodsForMaintenance = $region->allNeighborhoods()
+    ->get();
+```
+
+Normal `Neighborhood::regions()` and `CityRegion::neighborhoods()` relationships use active, non-deprecated mapping rows. Use `allRegions()` or `allNeighborhoods()` only for maintenance screens or jobs that need to inspect inactive or deprecated mappings.
+
+## API Examples
+
+The API is disabled by default. When enabled with the default prefix, the examples below use `/iran-locations/api`.
+
+### Status
+
+```http
+GET /iran-locations/api/status
+```
+
+Use this after sync to inspect package data status, table availability, and counts before querying Tehran records.
+
+### Search
+
+```http
+GET /iran-locations/api/search?q=تهران
+```
+
+This searches grouped active location results for Tehran. `q` is required and must satisfy `search.min_length`.
+
+### Province List And Nested Tehran Province Queries
+
+```http
+GET /iran-locations/api/provinces?q=تهران
+GET /iran-locations/api/provinces/ir.province.001/cities
+GET /iran-locations/api/provinces/ir.province.001/counties
+```
+
+The route parent can resolve by code. Nested parents must be active. Conflicting nested filters return `422`.
+
+### County Queries
+
+```http
+GET /iran-locations/api/counties?province_code=ir.province.001&q=تهران
+GET /iran-locations/api/counties/ir.county.001.001/cities
+GET /iran-locations/api/counties/ir.county.001.001/official-districts
+GET /iran-locations/api/counties/ir.county.001.001/rural-districts
+```
+
+These list official hierarchy records under Tehran county, including Tehran city, official districts, and any packaged rural districts for that county.
+
+### Official District Queries
+
+```http
+GET /iran-locations/api/official-districts?county_code=ir.county.001.001
+GET /iran-locations/api/official-districts/ir.official_district.001.001.001/cities
+GET /iran-locations/api/official-districts/ir.official_district.001.001.001/rural-districts
+```
+
+The central official district code above is linked to Tehran city. If an application needs another Tehran county district, resolve it from the county endpoint first and then use that district code as the route parent.
+
+### Rural District Queries
+
+```http
+GET /iran-locations/api/rural-districts?county_code=ir.county.001.001
+```
+
+This asks for rural districts under Tehran county. Rural district data is partial in the current package version.
+
+### City List And Tehran Nested Queries
+
+```http
+GET /iran-locations/api/cities?q=تهران&province_code=ir.province.001
+GET /iran-locations/api/cities/ir.city.001.001.001.001/regions
+GET /iran-locations/api/cities/ir.city.001.001.001.001/areas
+GET /iran-locations/api/cities/ir.city.001.001.001.001/neighborhoods
+```
+
+Tehran city is the route parent. `/areas` may return empty with packaged data because city areas are not populated in `0.2.0-dev`. `/neighborhoods` lists Tehran neighborhood records.
+
+### City Region Queries
+
+```http
+GET /iran-locations/api/city-regions?city_code=ir.city.001.001.001.001
+GET /iran-locations/api/city-regions/ir.city.tehran.region.05/neighborhoods
+GET /iran-locations/api/city-regions/ir.city.tehran.region.05/areas
+```
+
+Region 05 is a Tehran municipal region. Neighborhood consumption uses active mappings. Areas may be empty unless custom city-area data exists.
+
+### City Area Queries
+
+```http
+GET /iran-locations/api/city-areas?city_code=ir.city.001.001.001.001
+GET /iran-locations/api/city-areas/{area-code}/neighborhoods
+```
+
+Packaged city areas are empty in `0.2.0-dev`. The route pattern is useful for applications that add custom city areas and then assign Tehran neighborhoods to them.
+
+### Neighborhood Queries
+
+```http
+GET /iran-locations/api/neighborhoods?city_code=ir.city.001.001.001.001
+GET /iran-locations/api/neighborhoods?region_code=ir.city.tehran.region.05
+GET /iran-locations/api/neighborhoods?q=صادقیه&city_code=ir.city.001.001.001.001
+```
+
+These query Tehran neighborhoods by city, region, and search term.
+
+### Alias Queries
+
+```http
+GET /iran-locations/api/aliases?location_type=city&status=active
+GET /iran-locations/api/aliases?location_type=city&status=all
+```
+
+Package data has zero aliases by default in `0.2.0-dev`. Applications may add custom aliases such as a colloquial Tehran spelling. API responses use stable `location_type` keys such as `city`.
+
+### Option Endpoints
+
+```http
+GET /iran-locations/api/options/provinces?q=تهران
+GET /iran-locations/api/options/counties?province_code=ir.province.001&q=تهران
+GET /iran-locations/api/options/cities?province_code=ir.province.001&q=تهران
+GET /iran-locations/api/options/city-regions?city_code=ir.city.001.001.001.001
+GET /iran-locations/api/options/neighborhoods?city_code=ir.city.001.001.001.001&q=صادقیه
+```
+
+Option endpoints return dropdown-friendly records for Tehran workflows. `q` is optional, but when present it must satisfy `search.min_length`.
+
+### Conflicting Nested Filters
+
+```http
+GET /iran-locations/api/provinces/ir.province.001/cities?province_code=ir.province.002
+```
+
+This returns `422` because the route parent is Tehran province but the query filter asks for another province.
+
+## Admin Query Concepts
+
+The admin UI is not a separate query API. Admin index screens use validated filters similar to the public builders, so an admin list can narrow cities to Tehran province with `province_code=ir.province.001` or neighborhoods to Tehran city with `city_code=ir.city.001.001.001.001`. Admin forms accept stable alias `location_type` keys, validate parent hierarchy consistency, and keep package-owned records protected unless the application deliberately allows package-record direct edits.
+
+## Sync And Status Examples
+
+```bash
+php artisan iran-locations:status
+php artisan iran-locations:sync --dry-run
+php artisan iran-locations:sync
+```
+
+Use `status` before querying Tehran to confirm tables exist and package data has been applied. Use `sync --dry-run` to preview package changes before applying them. Sync preserves application-owned custom records such as custom Tehran aliases or city areas.
