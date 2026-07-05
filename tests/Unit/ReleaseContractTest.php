@@ -84,5 +84,9 @@ class ReleaseContractTest extends TestCase
         self::assertStringContainsString('--with-all-dependencies', $contents);
         self::assertStringNotContainsString("--with-all-dependencies \\\n            \"illuminate/contracts:", $contents);
         self::assertSame(2, substr_count($contents, 'extensions: zip'));
+        self::assertStringContainsString('COMPOSER_POLICY_ADVISORIES_BLOCK: "0"', $contents);
+        self::assertStringContainsString('composer audit || true', $contents);
+        self::assertStringNotContainsString('policy.advisories.block false', $contents);
+        self::assertStringNotContainsString('composer.lock', $contents);
     }
 }

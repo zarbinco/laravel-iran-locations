@@ -49,6 +49,7 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Added local release-gate scripts for validation, tests, formatting, static analysis, Composer archive generation, and archive hygiene checks.
 - Added deterministic archive hygiene tooling and tests for private/review/build artifact exclusions.
 - Expanded CI with a release-gate/archive hygiene job while keeping publishing, tags, and deployment secrets out of scope.
+- Allowed the CI compatibility matrix to disable Composer advisory blocking only inside CI for older supported Laravel/Testbench installs, while keeping non-blocking `composer audit` visibility.
 - Expanded consumer smoke-test documentation with a Git Bash path repository flow and optional smoke report artifact.
 - Declared `ext-zip` as a development-only requirement for archive hygiene tooling and explicitly enabled `zip` in CI jobs.
 - Finalized release-readiness documentation, package scope notes, and manual checklist guidance for maintainer review.

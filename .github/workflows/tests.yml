@@ -9,6 +9,9 @@ jobs:
     name: PHP ${{ matrix.php }} / Laravel ${{ matrix.laravel }}
     runs-on: ubuntu-latest
 
+    env:
+      COMPOSER_POLICY_ADVISORIES_BLOCK: "0"
+
     strategy:
       fail-fast: false
       matrix:
@@ -93,6 +96,9 @@ jobs:
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-interaction --no-progress --with-all-dependencies
+
+      - name: Report dependency advisories
+        run: composer audit || true
 
       - name: Run release gate
         run: composer run-script release:check
