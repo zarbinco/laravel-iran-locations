@@ -35,3 +35,6 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Changed active search to ignore inactive and deprecated aliases.
 - Changed normal neighborhood-region relationships to return active, non-deprecated mappings by default, with all-mapping helpers for maintenance access.
 - Changed the alias API to default to active aliases, expose lifecycle fields, and support `status=active|inactive|deprecated|all`.
+- Normalized packaged Persian display data from Arabic `ك/ي` to Persian `ک/ی`.
+- Populated 31 province capital city flags and guarded them with data-quality tests.
+- Added permanent packaged-data quality coverage for manifest checksums, references, duplicate codes, Persian display fields, and documented duplicate neighborhood names.

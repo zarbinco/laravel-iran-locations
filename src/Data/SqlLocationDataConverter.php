@@ -103,7 +103,7 @@ class SqlLocationDataConverter
 
         foreach ($rows as $index => $row) {
             $sourceId = $this->intValue($this->firstValue($row, ['id', 'province_id', 'ostan_id', 'source_id', 'column_0']), $index + 1);
-            $name = $this->stringValue($this->firstValue($row, ['name_fa', 'name', 'title', 'province', 'ostan', 'column_1']));
+            $name = $this->nameValue($this->firstValue($row, ['name_fa', 'name', 'title', 'province', 'ostan', 'column_1']));
 
             if ($name === '') {
                 $skipped[] = "provinces row [{$index}] missing name.";
@@ -152,7 +152,7 @@ class SqlLocationDataConverter
         foreach ($rows as $index => $row) {
             $sourceId = $this->intValue($this->firstValue($row, ['id', 'city_id', 'source_id', 'column_0']), $index + 1);
             $provinceSourceId = $this->intValue($this->firstValue($row, ['province_id', 'ostan_id', 'parent_id', 'column_1']), 0);
-            $name = $this->stringValue($this->firstValue($row, ['name_fa', 'name', 'title', 'city', 'column_2', 'column_1']));
+            $name = $this->nameValue($this->firstValue($row, ['name_fa', 'name', 'title', 'city', 'column_2', 'column_1']));
             $province = $provinces['by_source_id'][$provinceSourceId] ?? null;
 
             if ($name === '') {
@@ -212,7 +212,7 @@ class SqlLocationDataConverter
         foreach ($rows as $index => $row) {
             $sourceId = $this->intValue($this->firstValue($row, ['id', 'district_id', 'neighborhood_id', 'source_id', 'column_0']), $index + 1);
             $citySourceId = $this->intValue($this->firstValue($row, ['city_id', 'parent_id', 'column_1']), 0);
-            $name = $this->stringValue($this->firstValue($row, ['name_fa', 'name', 'title', 'district', 'neighborhood', 'column_2', 'column_1']));
+            $name = $this->nameValue($this->firstValue($row, ['name_fa', 'name', 'title', 'district', 'neighborhood', 'column_2', 'column_1']));
             $city = $cities['by_source_id'][$citySourceId] ?? null;
 
             if ($name === '') {
@@ -491,6 +491,20 @@ class SqlLocationDataConverter
     private function stringValue(mixed $value): string
     {
         return is_string($value) || is_numeric($value) ? trim((string) $value) : '';
+    }
+
+    private function nameValue(mixed $value): string
+    {
+        return $this->persianDisplayText($this->stringValue($value));
+    }
+
+    private function persianDisplayText(string $value): string
+    {
+        return strtr($value, [
+            'ك' => 'ک',
+            'ي' => 'ی',
+            'ى' => 'ی',
+        ]);
     }
 
     private function nullableFloat(mixed $value): ?float

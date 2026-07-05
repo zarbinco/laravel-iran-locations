@@ -123,12 +123,12 @@ final class ExcelLocationDataConverter
             }
 
             $provinceCode = $this->stringValue($row[0] ?? null);
-            $provinceName = $this->stringValue($row[1] ?? null);
+            $provinceName = $this->nameValue($row[1] ?? null);
             $countyCode = $this->stringValue($row[2] ?? null);
-            $countyName = $this->stringValue($row[3] ?? null);
+            $countyName = $this->nameValue($row[3] ?? null);
             $officialDistrictCode = $this->stringValue($row[4] ?? null);
-            $officialDistrictName = $this->stringValue($row[5] ?? null);
-            $cityName = $this->stringValue($row[6] ?? null);
+            $officialDistrictName = $this->nameValue($row[5] ?? null);
+            $cityName = $this->nameValue($row[6] ?? null);
 
             if ($provinceName === '' && $countyName === '' && $officialDistrictName === '' && $cityName === '') {
                 continue;
@@ -420,7 +420,7 @@ final class ExcelLocationDataConverter
         $currentCountyName = null;
 
         foreach ($rows as $index => $row) {
-            $divisionName = $this->stringValue($row[0] ?? null);
+            $divisionName = $this->nameValue($row[0] ?? null);
 
             if ($divisionName === '' || $divisionName === 'شهرستان و بخش' || $this->startsWith($divisionName, 'تقسیمات')) {
                 continue;
@@ -511,8 +511,8 @@ final class ExcelLocationDataConverter
         foreach ($rows as $index => $row) {
             $sourceId = $this->intValue($row[0] ?? null, count($neighborhoods) + 1);
             $regionNumber = $this->intValue($row[1] ?? null, 0);
-            $regionName = $this->stringValue($row[2] ?? null);
-            $neighborhoodName = $this->stringValue($row[3] ?? null);
+            $regionName = $this->nameValue($row[2] ?? null);
+            $neighborhoodName = $this->nameValue($row[3] ?? null);
             $regionRowNumber = $this->intValue($row[4] ?? null, count($neighborhoods) + 1);
 
             if ($this->stringValue($row[0] ?? null) === 'ردیف' || $this->startsWith($this->stringValue($row[0] ?? null), 'لیست')) {
@@ -903,7 +903,7 @@ final class ExcelLocationDataConverter
         $items = [];
 
         foreach ($parts as $part) {
-            $part = trim($part);
+            $part = $this->persianDisplayText(trim($part));
 
             if ($part !== '') {
                 $items[] = $part;
@@ -933,6 +933,20 @@ final class ExcelLocationDataConverter
     private function stringValue(mixed $value): string
     {
         return is_string($value) || is_numeric($value) ? trim((string) $value) : '';
+    }
+
+    private function nameValue(mixed $value): string
+    {
+        return $this->persianDisplayText($this->stringValue($value));
+    }
+
+    private function persianDisplayText(string $value): string
+    {
+        return strtr($value, [
+            'ك' => 'ک',
+            'ي' => 'ی',
+            'ى' => 'ی',
+        ]);
     }
 
     private function neighborhoodType(string $name): string

@@ -20,7 +20,7 @@ class ExcelLocationDataConverterTest extends TestCase
             [
                 ['کد استان', 'نام استان', 'کد شهرستان', 'نام شهرستان', 'کد بخش', 'نام بخش', 'نام شهر'],
                 ['23', 'تهران', '01', 'تهران', '02', 'مرکزی', 'تهران'],
-                ['23', 'تهران', '02', 'ری', '01', 'مرکزی', 'ری'],
+                ['23', 'تهران', '02', 'ری', '01', 'مرکزی', 'ري'],
             ],
             [
                 ['تقسیمات کشوری استان تهران', null, null],
@@ -54,6 +54,8 @@ class ExcelLocationDataConverterTest extends TestCase
         self::assertSame(1, $summary['counts']['neighborhoods']);
         self::assertSame(1, $summary['counts']['neighborhood_region']);
         self::assertSame('search:تهران', $provinces[0]['normalized_name']);
+        self::assertSame('ری', $cities[1]['name_fa']);
+        self::assertSame('search:ری', $cities[1]['normalized_name']);
         self::assertSame('slug:تهران', $cities[0]['slug']);
         self::assertSame('official-district-1', $officialDistricts[0]['slug']);
         self::assertSame('rural-district-1', $ruralDistricts[0]['slug']);

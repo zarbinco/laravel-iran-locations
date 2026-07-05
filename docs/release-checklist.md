@@ -2,6 +2,7 @@
 
 - Run `composer validate --strict`.
 - Run `composer test`.
+- Run `vendor/bin/phpunit tests/Unit/LocationDataQualityTest.php`.
 - Run `composer run-script format:test`.
 - Run `composer analyse`.
 - Skip or replace unavailable scripts with the package's configured equivalents, and record any skipped checks.
@@ -17,6 +18,7 @@
 - Confirm `zarbinco/laravel-persian-core` uses a stable semver constraint.
 - Confirm Packagist metadata is correct.
 - Confirm README examples match the current API.
+- Confirm packaged data quality tests pass for Persian `ک/ی`, province capitals, manifest checksum, and reference integrity.
 - Confirm config publishing works.
 - Confirm migration publishing works.
 - Confirm view publishing works.

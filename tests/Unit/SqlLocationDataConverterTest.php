@@ -24,7 +24,7 @@ class SqlLocationDataConverterTest extends TestCase
                 ['id' => 1, 'province_id' => 1, 'name' => 'تهران'],
             ],
             [
-                ['id' => 1, 'city_id' => 1, 'name' => 'خیابان ولیعصر'],
+                ['id' => 1, 'city_id' => 1, 'name' => 'خیابان وليعصر'],
                 ['id' => 2, 'city_id' => 1, 'name' => 'پارک ملت'],
             ],
             $outputPath,
@@ -33,6 +33,7 @@ class SqlLocationDataConverterTest extends TestCase
         $neighborhoods = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('neighborhoods'));
 
         self::assertSame(2, $summary['counts']['neighborhoods']);
+        self::assertSame('خیابان ولیعصر', $neighborhoods[0]['name_fa']);
         self::assertSame('street', $neighborhoods[0]['type']);
         self::assertSame('park', $neighborhoods[1]['type']);
         self::assertSame('search:خیابان ولیعصر', $neighborhoods[0]['normalized_name']);

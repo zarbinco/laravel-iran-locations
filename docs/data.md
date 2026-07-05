@@ -19,9 +19,13 @@ The current data version is `0.2.0-dev`. Treat this as private pre-release packa
 
 The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. Municipal data remains separate: city regions, city areas, and neighborhoods. Official divisions and municipal locations are available through the schema, models, builders, sync, admin UI, API, and Blade components. City areas and aliases are structurally supported, but packaged data version `0.2.0-dev` does not populate them by default.
 
+Public Persian display fields in the packaged JSON have been normalized from Arabic `ك` and `ي` to Persian `ک` and `ی`. Province capital flags are populated for one city per province, so `is_province_capital` identifies 31 capital cities in data version `0.2.0-dev`.
+
+Automated data quality tests guard public Persian characters, leading/trailing display whitespace, duplicate codes, manifest counts and checksum, package reference integrity, province-capital mappings, and documented duplicate neighborhood names. The current documented duplicate neighborhood names are two ambiguous Tehran source rows: `استاد معین` in region 09 and `مشیریه` in region 15.
+
 ## Scope And Limitations
 
-The package does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless a release explicitly documents that scope. Treat the data as versioned package data, not as automatically complete, official, current national coverage.
+The package does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless a release explicitly documents that scope. Rural district coverage remains limited by the current source files. Treat the data as versioned package data, not as automatically complete, official, current national coverage.
 
 Verify source assumptions, completeness, and licensing suitability before using it in production, legal, regulatory, logistics, or high-stakes workflows.
 

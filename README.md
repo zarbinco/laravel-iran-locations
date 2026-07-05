@@ -72,6 +72,8 @@ The current packaged dataset includes:
 
 The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. The municipal hierarchy remains separate: city region, city area, and neighborhood. City areas and aliases are structurally supported but are empty in packaged data version `0.2.0-dev` unless your application adds records.
 
+Public Persian display names in the packaged data are normalized from Arabic `ك/ي` to Persian `ک/ی`, and the 31 province capital city flags are populated. Data quality tests guard manifest counts, checksums, reference integrity, duplicate codes, public Persian text fields, documented duplicate neighborhood names, and province-capital mappings.
+
 Treat this as versioned package data, not automatically complete, official, current national coverage. It does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless explicitly documented. Verify source assumptions and licensing suitability before production, legal, regulatory, logistics, or high-stakes use.
 
 ## Alias Contract
