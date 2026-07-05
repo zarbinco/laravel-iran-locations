@@ -17,6 +17,8 @@ class ComposerMetadataTest extends TestCase
         self::assertSame('library', $composer['type']);
         self::assertSame('^8.2', $composer['require']['php']);
         self::assertSame('^1.0', $composer['require']['zarbinco/laravel-persian-core']);
+        self::assertArrayNotHasKey('ext-zip', $composer['require']);
+        self::assertSame('*', $composer['require-dev']['ext-zip']);
         self::assertSame('stable', $composer['minimum-stability']);
         self::assertTrue($composer['prefer-stable']);
 
@@ -33,9 +35,19 @@ class ComposerMetadataTest extends TestCase
     {
         $composer = $this->composer();
 
-        foreach (['test', 'analyse', 'format', 'format:test', 'test:coverage'] as $script) {
+        foreach (['archive:check', 'test', 'test:ci', 'analyse', 'format', 'format:test', 'release:check', 'test:coverage'] as $script) {
             self::assertArrayHasKey($script, $composer['scripts']);
         }
+
+        self::assertSame(['@test', '@format:test', '@analyse'], $composer['scripts']['test:ci']);
+        self::assertSame([
+            'composer validate --strict',
+            '@test',
+            '@format:test',
+            '@analyse',
+            'composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check',
+            'php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip',
+        ], $composer['scripts']['release:check']);
 
         self::assertArrayNotHasKey('spatie/laravel-query-builder', $composer['require']);
 

@@ -2,34 +2,28 @@
 
 Use this checklist before tagging a release or when validating the package in a real Laravel application.
 
-## Fresh App
+## Git Bash Fresh App Flow
 
-Create a new Laravel application outside this package repository:
+Create a new Laravel application outside this package repository. Replace `/absolute/path/to/laravel-iran-locations` with your local checkout path:
 
 ```bash
-composer create-project laravel/laravel:^12.0 consumer-app --prefer-dist
-cd consumer-app
+mkdir -p /tmp/iran-locations-smoke
+cd /tmp/iran-locations-smoke
+
+composer create-project laravel/laravel app --prefer-dist
+cd app
+
+composer config repositories.iran-locations path /absolute/path/to/laravel-iran-locations
+composer require zarbinco/laravel-iran-locations:@dev --with-all-dependencies
 ```
 
-Laravel 11 or 13 may also be used when matching your supported dependency matrix.
-
-## Local Package Install
-
-For a published release, install normally:
+For a published release later, install normally instead:
 
 ```bash
 composer require zarbinco/laravel-iran-locations
 ```
 
-When testing local package checkouts before all related tags are available, add path repositories only in the consumer app:
-
-```bash
-composer config repositories.laravel-persian-core path ../laravel-persian-core
-composer config repositories.laravel-iran-locations path ../laravel-iran-locations
-composer require zarbinco/laravel-iran-locations:* --prefer-source
-```
-
-Keep `zarbinco/laravel-persian-core` on a stable semver-compatible version. Do not change this package to depend on a development branch for release testing.
+Laravel 11, 12, or 13 may be used when matching the supported dependency matrix. Keep `zarbinco/laravel-persian-core` on a stable semver-compatible version; do not change this package to depend on a development branch for release testing.
 
 ## Database
 
@@ -85,7 +79,7 @@ Enable the read-only API:
 ```php
 'api' => [
     'enabled' => true,
-    'middleware' => ['web'],
+    'middleware' => ['api'],
 ],
 ```
 
@@ -96,6 +90,15 @@ php artisan route:list --path=iran-locations
 ```
 
 Open the admin dashboard, data page, and each location index/create/edit screen. Check API list, search, nested, and option endpoints return JSON responses.
+
+For command-line JSON checks, start the Laravel server in one terminal and call a few endpoints from another:
+
+```bash
+php artisan serve --host=127.0.0.1 --port=8017
+curl -s http://127.0.0.1:8017/iran-locations/api/status
+curl -s "http://127.0.0.1:8017/iran-locations/api/provinces?per_page=5"
+curl -s "http://127.0.0.1:8017/iran-locations/api/search?q=تهران"
+```
 
 ## Blade Components
 
@@ -123,6 +126,9 @@ composer validate --strict
 composer test
 composer run-script format:test
 composer analyse
+composer run-script test:ci
+composer run-script release:check
+bash tools/release-check.sh
 ```
 
 If a script is not defined or not configured in a given checkout, skip it or replace it with the package's configured equivalent and record the reason in the release notes.
@@ -132,11 +138,29 @@ If a script is not defined or not configured in a given checkout, skip it or rep
 From the package repository, build and inspect a Composer archive before publishing:
 
 ```bash
-composer archive --format=zip
+composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check
+php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip
 
-unzip -l zarbinco-laravel-iran-locations-*.zip | grep -E "(REVIEW_NOTES|\.phpunit\.cache|vendor/|node_modules/|_source/|coverage/|artifacts/|_review/)" \
+unzip -l build/release-check/laravel-iran-locations-release-check.zip | grep -E "(REVIEW_NOTES|\.phpunit\.cache|vendor/|node_modules/|_source/|coverage/|artifacts/|_review/)" \
   && echo "Unexpected private artifact found" \
   || echo "Archive hygiene looks clean"
 ```
 
 Also confirm the archive is not a full project snapshot and does not contain nested zip, tar, build, release, or temporary review artifacts.
+Archive hygiene tooling requires PHP `zip` support in the package development checkout. If Composer installation or `tools/check-archive.php` reports missing `ext-zip`, install or enable the PHP zip extension for that development environment. Consumer applications do not need `ext-zip` for normal package runtime use.
+
+## Optional Smoke Report
+
+Capture a small smoke report in the temporary app if you want an artifact for release review:
+
+```bash
+{
+  php artisan about
+  php artisan iran-locations:status
+  php artisan route:list --path=iran-locations
+} > iran-locations-smoke-report.txt
+
+zip iran-locations-smoke-report.zip iran-locations-smoke-report.txt
+```
+
+Do not commit the temporary Laravel app or smoke report artifacts into this package repository.

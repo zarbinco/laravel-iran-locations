@@ -5,6 +5,11 @@
 - Run `vendor/bin/phpunit tests/Unit/LocationDataQualityTest.php`.
 - Run `composer run-script format:test`.
 - Run `composer analyse`.
+- Run `composer run-script test:ci` for the package CI command group.
+- Run `composer run-script release:check` for the full local release gate.
+- Optionally run `bash tools/release-check.sh` from Git Bash or a compatible shell; it wraps the Composer release gate.
+- Confirm `tools/check-archive.php` passes for the generated Composer archive.
+- Confirm the package development PHP installation has the `zip` extension enabled; archive hygiene tooling requires `ext-zip`, but package runtime consumers do not.
 - Skip or replace unavailable scripts with the package's configured equivalents, and record any skipped checks.
 - Confirm the working tree has no `.phpunit.cache/` or `.phpunit.result.cache`.
 - Confirm the working tree has no `REVIEW_NOTES.md`.
@@ -15,6 +20,8 @@
 - Confirm no `.env`, secrets, logs, caches, or coverage output are included.
 - Confirm `.gitattributes` export-ignore rules exclude private, cache, build, release, and review artifacts.
 - Run `composer archive --format=zip` and inspect the archive contents before tagging.
+- Confirm Composer archives do not contain `_review/`, `REVIEW_NOTES.md`, `.phpunit.cache/`, `vendor/`, `node_modules/`, `coverage/`, `artifacts/`, `_source/`, build/release directories, or nested archives.
+- Confirm `.gitattributes` keeps private, cache, build, release, review, dependency, and generated archive paths export-ignored.
 - Confirm `zarbinco/laravel-persian-core` uses a stable semver constraint.
 - Confirm Packagist metadata is correct.
 - Confirm README examples match the current API.
@@ -30,3 +37,6 @@
 - Run the [consumer smoke test](consumer-smoke-test.md) in a fresh Laravel app.
 - Run `php artisan iran-locations:sync --dry-run` in a test app.
 - Confirm safe sync behavior before applying data.
+- Confirm CI only validates the package and archive hygiene; it must not publish Packagist releases, GitHub releases, tags, or use deployment secrets.
+- Confirm CI setup keeps `extensions: zip` enabled for jobs that run tests or release-gate tooling.
+- Leave final public release decisions and final release announcement/docs for the final release preparation step.

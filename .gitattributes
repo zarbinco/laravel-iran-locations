@@ -11,6 +11,8 @@
 /dist export-ignore
 /release export-ignore
 /artifacts export-ignore
+/vendor export-ignore
+/node_modules export-ignore
 /_review export-ignore
 /_source export-ignore
 /REVIEW_NOTES.md export-ignore

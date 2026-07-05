@@ -24,6 +24,7 @@
         "zarbinco/laravel-persian-core": "^1.0"
     },
     "require-dev": {
+        "ext-zip": "*",
         "larastan/larastan": "^2.0|^3.0",
         "laravel/pint": "^1.0",
         "orchestra/testbench": "^9.0|^10.0|^11.0",
@@ -51,10 +52,24 @@
         }
     },
     "scripts": {
+        "archive:check": "php tools/check-archive.php",
         "analyse": "phpstan analyse",
         "format": "pint",
         "format:test": "pint --test",
+        "release:check": [
+            "composer validate --strict",
+            "@test",
+            "@format:test",
+            "@analyse",
+            "composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check",
+            "php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip"
+        ],
         "test": "phpunit",
+        "test:ci": [
+            "@test",
+            "@format:test",
+            "@analyse"
+        ],
         "test:coverage": "phpunit --coverage-text"
     },
     "config": {

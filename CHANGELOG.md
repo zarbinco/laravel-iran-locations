@@ -45,3 +45,8 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Made nested API route parent resolution active-safe so inactive or deprecated parents return `404`.
 - Changed nested API endpoints to return `422` for conflicting parent filters instead of silently overriding them.
 - Tightened admin and API ID filter validation so negative IDs fail validation.
+- Added local release-gate scripts for validation, tests, formatting, static analysis, Composer archive generation, and archive hygiene checks.
+- Added deterministic archive hygiene tooling and tests for private/review/build artifact exclusions.
+- Expanded CI with a release-gate/archive hygiene job while keeping publishing, tags, and deployment secrets out of scope.
+- Expanded consumer smoke-test documentation with a Git Bash path repository flow and optional smoke report artifact.
+- Declared `ext-zip` as a development-only requirement for archive hygiene tooling and explicitly enabled `zip` in CI jobs.

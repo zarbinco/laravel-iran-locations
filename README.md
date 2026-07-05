@@ -190,10 +190,16 @@ Components are plain Blade, preserve old input, support parent filters, and requ
 
 ```bash
 composer test
+composer run-script test:ci
+composer run-script release:check
+bash tools/release-check.sh
 composer run-script format:test
 composer analyse
 composer validate --strict
 ```
+
+`composer run-script release:check` runs the local release gate: Composer validation, tests, formatting, static analysis, Composer archive generation, and archive hygiene checks. `tools/release-check.sh` is a Git Bash convenience wrapper for the same gate. The CI workflow runs the supported PHP/Laravel/Testbench matrix and a separate archive hygiene gate, but it does not publish tags or releases.
+The release/archive hygiene gate requires the PHP `zip` extension. It is declared as a development requirement only; consumer applications do not need `ext-zip` for normal runtime use. CI explicitly enables `zip` for test and release-gate jobs.
 
 ## More Documentation
 

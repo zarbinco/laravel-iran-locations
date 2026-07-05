@@ -2,7 +2,6 @@ name: Tests
 
 on:
   push:
-    branches: [main]
   pull_request:
 
 jobs:
@@ -49,6 +48,7 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: none
           tools: composer:v2
+          extensions: zip
 
       - name: Validate composer metadata
         run: composer validate --strict
@@ -73,3 +73,25 @@ jobs:
 
       - name: Run static analysis
         run: composer analyse
+
+  release-gate:
+    name: Release gate / archive hygiene
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+          extensions: zip
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-interaction --no-progress --with-all-dependencies
+
+      - name: Run release gate
+        run: composer run-script release:check
