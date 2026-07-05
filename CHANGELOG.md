@@ -23,6 +23,7 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 
 ### Changed
 
+- Allowed installation with the current stable `zarbinco/laravel-persian-core` `^0.1` line while keeping future `^1.0` compatibility.
 - Enforced `search.min_length` through API and admin HTTP request validation.
 - Enforced package-owned admin edit/delete protection through `data.allow_package_record_direct_edit`.
 - Removed misleading normalization and custom-preservation config toggles that did not represent runtime behavior.

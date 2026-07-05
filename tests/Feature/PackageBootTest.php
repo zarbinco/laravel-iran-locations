@@ -45,6 +45,7 @@ class PackageBootTest extends TestCase
 
         self::assertInstanceOf(LocationNormalizer::class, $normalizer);
         self::assertInstanceOf(PersianCoreLocationNormalizer::class, $normalizer);
+        self::assertSame('علی کیش', $normalizer->search('علي كيش'));
     }
 
     public function test_manager_table_and_model_helpers_work(): void

@@ -23,7 +23,7 @@ Laravel Iran Locations provides Iran location data, Eloquent models, safe databa
 
 - PHP 8.2 or newer
 - Laravel 11, 12, or 13
-- `zarbinco/laravel-persian-core`
+- `zarbinco/laravel-persian-core` `^0.1` or `^1.0`
 - PHP `zip` extension for package development/release archive checks only
 
 ## Installation

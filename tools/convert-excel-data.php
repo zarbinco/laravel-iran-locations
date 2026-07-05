@@ -11,10 +11,8 @@ use Zarbinco\PersianCore\Normalizers\MobileNormalizer;
 use Zarbinco\PersianCore\Normalizers\MoneyNormalizer;
 use Zarbinco\PersianCore\Normalizers\PersianNormalizerPipeline;
 use Zarbinco\PersianCore\Normalizers\PersianNumberNormalizer;
-use Zarbinco\PersianCore\Normalizers\PersianSearchNormalizer;
 use Zarbinco\PersianCore\Normalizers\PersianTextNormalizer;
 use Zarbinco\PersianCore\PersianManager;
-use Zarbinco\PersianCore\Services\IranianBankDetector;
 
 require __DIR__.'/../vendor/autoload.php';
 
@@ -23,10 +21,9 @@ $outputPath = $argv[2] ?? dirname(__DIR__).DIRECTORY_SEPARATOR.'data';
 
 $numberNormalizer = new PersianNumberNormalizer;
 $textNormalizer = new PersianTextNormalizer;
-$searchNormalizer = new PersianSearchNormalizer($numberNormalizer);
 $moneyNormalizer = new MoneyNormalizer($numberNormalizer);
 $mobileNormalizer = new MobileNormalizer($numberNormalizer);
-$pipeline = new PersianNormalizerPipeline($textNormalizer, $numberNormalizer, [], $searchNormalizer);
+$pipeline = new PersianNormalizerPipeline($textNormalizer, $numberNormalizer, []);
 
 $normalizer = new PersianCoreLocationNormalizer(new PersianManager(
     $textNormalizer,
@@ -37,8 +34,6 @@ $normalizer = new PersianCoreLocationNormalizer(new PersianManager(
     $mobileNormalizer,
     new MobileFormatter($mobileNormalizer),
     $pipeline,
-    $searchNormalizer,
-    new IranianBankDetector($numberNormalizer),
 ));
 
 $summary = (new ExcelLocationDataConverter($normalizer))->convertDirectory($sourcePath, $outputPath);

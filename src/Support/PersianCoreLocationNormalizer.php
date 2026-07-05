@@ -21,7 +21,7 @@ final class PersianCoreLocationNormalizer implements LocationNormalizer
 
     public function search(string $value): string
     {
-        return $this->persian->search($value)->normalize();
+        return $this->persian->normalize($value)->forSearch();
     }
 
     public function slug(string $value): string
