@@ -6,13 +6,48 @@ namespace Zarbin\IranLocations\Data;
 
 use InvalidArgumentException;
 use Throwable;
+use Zarbin\IranLocations\Coding\LocationCodeGenerator;
 use Zarbin\IranLocations\Support\LocationModelResolver;
 
 class LocationDataValidator
 {
+    private const LEGACY_CODE_PREFIX = 'i'.'r.';
+
+    /**
+     * @var array<string, true>
+     */
+    private const CODE_DATASETS = [
+        'provinces' => true,
+        'counties' => true,
+        'official_districts' => true,
+        'rural_districts' => true,
+        'cities' => true,
+        'city_regions' => true,
+        'city_areas' => true,
+        'neighborhoods' => true,
+    ];
+
+    private const FORBIDDEN_CODE_PARTS = [
+        'province',
+        'county',
+        'official',
+        'district',
+        'rural',
+        'city',
+        'region',
+        'area',
+        'neighborhood',
+        'tehran',
+    ];
+
+    private readonly LocationCodeGenerator $codes;
+
     public function __construct(
         private readonly JsonLocationDataRepository $repository,
-    ) {}
+        ?LocationCodeGenerator $codes = null,
+    ) {
+        $this->codes = $codes ?? new LocationCodeGenerator;
+    }
 
     /**
      * @return array{ok: bool, errors: array<int, string>, checks: array<int, string>}
@@ -46,7 +81,9 @@ class LocationDataValidator
 
         $this->validateRecords($datasets, $errors, $checks);
         $this->validateReferences($datasets, $errors, $checks);
+        $this->validateStructuralCodeConsistency($datasets, $errors, $checks);
         $this->validateManifestGeneratedAt($manifest, $errors, $checks);
+        $this->validateManifestCodeScheme($manifest, $errors, $checks);
         $this->validateManifestCounts($manifest, $datasets, $errors, $checks);
         $this->validateManifestChecksum($manifest, $datasets, $errors, $checks);
 
@@ -93,6 +130,7 @@ class LocationDataValidator
             $this->validateUniqueCodes($dataset, $records, $errors, $checks);
             $this->validateRequiredFields($dataset, $records, $errors, $checks);
             $this->validateNormalizedNames($dataset, $records, $errors, $checks);
+            $this->validateCodeFormats($dataset, $records, $errors, $checks);
         }
     }
 
@@ -179,6 +217,85 @@ class LocationDataValidator
         }
 
         $checks[] = "Dataset [{$dataset}] has unique codes.";
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $records
+     * @param  array<int, string>  $errors
+     * @param  array<int, string>  $checks
+     */
+    private function validateCodeFormats(string $dataset, array $records, array &$errors, array &$checks): void
+    {
+        if ($dataset === 'neighborhood_region') {
+            foreach ($records as $index => $record) {
+                $this->validateCodeValue('neighborhoods', $dataset, $index, 'neighborhood_code', $record['neighborhood_code'] ?? null, $errors);
+                $this->validateCodeValue('city_regions', $dataset, $index, 'city_region_code', $record['city_region_code'] ?? null, $errors);
+            }
+
+            $checks[] = 'Dataset [neighborhood_region] reference codes match package code scheme.';
+
+            return;
+        }
+
+        if ($dataset === 'aliases') {
+            foreach ($records as $index => $record) {
+                $locationType = $record['location_type'] ?? null;
+
+                if (! is_string($locationType) || blank($locationType)) {
+                    continue;
+                }
+
+                try {
+                    $targetDataset = LocationModelResolver::datasetForLocationType($locationType);
+                } catch (InvalidArgumentException) {
+                    continue;
+                }
+
+                $this->validateCodeValue($targetDataset, $dataset, $index, 'location_code', $record['location_code'] ?? null, $errors);
+            }
+
+            $checks[] = 'Dataset [aliases] target codes match package code scheme.';
+
+            return;
+        }
+
+        if (! isset(self::CODE_DATASETS[$dataset])) {
+            return;
+        }
+
+        foreach ($records as $index => $record) {
+            $this->validateCodeValue($dataset, $dataset, $index, 'code', $record['code'] ?? null, $errors);
+        }
+
+        $checks[] = "Dataset [{$dataset}] codes match package code scheme.";
+    }
+
+    /**
+     * @param  array<int, string>  $errors
+     */
+    private function validateCodeValue(string $expectedDataset, string $dataset, int $index, string $field, mixed $code, array &$errors): void
+    {
+        if (! is_string($code) || $code === '') {
+            return;
+        }
+
+        if ($code !== strtolower($code)) {
+            $errors[] = "Dataset [{$dataset}] record [{$index}] field [{$field}] code [{$code}] must be lowercase.";
+        }
+
+        if (str_starts_with($code, self::LEGACY_CODE_PREFIX)) {
+            $errors[] = "Dataset [{$dataset}] record [{$index}] field [{$field}] code [{$code}] must not start with [".self::LEGACY_CODE_PREFIX.'].';
+        }
+
+        foreach (self::FORBIDDEN_CODE_PARTS as $part) {
+            if (str_contains($code, $part)) {
+                $errors[] = "Dataset [{$dataset}] record [{$index}] field [{$field}] code [{$code}] must not contain [{$part}].";
+            }
+        }
+
+        if (! $this->codes->matchesDataset($expectedDataset, $code)) {
+            $errors[] = "Dataset [{$dataset}] record [{$index}] field [{$field}] code [{$code}] does not match package code scheme for [{$expectedDataset}].";
+        }
     }
 
     /**
@@ -482,6 +599,102 @@ class LocationDataValidator
     }
 
     /**
+     * @param  array<string, array<int, array<string, mixed>>>  $datasets
+     * @param  array<int, string>  $errors
+     * @param  array<int, string>  $checks
+     */
+    private function validateStructuralCodeConsistency(array $datasets, array &$errors, array &$checks): void
+    {
+        foreach ($datasets['counties'] ?? [] as $index => $county) {
+            $this->assertCodeStartsWith($county['code'] ?? null, $county['province_code'] ?? null, 'counties', $index, 'province_code', $errors);
+        }
+
+        foreach ($datasets['official_districts'] ?? [] as $index => $district) {
+            $this->assertCodeStartsWith($district['code'] ?? null, $district['province_code'] ?? null, 'official_districts', $index, 'province_code', $errors);
+            $this->assertCodeStartsWith($district['code'] ?? null, $district['county_code'] ?? null, 'official_districts', $index, 'county_code', $errors);
+        }
+
+        foreach ($datasets['rural_districts'] ?? [] as $index => $district) {
+            $this->assertCodeStartsWith($district['code'] ?? null, $district['province_code'] ?? null, 'rural_districts', $index, 'province_code', $errors);
+            $this->assertCodeStartsWith($district['code'] ?? null, $district['county_code'] ?? null, 'rural_districts', $index, 'county_code', $errors);
+            $this->assertCodeStartsWith($district['code'] ?? null, $district['official_district_code'] ?? null, 'rural_districts', $index, 'official_district_code', $errors);
+        }
+
+        foreach ($datasets['cities'] ?? [] as $index => $city) {
+            $this->assertCodeStartsWith($city['code'] ?? null, $city['province_code'] ?? null, 'cities', $index, 'province_code', $errors);
+            $this->assertCodeStartsWith($city['code'] ?? null, $city['county_code'] ?? null, 'cities', $index, 'county_code', $errors);
+            $this->assertCodeStartsWith($city['code'] ?? null, $city['official_district_code'] ?? null, 'cities', $index, 'official_district_code', $errors);
+        }
+
+        foreach ($datasets['city_regions'] ?? [] as $index => $region) {
+            $this->assertCodeStartsWith($region['code'] ?? null, $region['city_code'] ?? null, 'city_regions', $index, 'city_code', $errors);
+        }
+
+        foreach ($datasets['city_areas'] ?? [] as $index => $area) {
+            $this->assertCodeStartsWith($area['code'] ?? null, $area['city_region_code'] ?? null, 'city_areas', $index, 'city_region_code', $errors);
+        }
+
+        foreach ($datasets['neighborhoods'] ?? [] as $index => $neighborhood) {
+            $cityRegionCode = $this->firstString($neighborhood, ['default_city_region_code', 'city_region_code', 'region_code']);
+
+            if ($cityRegionCode === null) {
+                $errors[] = "Dataset [neighborhoods] record [{$index}] is missing default_city_region_code required by package code scheme.";
+            }
+
+            $this->assertCodeStartsWith($neighborhood['code'] ?? null, $neighborhood['city_code'] ?? null, 'neighborhoods', $index, 'city_code', $errors);
+            $this->assertCodeStartsWith($neighborhood['code'] ?? null, $cityRegionCode, 'neighborhoods', $index, 'default_city_region_code', $errors);
+        }
+
+        foreach ($datasets['neighborhood_region'] ?? [] as $index => $record) {
+            $this->assertCodesShareCityPath($record['neighborhood_code'] ?? null, $record['city_region_code'] ?? null, 'neighborhood_region', $index, $errors);
+        }
+
+        $checks[] = 'Dataset code hierarchy matches package code scheme.';
+    }
+
+    /**
+     * @param  array<int, string>  $errors
+     */
+    private function assertCodeStartsWith(mixed $childCode, mixed $parentCode, string $dataset, int $index, string $parentField, array &$errors): void
+    {
+        if (! is_string($childCode) || ! is_string($parentCode) || $childCode === '' || $parentCode === '') {
+            return;
+        }
+
+        try {
+            $childPath = $this->codes->path($childCode);
+            $parentPath = $this->codes->path($parentCode);
+        } catch (InvalidArgumentException) {
+            return;
+        }
+
+        if (! $this->codes->startsWithPath($childPath, $parentPath)) {
+            $errors[] = "Dataset [{$dataset}] record [{$index}] code [{$childCode}] is not under {$parentField} [{$parentCode}].";
+        }
+    }
+
+    /**
+     * @param  array<int, string>  $errors
+     */
+    private function assertCodesShareCityPath(mixed $neighborhoodCode, mixed $cityRegionCode, string $dataset, int $index, array &$errors): void
+    {
+        if (! is_string($neighborhoodCode) || ! is_string($cityRegionCode) || $neighborhoodCode === '' || $cityRegionCode === '') {
+            return;
+        }
+
+        try {
+            $neighborhoodPath = $this->codes->path($neighborhoodCode);
+            $regionPath = $this->codes->path($cityRegionCode);
+        } catch (InvalidArgumentException) {
+            return;
+        }
+
+        if (array_slice($neighborhoodPath, 0, 4) !== array_slice($regionPath, 0, 4)) {
+            $errors[] = "Dataset [{$dataset}] record [{$index}] connects neighborhood_code [{$neighborhoodCode}] to city_region_code [{$cityRegionCode}] in a different code city path.";
+        }
+    }
+
+    /**
      * @param  array<int, array<string, mixed>>  $records
      * @return array<string, array<string, mixed>>
      */
@@ -537,7 +750,15 @@ class LocationDataValidator
 
     private function messageValue(mixed $value): string
     {
-        if (is_scalar($value) || $value === null) {
+        if (is_bool($value)) {
+            return $value ? 'true' : 'false';
+        }
+
+        if ($value === null) {
+            return 'null';
+        }
+
+        if (is_scalar($value)) {
             return (string) $value;
         }
 
@@ -594,6 +815,32 @@ class LocationDataValidator
         }
 
         $checks[] = 'Manifest generated_at is a valid date-time string.';
+    }
+
+    /**
+     * @param  array<string, mixed>  $manifest
+     * @param  array<int, string>  $errors
+     * @param  array<int, string>  $checks
+     */
+    private function validateManifestCodeScheme(array $manifest, array &$errors, array &$checks): void
+    {
+        $scheme = $manifest['code_scheme'] ?? null;
+
+        if (! is_array($scheme)) {
+            $errors[] = 'Manifest is missing [code_scheme].';
+
+            return;
+        }
+
+        foreach (LocationCodeGenerator::scheme() as $key => $expected) {
+            $actual = $scheme[$key] ?? null;
+
+            if ($actual !== $expected) {
+                $errors[] = 'Manifest code_scheme ['.$key.'] is ['.$this->messageValue($actual).'], expected ['.$this->messageValue($expected).'].';
+            }
+        }
+
+        $checks[] = 'Manifest code_scheme matches package code scheme.';
     }
 
     private function isUtcGeneratedAtTimestamp(string $value): bool

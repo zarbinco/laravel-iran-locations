@@ -1,8 +1,8 @@
 [
     {
-        "code": "ir.city.tehran.region.01",
+        "code": "r.01.01.01.01.01",
         "source_id": 1,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 1,
         "name_fa": "منطقه ۱ تهران",
@@ -17,9 +17,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.02",
+        "code": "r.01.01.01.01.02",
         "source_id": 2,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 2,
         "name_fa": "منطقه ۲ تهران",
@@ -34,9 +34,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.03",
+        "code": "r.01.01.01.01.03",
         "source_id": 3,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 3,
         "name_fa": "منطقه ۳ تهران",
@@ -51,9 +51,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.04",
+        "code": "r.01.01.01.01.04",
         "source_id": 4,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 4,
         "name_fa": "منطقه ۴ تهران",
@@ -68,9 +68,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.05",
+        "code": "r.01.01.01.01.05",
         "source_id": 5,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 5,
         "name_fa": "منطقه ۵ تهران",
@@ -85,9 +85,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.06",
+        "code": "r.01.01.01.01.06",
         "source_id": 6,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 6,
         "name_fa": "منطقه ۶ تهران",
@@ -102,9 +102,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.07",
+        "code": "r.01.01.01.01.07",
         "source_id": 7,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 7,
         "name_fa": "منطقه ۷ تهران",
@@ -119,9 +119,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.08",
+        "code": "r.01.01.01.01.08",
         "source_id": 8,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 8,
         "name_fa": "منطقه ۸ تهران",
@@ -136,9 +136,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.09",
+        "code": "r.01.01.01.01.09",
         "source_id": 9,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 9,
         "name_fa": "منطقه ۹ تهران",
@@ -153,9 +153,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.10",
+        "code": "r.01.01.01.01.10",
         "source_id": 10,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 10,
         "name_fa": "منطقه ۱۰ تهران",
@@ -170,9 +170,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.11",
+        "code": "r.01.01.01.01.11",
         "source_id": 11,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 11,
         "name_fa": "منطقه ۱۱ تهران",
@@ -187,9 +187,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.12",
+        "code": "r.01.01.01.01.12",
         "source_id": 12,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 12,
         "name_fa": "منطقه ۱۲ تهران",
@@ -204,9 +204,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.13",
+        "code": "r.01.01.01.01.13",
         "source_id": 13,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 13,
         "name_fa": "منطقه ۱۳ تهران",
@@ -221,9 +221,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.14",
+        "code": "r.01.01.01.01.14",
         "source_id": 14,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 14,
         "name_fa": "منطقه ۱۴ تهران",
@@ -238,9 +238,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.15",
+        "code": "r.01.01.01.01.15",
         "source_id": 15,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 15,
         "name_fa": "منطقه ۱۵ تهران",
@@ -255,9 +255,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.16",
+        "code": "r.01.01.01.01.16",
         "source_id": 16,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 16,
         "name_fa": "منطقه ۱۶ تهران",
@@ -272,9 +272,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.17",
+        "code": "r.01.01.01.01.17",
         "source_id": 17,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 17,
         "name_fa": "منطقه ۱۷ تهران",
@@ -289,9 +289,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.18",
+        "code": "r.01.01.01.01.18",
         "source_id": 18,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 18,
         "name_fa": "منطقه ۱۸ تهران",
@@ -306,9 +306,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.19",
+        "code": "r.01.01.01.01.19",
         "source_id": 19,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 19,
         "name_fa": "منطقه ۱۹ تهران",
@@ -323,9 +323,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.20",
+        "code": "r.01.01.01.01.20",
         "source_id": 20,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 20,
         "name_fa": "منطقه ۲۰ تهران",
@@ -340,9 +340,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.21",
+        "code": "r.01.01.01.01.21",
         "source_id": 21,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 21,
         "name_fa": "منطقه ۲۱ تهران",
@@ -357,9 +357,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.city.tehran.region.22",
+        "code": "r.01.01.01.01.22",
         "source_id": 22,
-        "city_code": "ir.city.001.001.001.001",
+        "city_code": "s.01.01.01.01",
         "city_source_id": 1,
         "number": 22,
         "name_fa": "منطقه ۲۲ تهران",

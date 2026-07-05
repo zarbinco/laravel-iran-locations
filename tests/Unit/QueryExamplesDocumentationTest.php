@@ -14,10 +14,10 @@ class QueryExamplesDocumentationTest extends TestCase
 
         self::assertStringContainsString('# Query Examples With Tehran City', $contents);
         self::assertStringContainsString('Tehran city', $contents);
-        self::assertStringContainsString('ir.province.001', $contents);
-        self::assertStringContainsString('ir.county.001.001', $contents);
-        self::assertStringContainsString('ir.city.001.001.001.001', $contents);
-        self::assertStringContainsString('ir.city.tehran.region.05', $contents);
+        self::assertStringContainsString('p.01', $contents);
+        self::assertStringContainsString('c.01.01', $contents);
+        self::assertStringContainsString('s.01.01.01.01', $contents);
+        self::assertStringContainsString('r.01.01.01.01.05', $contents);
         self::assertStringContainsString('City areas and aliases are structurally supported', $contents);
         self::assertStringContainsString('zero alias records', $contents);
     }
@@ -32,7 +32,7 @@ class QueryExamplesDocumentationTest extends TestCase
 
     public function test_hard_coded_location_codes_exist_in_packaged_data(): void
     {
-        preg_match_all('/\bir\.[a-z_]+(?:\.[a-z0-9_]+)+\b/i', $this->queryExamples(), $matches);
+        preg_match_all('/\b(?:p\.\d{2}|c\.\d{2}\.\d{2}|b\.\d{2}\.\d{2}\.\d{2}|d\.\d{2}\.\d{2}\.\d{2}\.\d{2}|s\.\d{2}\.\d{2}\.\d{2}\.\d{2}|r\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2}|a\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2}|n\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{2}\.\d{3})\b/', $this->queryExamples(), $matches);
 
         $codes = array_values(array_unique($matches[0]));
 
@@ -90,14 +90,14 @@ class QueryExamplesDocumentationTest extends TestCase
     private function datasetForCode(string $code): string
     {
         return match (true) {
-            str_starts_with($code, 'ir.province.') => 'provinces',
-            str_starts_with($code, 'ir.county.') => 'counties',
-            str_starts_with($code, 'ir.official_district.') => 'official_districts',
-            str_starts_with($code, 'ir.rural_district.') => 'rural_districts',
-            str_starts_with($code, 'ir.city.tehran.region.') => 'city_regions',
-            str_starts_with($code, 'ir.city_area.') => 'city_areas',
-            str_starts_with($code, 'ir.city.') => 'cities',
-            str_starts_with($code, 'ir.neighborhood.') => 'neighborhoods',
+            str_starts_with($code, 'p.') => 'provinces',
+            str_starts_with($code, 'c.') => 'counties',
+            str_starts_with($code, 'b.') => 'official_districts',
+            str_starts_with($code, 'd.') => 'rural_districts',
+            str_starts_with($code, 's.') => 'cities',
+            str_starts_with($code, 'r.') => 'city_regions',
+            str_starts_with($code, 'a.') => 'city_areas',
+            str_starts_with($code, 'n.') => 'neighborhoods',
             default => self::fail("No dataset mapping exists for {$code}."),
         };
     }

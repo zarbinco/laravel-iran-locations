@@ -78,10 +78,10 @@ class LocationSyncServiceTest extends TestCase
         self::assertSame(0, City::query()->whereDoesntHave('officialDistrict')->count());
         self::assertSame(0, Neighborhood::query()->whereDoesntHave('city')->count());
 
-        $city = City::query()->where('code', 'ir.city.001.001.001.001')->firstOrFail();
-        $province = Province::query()->where('code', 'ir.province.001')->firstOrFail();
-        $county = County::query()->where('code', 'ir.county.001.001')->firstOrFail();
-        $officialDistrict = OfficialDistrict::query()->where('code', 'ir.official_district.001.001.001')->firstOrFail();
+        $city = City::query()->where('code', 's.01.01.01.01')->firstOrFail();
+        $province = Province::query()->where('code', 'p.01')->firstOrFail();
+        $county = County::query()->where('code', 'c.01.01')->firstOrFail();
+        $officialDistrict = OfficialDistrict::query()->where('code', 'b.01.01.01')->firstOrFail();
 
         self::assertSame($province->getKey(), $city->getAttribute('province_id'));
         self::assertSame($county->getKey(), $city->getAttribute('county_id'));
@@ -184,7 +184,7 @@ class LocationSyncServiceTest extends TestCase
     public function test_custom_records_are_preserved_and_not_overwritten(): void
     {
         Province::query()->create([
-            'code' => 'ir.province.001',
+            'code' => 'p.01',
             'name_fa' => 'Custom Tehran',
             'normalized_name' => 'custom-tehran',
             'display_name_fa' => 'Custom Tehran Display',
@@ -192,7 +192,7 @@ class LocationSyncServiceTest extends TestCase
             'data_version' => 'custom',
         ]);
         Province::query()->create([
-            'code' => 'custom.province.keep',
+            'code' => 'x.p.keep',
             'name_fa' => 'Keep Me',
             'normalized_name' => 'keep me',
             'source' => 'custom',
@@ -200,19 +200,19 @@ class LocationSyncServiceTest extends TestCase
         ]);
 
         $result = $this->app->make(LocationSyncService::class)->sync(LocationSyncOptions::make(datasets: ['provinces']));
-        $province = Province::query()->where('code', 'ir.province.001')->firstOrFail();
+        $province = Province::query()->where('code', 'p.01')->firstOrFail();
 
         self::assertSame(1, $result->datasetsByName()['provinces']->totals()['skipped']);
         self::assertSame('Custom Tehran', $province->getAttribute('name_fa'));
         self::assertSame('Custom Tehran Display', $province->getAttribute('display_name_fa'));
         self::assertSame('custom', $province->getAttribute('source'));
-        self::assertTrue(Province::query()->where('code', 'custom.province.keep')->exists());
+        self::assertTrue(Province::query()->where('code', 'x.p.keep')->exists());
     }
 
     public function test_custom_official_hierarchy_records_are_preserved_and_not_overwritten(): void
     {
         $province = Province::query()->create([
-            'code' => 'ir.province.001',
+            'code' => 'p.01',
             'name_fa' => 'Custom Tehran',
             'normalized_name' => 'custom tehran',
             'source' => 'custom',
@@ -220,7 +220,7 @@ class LocationSyncServiceTest extends TestCase
         ]);
         $county = County::query()->create([
             'province_id' => $province->getKey(),
-            'code' => 'ir.county.001.001',
+            'code' => 'c.01.01',
             'name_fa' => 'Custom County',
             'normalized_name' => 'custom county',
             'source' => 'custom',
@@ -229,7 +229,7 @@ class LocationSyncServiceTest extends TestCase
         $officialDistrict = OfficialDistrict::query()->create([
             'province_id' => $province->getKey(),
             'county_id' => $county->getKey(),
-            'code' => 'ir.official_district.001.001.001',
+            'code' => 'b.01.01.01',
             'name_fa' => 'Custom Official District',
             'normalized_name' => 'custom official district',
             'source' => 'custom',
@@ -239,7 +239,7 @@ class LocationSyncServiceTest extends TestCase
             'province_id' => $province->getKey(),
             'county_id' => $county->getKey(),
             'official_district_id' => $officialDistrict->getKey(),
-            'code' => 'ir.rural_district.001.001.001.001',
+            'code' => 'd.01.01.01.01',
             'name_fa' => 'Custom Rural District',
             'normalized_name' => 'custom rural district',
             'source' => 'custom',
@@ -251,15 +251,15 @@ class LocationSyncServiceTest extends TestCase
         self::assertSame(1, $result->datasetsByName()['counties']->totals()['skipped']);
         self::assertSame(1, $result->datasetsByName()['official_districts']->totals()['skipped']);
         self::assertSame(1, $result->datasetsByName()['rural_districts']->totals()['skipped']);
-        self::assertSame('Custom County', County::query()->where('code', 'ir.county.001.001')->firstOrFail()->getAttribute('name_fa'));
-        self::assertSame('Custom Official District', OfficialDistrict::query()->where('code', 'ir.official_district.001.001.001')->firstOrFail()->getAttribute('name_fa'));
-        self::assertSame('Custom Rural District', RuralDistrict::query()->where('code', 'ir.rural_district.001.001.001.001')->firstOrFail()->getAttribute('name_fa'));
+        self::assertSame('Custom County', County::query()->where('code', 'c.01.01')->firstOrFail()->getAttribute('name_fa'));
+        self::assertSame('Custom Official District', OfficialDistrict::query()->where('code', 'b.01.01.01')->firstOrFail()->getAttribute('name_fa'));
+        self::assertSame('Custom Rural District', RuralDistrict::query()->where('code', 'd.01.01.01.01')->firstOrFail()->getAttribute('name_fa'));
     }
 
     public function test_missing_package_records_are_deprecated_by_default(): void
     {
         $stale = Province::query()->create([
-            'code' => 'ir.province.stale',
+            'code' => 'x.p.stale',
             'name_fa' => 'Stale',
             'normalized_name' => 'stale',
             'source' => 'package',
@@ -277,7 +277,7 @@ class LocationSyncServiceTest extends TestCase
     public function test_missing_package_county_records_are_deprecated_by_default(): void
     {
         $province = Province::query()->create([
-            'code' => 'ir.province.001',
+            'code' => 'p.01',
             'name_fa' => 'Tehran',
             'normalized_name' => 'tehran',
             'source' => 'package',
@@ -285,7 +285,7 @@ class LocationSyncServiceTest extends TestCase
         ]);
         $stale = County::query()->create([
             'province_id' => $province->getKey(),
-            'code' => 'ir.county.stale',
+            'code' => 'x.c.stale',
             'name_fa' => 'Stale County',
             'normalized_name' => 'stale county',
             'source' => 'package',
@@ -303,7 +303,7 @@ class LocationSyncServiceTest extends TestCase
     public function test_no_deprecate_option_preserves_missing_package_records(): void
     {
         $stale = Province::query()->create([
-            'code' => 'ir.province.stale',
+            'code' => 'x.p.stale',
             'name_fa' => 'Stale',
             'normalized_name' => 'stale',
             'source' => 'package',
@@ -327,10 +327,10 @@ class LocationSyncServiceTest extends TestCase
 
         $service->sync();
 
-        $region = CityRegion::query()->where('code', 'ir.city.tehran.region.01')->firstOrFail();
+        $region = CityRegion::query()->where('code', 'r.01.01.01.01.01')->firstOrFail();
         $area = CityArea::query()->create([
             'city_region_id' => $region->getKey(),
-            'code' => 'ir.city-area.stale',
+            'code' => 'x.a.stale',
             'number' => 1,
             'name_fa' => 'Stale Area',
             'normalized_name' => 'stale area',
@@ -355,7 +355,7 @@ class LocationSyncServiceTest extends TestCase
     public function test_package_updates_replace_package_owned_display_name_and_restore_deprecated_records(): void
     {
         Province::query()->create([
-            'code' => 'ir.province.001',
+            'code' => 'p.01',
             'name_fa' => 'Old Tehran',
             'normalized_name' => 'old-tehran',
             'display_name_fa' => 'My Tehran',
@@ -366,7 +366,7 @@ class LocationSyncServiceTest extends TestCase
         ]);
 
         $result = $this->app->make(LocationSyncService::class)->sync(LocationSyncOptions::make(datasets: ['provinces']));
-        $province = Province::query()->where('code', 'ir.province.001')->firstOrFail();
+        $province = Province::query()->where('code', 'p.01')->firstOrFail();
 
         self::assertGreaterThan(0, $result->datasetsByName()['provinces']->totals()['updated']);
         self::assertSame('تهران', $province->getAttribute('name_fa'));
@@ -393,8 +393,8 @@ class LocationSyncServiceTest extends TestCase
             'official_districts' => [],
             'rural_districts' => [],
             'cities' => [[
-                'code' => 'ir.city.missing-parent',
-                'province_code' => 'ir.province.missing',
+                'code' => 'x.s.missing-parent',
+                'province_code' => 'x.p.missing',
                 'name_fa' => 'Missing Parent',
                 'normalized_name' => 'missing parent',
                 'slug' => 'missing-parent',
@@ -422,13 +422,13 @@ class LocationSyncServiceTest extends TestCase
     {
         $repository = new ArrayLocationDataRepository([
             'provinces' => [[
-                'code' => 'ir.province.alias-sync',
+                'code' => 'x.p.alias-sync',
                 'name_fa' => 'Alias Sync Province',
                 'source_version' => 'source-province',
             ]],
             'aliases' => [[
                 'location_type' => 'provinces',
-                'location_code' => 'ir.province.alias-sync',
+                'location_code' => 'x.p.alias-sync',
                 'alias' => 'Alias Sync Province Alias',
                 'normalized_alias' => 'alias sync province alias',
                 'source_version' => 'source-alias',
@@ -709,7 +709,7 @@ class LocationSyncServiceTest extends TestCase
     private function createSyncGraph(string $suffix): array
     {
         $province = new Province([
-            'code' => "test.province.{$suffix}",
+            'code' => "x.p.{$suffix}",
             'name_fa' => "Province {$suffix}",
             'normalized_name' => "province {$suffix}",
             'source' => 'package',
@@ -719,7 +719,7 @@ class LocationSyncServiceTest extends TestCase
 
         $city = new City([
             'province_id' => $province->getKey(),
-            'code' => "test.city.{$suffix}",
+            'code' => "x.s.{$suffix}",
             'name_fa' => "City {$suffix}",
             'normalized_name' => "city {$suffix}",
             'source' => 'package',
@@ -729,7 +729,7 @@ class LocationSyncServiceTest extends TestCase
 
         $region = new CityRegion([
             'city_id' => $city->getKey(),
-            'code' => "test.region.{$suffix}",
+            'code' => "x.r.{$suffix}",
             'number' => 1,
             'name_fa' => "Region {$suffix}",
             'normalized_name' => "region {$suffix}",
@@ -741,7 +741,7 @@ class LocationSyncServiceTest extends TestCase
         $neighborhood = new Neighborhood([
             'city_id' => $city->getKey(),
             'default_city_region_id' => $region->getKey(),
-            'code' => "test.neighborhood.{$suffix}",
+            'code' => "x.n.{$suffix}",
             'name_fa' => "Neighborhood {$suffix}",
             'normalized_name' => "neighborhood {$suffix}",
             'source' => 'package',

@@ -10,6 +10,7 @@ use DOMXPath;
 use Illuminate\Support\Str;
 use RuntimeException;
 use Throwable;
+use Zarbin\IranLocations\Coding\LocationCodeGenerator;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use ZipArchive;
 
@@ -25,9 +26,14 @@ final class ExcelLocationDataConverter
 
     private const TEHRAN_MUNICIPAL_FILE = 'tehran-state-neighbers.xlsx';
 
+    private readonly LocationCodeGenerator $codes;
+
     public function __construct(
         private readonly LocationNormalizer $normalizer,
-    ) {}
+        ?LocationCodeGenerator $codes = null,
+    ) {
+        $this->codes = $codes ?? new LocationCodeGenerator;
+    }
 
     /**
      * @return array<string, mixed>
@@ -528,7 +534,7 @@ final class ExcelLocationDataConverter
             }
 
             if (! isset($cityRegionByNumber[$regionNumber])) {
-                $regionCode = $this->cityRegionCode($regionNumber);
+                $regionCode = $this->cityRegionCode((string) $tehranCity['code'], $regionNumber);
                 $cityRegionByNumber[$regionNumber] = $regionCode;
                 $cityRegions[] = [
                     'code' => $regionCode,
@@ -557,7 +563,7 @@ final class ExcelLocationDataConverter
 
             $seenNeighborhoodNames[$neighborhoodNameKey] = true;
             $regionCode = $cityRegionByNumber[$regionNumber];
-            $neighborhoodCode = $this->neighborhoodCode($regionNumber, $regionRowNumber);
+            $neighborhoodCode = $this->neighborhoodCode((string) $tehranCity['code'], $regionCode, $regionRowNumber);
             $neighborhoods[] = [
                 'code' => $neighborhoodCode,
                 'source_id' => $sourceId,
@@ -820,37 +826,37 @@ final class ExcelLocationDataConverter
 
     private function provinceCode(int $provinceSegment): string
     {
-        return sprintf('ir.province.%03d', $provinceSegment);
+        return $this->codes->province($provinceSegment);
     }
 
     private function countyCode(int $provinceSegment, int $countySegment): string
     {
-        return sprintf('ir.county.%03d.%03d', $provinceSegment, $countySegment);
+        return $this->codes->county($this->provinceCode($provinceSegment), $countySegment);
     }
 
     private function officialDistrictCode(int $provinceSegment, int $countySegment, int $officialDistrictSegment): string
     {
-        return sprintf('ir.official_district.%03d.%03d.%03d', $provinceSegment, $countySegment, $officialDistrictSegment);
+        return $this->codes->officialDistrict($this->countyCode($provinceSegment, $countySegment), $officialDistrictSegment);
     }
 
     private function cityCode(int $provinceSegment, int $countySegment, int $officialDistrictSegment, int $citySegment): string
     {
-        return sprintf('ir.city.%03d.%03d.%03d.%03d', $provinceSegment, $countySegment, $officialDistrictSegment, $citySegment);
+        return $this->codes->city($this->officialDistrictCode($provinceSegment, $countySegment, $officialDistrictSegment), $citySegment);
     }
 
     private function ruralDistrictCode(int $provinceSegment, int $countySegment, int $officialDistrictSegment, int $ruralDistrictSegment): string
     {
-        return sprintf('ir.rural_district.%03d.%03d.%03d.%03d', $provinceSegment, $countySegment, $officialDistrictSegment, $ruralDistrictSegment);
+        return $this->codes->ruralDistrict($this->officialDistrictCode($provinceSegment, $countySegment, $officialDistrictSegment), $ruralDistrictSegment);
     }
 
-    private function cityRegionCode(int $regionNumber): string
+    private function cityRegionCode(string $cityCode, int $regionNumber): string
     {
-        return sprintf('ir.city.tehran.region.%02d', $regionNumber);
+        return $this->codes->cityRegion($cityCode, $regionNumber);
     }
 
-    private function neighborhoodCode(int $regionNumber, int $regionRowNumber): string
+    private function neighborhoodCode(string $cityCode, string $cityRegionCode, int $regionRowNumber): string
     {
-        return sprintf('ir.neighborhood.tehran.region.%02d.%03d', $regionNumber, $regionRowNumber);
+        return $this->codes->neighborhood($cityCode, $cityRegionCode, $regionRowNumber);
     }
 
     /**
@@ -1013,6 +1019,7 @@ final class ExcelLocationDataConverter
                 'aliases' => $counts['aliases'] > 0,
             ],
             'generated_at' => gmdate('Y-m-d\TH:i:s\Z'),
+            'code_scheme' => LocationCodeGenerator::scheme(),
             'counts' => $counts,
             'checksum' => $this->checksum($datasets),
         ];

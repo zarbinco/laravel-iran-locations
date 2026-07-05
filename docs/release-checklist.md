@@ -26,6 +26,7 @@ Use this checklist before manually tagging a reviewed release.
 ## Package Contract
 
 - Confirm `config/iran-locations.php`, `README.md`, `docs/data.md`, and the data manifest all agree on data version and dataset counts.
+- Confirm packaged JSON codes and manifest `code_scheme` use the generated short package code contract, with no legacy pre-release code compatibility layer.
 - Confirm [DATA-SOURCES.md](../DATA-SOURCES.md) and [DATA-LICENSE.md](../DATA-LICENSE.md) describe the imported/curated pre-release data without overclaiming official or legal approval.
 - Confirm packaged data quality tests pass for manifest counts, checksums, references, Persian `ک/ی`, province capitals, duplicate-code guards, and documented duplicate neighborhood names.
 - Confirm `zarbinco/laravel-persian-core` uses a stable semver constraint.

@@ -81,8 +81,8 @@ class SyncCommandTest extends TestCase
         self::assertSame(568, Neighborhood::query()->count());
         self::assertSame(1, LocationDataVersion::query()->count());
 
-        $tehran = City::query()->where('code', 'ir.city.001.001.001.001')->firstOrFail();
-        $region5 = CityRegion::query()->where('code', 'ir.city.tehran.region.05')->firstOrFail();
+        $tehran = City::query()->where('code', 's.01.01.01.01')->firstOrFail();
+        $region5 = CityRegion::query()->where('code', 'r.01.01.01.01.05')->firstOrFail();
 
         self::assertSame(22, CityRegion::query()->forCityCode((string) $tehran->getAttribute('code'))->orderedByNumber()->count());
         self::assertGreaterThan(0, Neighborhood::query()->forRegionCode((string) $region5->getAttribute('code'))->count());
@@ -107,21 +107,21 @@ class SyncCommandTest extends TestCase
         Artisan::call('iran-locations:sync');
 
         $province = Province::query()->create([
-            'code' => 'custom.province.status',
+            'code' => 'x.p.status',
             'name_fa' => 'Custom Province',
             'normalized_name' => 'custom province',
             'source' => 'custom',
         ]);
         $city = City::query()->create([
             'province_id' => $province->getKey(),
-            'code' => 'custom.city.status',
+            'code' => 'x.s.status',
             'name_fa' => 'Custom City',
             'normalized_name' => 'custom city',
             'source' => 'custom',
         ]);
         Neighborhood::query()->create([
             'city_id' => $city->getKey(),
-            'code' => 'custom.neighborhood.status',
+            'code' => 'x.n.status',
             'name_fa' => 'Custom Neighborhood',
             'normalized_name' => 'custom neighborhood',
             'source' => 'custom',
@@ -140,7 +140,7 @@ class SyncCommandTest extends TestCase
         Artisan::call('iran-locations:sync');
 
         Province::query()->create([
-            'code' => 'ir.province.stale-status',
+            'code' => 'x.p.stale-status',
             'name_fa' => 'Stale Package Province',
             'normalized_name' => 'stale package province',
             'source' => 'package',
@@ -160,11 +160,11 @@ class SyncCommandTest extends TestCase
     {
         Artisan::call('iran-locations:sync');
 
-        $region = CityRegion::query()->where('code', 'ir.city.tehran.region.01')->firstOrFail();
+        $region = CityRegion::query()->where('code', 'r.01.01.01.01.01')->firstOrFail();
 
         CityArea::query()->create([
             'city_region_id' => $region->getKey(),
-            'code' => 'ir.city-area.local-status',
+            'code' => 'x.a.local-status',
             'number' => 1,
             'name_fa' => 'Local Area',
             'normalized_name' => 'local area',
@@ -184,7 +184,7 @@ class SyncCommandTest extends TestCase
     {
         Artisan::call('iran-locations:sync');
 
-        City::query()->where('code', 'ir.city.001.001.001.001')->update([
+        City::query()->where('code', 's.01.01.01.01')->update([
             'is_active' => false,
         ]);
 

@@ -119,9 +119,10 @@ Option endpoints return small dropdown-friendly arrays:
 [
   {
     "value": 1,
-    "code": "ir.province.001",
+    "code": "p.01",
     "label": "Tehran",
     "name_fa": "Tehran"
   }
 ]
 ```
+

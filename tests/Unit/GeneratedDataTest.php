@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Tests\Unit;
 
+use Zarbin\IranLocations\Coding\LocationCodeGenerator;
 use Zarbin\IranLocations\Data\LocationDataManifest;
 use Zarbin\IranLocations\Tests\TestCase;
 
@@ -58,6 +59,7 @@ class GeneratedDataTest extends TestCase
         self::assertFalse($manifest['contains']['aliases']);
         self::assertIsString($manifest['checksum']);
         self::assertNotSame('', $manifest['checksum']);
+        self::assertSame(LocationCodeGenerator::scheme(), $manifest['code_scheme']);
     }
 
     public function test_package_data_does_not_expose_public_districts_dataset(): void

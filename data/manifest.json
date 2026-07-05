@@ -22,7 +22,7 @@
         "neighborhood_region": true,
         "aliases": false
     },
-    "generated_at": "2026-07-05T16:33:31Z",
+    "generated_at": "2026-07-05T19:17:06Z",
     "counts": {
         "provinces": 31,
         "counties": 484,
@@ -35,5 +35,13 @@
         "neighborhood_region": 568,
         "aliases": 0
     },
-    "checksum": "fa16ce66cb542ea0c0b144ee3c522cd97d823376dba5943881c528084ae88bca"
+    "checksum": "53c5782a2b8613228374c3077b57d598c24ffb58558e31fb8b089cf92c366126",
+    "code_scheme": {
+        "name": "zarbin-iran-location-code",
+        "version": "1.0",
+        "country_prefix": false,
+        "type_prefix": "single-letter",
+        "segment_format": "fixed-width-decimal",
+        "legacy_codes_preserved": false
+    }
 }

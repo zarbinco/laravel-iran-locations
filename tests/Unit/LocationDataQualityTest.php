@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Tests\Unit;
 
+use Zarbin\IranLocations\Coding\LocationCodeGenerator;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Data\LocationDataManifest;
 use Zarbin\IranLocations\Models\City;
@@ -54,13 +55,13 @@ class LocationDataQualityTest extends TestCase
      * @var array<string, array<int, string>>
      */
     private const ALLOWED_DUPLICATE_NEIGHBORHOODS = [
-        'ir.city.001.001.001.001|ir.city.tehran.region.09|استاد معین' => [
-            'ir.neighborhood.tehran.region.09.001',
-            'ir.neighborhood.tehran.region.09.009',
+        's.01.01.01.01|r.01.01.01.01.09|استاد معین' => [
+            'n.01.01.01.01.09.001',
+            'n.01.01.01.01.09.009',
         ],
-        'ir.city.001.001.001.001|ir.city.tehran.region.15|مشیریه' => [
-            'ir.neighborhood.tehran.region.15.014',
-            'ir.neighborhood.tehran.region.15.025',
+        's.01.01.01.01|r.01.01.01.01.15|مشیریه' => [
+            'n.01.01.01.01.15.014',
+            'n.01.01.01.01.15.025',
         ],
     ];
 
@@ -121,10 +122,73 @@ class LocationDataQualityTest extends TestCase
         self::assertSame('0.2.0-dev', $manifest['data_version'] ?? null);
         self::assertIsString($manifest['generated_at']);
         self::assertNotSame('', trim($manifest['generated_at']));
+        self::assertSame(LocationCodeGenerator::scheme(), $manifest['code_scheme'] ?? null);
         self::assertFalse($manifest['contains']['city_areas'] ?? true);
         self::assertFalse($manifest['contains']['aliases'] ?? true);
         self::assertSame(0, count($datasets['city_areas']));
         self::assertSame(0, count($datasets['aliases']));
+    }
+
+    public function test_packaged_codes_match_generated_scheme_and_parent_segments(): void
+    {
+        $datasets = $this->datasets();
+        $generator = new LocationCodeGenerator;
+
+        foreach ([
+            'provinces',
+            'counties',
+            'official_districts',
+            'rural_districts',
+            'cities',
+            'city_regions',
+            'city_areas',
+            'neighborhoods',
+        ] as $dataset) {
+            foreach ($datasets[$dataset] as $index => $record) {
+                $this->assertGeneratedCode($generator, $dataset, (string) ($record['code'] ?? ''), "{$dataset}[{$index}].code");
+            }
+        }
+
+        foreach ($datasets['neighborhood_region'] as $index => $record) {
+            $this->assertGeneratedCode($generator, 'neighborhoods', (string) ($record['neighborhood_code'] ?? ''), "neighborhood_region[{$index}].neighborhood_code");
+            $this->assertGeneratedCode($generator, 'city_regions', (string) ($record['city_region_code'] ?? ''), "neighborhood_region[{$index}].city_region_code");
+        }
+
+        foreach ($datasets['aliases'] as $index => $record) {
+            $dataset = LocationModelResolver::datasetForLocationType((string) ($record['location_type'] ?? ''));
+
+            $this->assertGeneratedCode($generator, $dataset, (string) ($record['location_code'] ?? ''), "aliases[{$index}].location_code");
+        }
+
+        foreach ($datasets['counties'] as $index => $county) {
+            $this->assertCodePathStartsWith($generator, (string) $county['code'], (string) $county['province_code'], "counties[{$index}] code path must match province.");
+        }
+
+        foreach ($datasets['official_districts'] as $index => $district) {
+            $this->assertCodePathStartsWith($generator, (string) $district['code'], (string) $district['province_code'], "official_districts[{$index}] code path must match province.");
+            $this->assertCodePathStartsWith($generator, (string) $district['code'], (string) $district['county_code'], "official_districts[{$index}] code path must match county.");
+        }
+
+        foreach ($datasets['rural_districts'] as $index => $district) {
+            $this->assertCodePathStartsWith($generator, (string) $district['code'], (string) $district['official_district_code'], "rural_districts[{$index}] code path must match official district.");
+        }
+
+        foreach ($datasets['cities'] as $index => $city) {
+            $this->assertCodePathStartsWith($generator, (string) $city['code'], (string) $city['official_district_code'], "cities[{$index}] code path must match official district.");
+        }
+
+        foreach ($datasets['city_regions'] as $index => $region) {
+            $this->assertCodePathStartsWith($generator, (string) $region['code'], (string) $region['city_code'], "city_regions[{$index}] code path must match city.");
+        }
+
+        foreach ($datasets['city_areas'] as $index => $area) {
+            $this->assertCodePathStartsWith($generator, (string) $area['code'], (string) $area['city_region_code'], "city_areas[{$index}] code path must match city region.");
+        }
+
+        foreach ($datasets['neighborhoods'] as $index => $neighborhood) {
+            $this->assertCodePathStartsWith($generator, (string) $neighborhood['code'], (string) $neighborhood['city_code'], "neighborhoods[{$index}] code path must match city.");
+            $this->assertCodePathStartsWith($generator, (string) $neighborhood['code'], (string) $neighborhood['default_city_region_code'], "neighborhoods[{$index}] code path must match default region.");
+        }
     }
 
     public function test_packaged_data_references_are_valid(): void
@@ -359,6 +423,29 @@ class LocationDataQualityTest extends TestCase
 
         self::assertIsString($code, $message);
         self::assertArrayHasKey($code, $codes, $message);
+    }
+
+    private function assertGeneratedCode(LocationCodeGenerator $generator, string $dataset, string $code, string $message): void
+    {
+        $legacyPrefix = implode('', ['i', 'r', '.']);
+
+        self::assertNotSame('', $code, $message);
+        self::assertSame(strtolower($code), $code, $message);
+        self::assertFalse(str_starts_with($code, $legacyPrefix), $message);
+
+        foreach (['province', 'county', 'official', 'district', 'rural', 'city', 'region', 'area', 'neighborhood', 'tehran'] as $forbidden) {
+            self::assertStringNotContainsString($forbidden, $code, $message);
+        }
+
+        self::assertTrue($generator->matchesDataset($dataset, $code), $message);
+    }
+
+    private function assertCodePathStartsWith(LocationCodeGenerator $generator, string $childCode, string $parentCode, string $message): void
+    {
+        self::assertTrue(
+            $generator->startsWithPath($generator->path($childCode), $generator->path($parentCode)),
+            $message,
+        );
     }
 
     private function nameKey(string $value): string

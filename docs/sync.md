@@ -26,7 +26,7 @@ Repeated successful syncs for the same `data_version` and checksum update that r
 ## Safety Behavior
 
 - Tables are never truncated.
-- Package-owned records are matched by stable `code`.
+- Package-owned records are matched by stable generated `code` values. Source spreadsheet code-like values are not used as public package codes.
 - Custom records with `source = custom` are always preserved; this is not configurable.
 - Package data is required to contain normalized/searchable fields. Sync writes those normalized fields and fills missing normalized or slug fields through the configured `LocationNormalizer`.
 - Missing package-owned records, aliases, and neighborhood-region mappings are deprecated by default.

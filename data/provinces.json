@@ -1,6 +1,6 @@
 [
     {
-        "code": "ir.province.001",
+        "code": "p.01",
         "source_id": 1,
         "name_fa": "تهران",
         "name_en": null,
@@ -13,7 +13,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.002",
+        "code": "p.02",
         "source_id": 2,
         "name_fa": "مرکزی",
         "name_en": null,
@@ -26,7 +26,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.003",
+        "code": "p.03",
         "source_id": 3,
         "name_fa": "گیلان",
         "name_en": null,
@@ -39,7 +39,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.004",
+        "code": "p.04",
         "source_id": 4,
         "name_fa": "مازندران",
         "name_en": null,
@@ -52,7 +52,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.005",
+        "code": "p.05",
         "source_id": 5,
         "name_fa": "آذربایجان شرقی",
         "name_en": null,
@@ -65,7 +65,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.006",
+        "code": "p.06",
         "source_id": 6,
         "name_fa": "آذربایجان غربی",
         "name_en": null,
@@ -78,7 +78,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.007",
+        "code": "p.07",
         "source_id": 7,
         "name_fa": "کرمانشاه",
         "name_en": null,
@@ -91,7 +91,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.008",
+        "code": "p.08",
         "source_id": 8,
         "name_fa": "خوزستان",
         "name_en": null,
@@ -104,7 +104,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.009",
+        "code": "p.09",
         "source_id": 9,
         "name_fa": "فارس",
         "name_en": null,
@@ -117,7 +117,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.010",
+        "code": "p.10",
         "source_id": 10,
         "name_fa": "کرمان",
         "name_en": null,
@@ -130,7 +130,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.011",
+        "code": "p.11",
         "source_id": 11,
         "name_fa": "خراسان رضوی",
         "name_en": null,
@@ -143,7 +143,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.012",
+        "code": "p.12",
         "source_id": 12,
         "name_fa": "اصفهان",
         "name_en": null,
@@ -156,7 +156,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.013",
+        "code": "p.13",
         "source_id": 13,
         "name_fa": "سیستان و بلوچستان",
         "name_en": null,
@@ -169,7 +169,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.014",
+        "code": "p.14",
         "source_id": 14,
         "name_fa": "کردستان",
         "name_en": null,
@@ -182,7 +182,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.015",
+        "code": "p.15",
         "source_id": 15,
         "name_fa": "همدان",
         "name_en": null,
@@ -195,7 +195,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.016",
+        "code": "p.16",
         "source_id": 16,
         "name_fa": "چهارمحال و بختیاری",
         "name_en": null,
@@ -208,7 +208,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.017",
+        "code": "p.17",
         "source_id": 17,
         "name_fa": "لرستان",
         "name_en": null,
@@ -221,7 +221,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.018",
+        "code": "p.18",
         "source_id": 18,
         "name_fa": "ایلام",
         "name_en": null,
@@ -234,7 +234,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.019",
+        "code": "p.19",
         "source_id": 19,
         "name_fa": "کهگیلویه و بویراحمد",
         "name_en": null,
@@ -247,7 +247,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.020",
+        "code": "p.20",
         "source_id": 20,
         "name_fa": "بوشهر",
         "name_en": null,
@@ -260,7 +260,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.021",
+        "code": "p.21",
         "source_id": 21,
         "name_fa": "زنجان",
         "name_en": null,
@@ -273,7 +273,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.022",
+        "code": "p.22",
         "source_id": 22,
         "name_fa": "سمنان",
         "name_en": null,
@@ -286,7 +286,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.023",
+        "code": "p.23",
         "source_id": 23,
         "name_fa": "یزد",
         "name_en": null,
@@ -299,7 +299,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.024",
+        "code": "p.24",
         "source_id": 24,
         "name_fa": "هرمزگان",
         "name_en": null,
@@ -312,7 +312,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.025",
+        "code": "p.25",
         "source_id": 25,
         "name_fa": "اردبیل",
         "name_en": null,
@@ -325,7 +325,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.026",
+        "code": "p.26",
         "source_id": 26,
         "name_fa": "قم",
         "name_en": null,
@@ -338,7 +338,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.027",
+        "code": "p.27",
         "source_id": 27,
         "name_fa": "قزوین",
         "name_en": null,
@@ -351,7 +351,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.028",
+        "code": "p.28",
         "source_id": 28,
         "name_fa": "گلستان",
         "name_en": null,
@@ -364,7 +364,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.029",
+        "code": "p.29",
         "source_id": 29,
         "name_fa": "خراسان شمالی",
         "name_en": null,
@@ -377,7 +377,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.030",
+        "code": "p.30",
         "source_id": 30,
         "name_fa": "خراسان جنوبی",
         "name_en": null,
@@ -390,7 +390,7 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.province.031",
+        "code": "p.31",
         "source_id": 31,
         "name_fa": "البرز",
         "name_en": null,

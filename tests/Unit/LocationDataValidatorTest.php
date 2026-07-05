@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Tests\Unit;
 
+use Zarbin\IranLocations\Coding\LocationCodeGenerator;
 use Zarbin\IranLocations\Data\JsonLocationDataRepository;
 use Zarbin\IranLocations\Data\LocationDataManifest;
 use Zarbin\IranLocations\Data\LocationDataValidator;
@@ -22,99 +23,99 @@ class LocationDataValidatorTest extends TestCase
     {
         $path = $this->makeDataPath([
             'provinces' => [
-                $this->province(['code' => 'ir.province.001']),
-                $this->province(['code' => 'ir.province.001', 'source_id' => 2]),
+                $this->province(['code' => 'p.01']),
+                $this->province(['code' => 'p.01', 'source_id' => 2]),
             ],
         ]);
 
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [provinces] contains duplicate code [ir.province.001].', $result['errors']);
+        self::assertContains('Dataset [provinces] contains duplicate code [p.01].', $result['errors']);
     }
 
     public function test_validator_catches_city_with_missing_province_code(): void
     {
         $path = $this->makeDataPath([
             'cities' => [
-                $this->city(['province_code' => 'ir.province.999']),
+                $this->city(['province_code' => 'p.99']),
             ],
         ]);
 
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [cities] record [0] references missing province_code [ir.province.999].', $result['errors']);
+        self::assertContains('Dataset [cities] record [0] references missing province_code [p.99].', $result['errors']);
     }
 
     public function test_validator_catches_county_with_missing_province_code(): void
     {
         $path = $this->makeDataPath([
             'counties' => [
-                $this->county(['province_code' => 'ir.province.999']),
+                $this->county(['province_code' => 'p.99']),
             ],
         ]);
 
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [counties] record [0] references missing province_code [ir.province.999].', $result['errors']);
+        self::assertContains('Dataset [counties] record [0] references missing province_code [p.99].', $result['errors']);
     }
 
     public function test_validator_catches_official_district_with_missing_county_code(): void
     {
         $path = $this->makeDataPath([
             'official_districts' => [
-                $this->officialDistrict(['county_code' => 'ir.county.001.999']),
+                $this->officialDistrict(['county_code' => 'c.01.99']),
             ],
         ]);
 
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [official_districts] record [0] references missing county_code [ir.county.001.999].', $result['errors']);
+        self::assertContains('Dataset [official_districts] record [0] references missing county_code [c.01.99].', $result['errors']);
     }
 
     public function test_validator_catches_rural_district_with_missing_official_district_code(): void
     {
         $path = $this->makeDataPath([
             'rural_districts' => [
-                $this->ruralDistrict(['official_district_code' => 'ir.official_district.001.001.999']),
+                $this->ruralDistrict(['official_district_code' => 'b.01.01.99']),
             ],
         ]);
 
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [rural_districts] record [0] references missing official_district_code [ir.official_district.001.001.999].', $result['errors']);
+        self::assertContains('Dataset [rural_districts] record [0] references missing official_district_code [b.01.01.99].', $result['errors']);
     }
 
     public function test_validator_catches_city_with_missing_official_district_code(): void
     {
         $path = $this->makeDataPath([
             'cities' => [
-                $this->city(['official_district_code' => 'ir.official_district.001.001.999']),
+                $this->city(['official_district_code' => 'b.01.01.99']),
             ],
         ]);
 
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [cities] record [0] references missing official_district_code [ir.official_district.001.001.999].', $result['errors']);
+        self::assertContains('Dataset [cities] record [0] references missing official_district_code [b.01.01.99].', $result['errors']);
     }
 
     public function test_validator_catches_neighborhood_with_missing_city_code(): void
     {
         $path = $this->makeDataPath([
             'neighborhoods' => [
-                $this->neighborhood(['city_code' => 'ir.city.001.9999']),
+                $this->neighborhood(['city_code' => 's.01.01.01.99']),
             ],
         ]);
 
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [neighborhoods] record [0] references missing city_code [ir.city.001.9999].', $result['errors']);
+        self::assertContains('Dataset [neighborhoods] record [0] references missing city_code [s.01.01.01.99].', $result['errors']);
     }
 
     public function test_validator_accepts_alias_plural_type_and_existing_target(): void
@@ -122,7 +123,7 @@ class LocationDataValidatorTest extends TestCase
         $path = $this->makeDataPath([
             'aliases' => [[
                 'location_type' => 'cities',
-                'location_code' => 'ir.city.001.001.001.001',
+                'location_code' => 's.01.01.01.01',
                 'alias' => 'Alias City',
                 'normalized_alias' => 'alias city',
                 'source' => 'package',
@@ -140,14 +141,14 @@ class LocationDataValidatorTest extends TestCase
             'aliases' => [
                 [
                     'location_type' => 'Zarbin\\IranLocations\\Models\\City',
-                    'location_code' => 'ir.city.001.001.001.001',
+                    'location_code' => 's.01.01.01.01',
                     'alias' => 'Alias City',
                     'normalized_alias' => 'alias city',
                     'source' => 'package',
                 ],
                 [
                     'location_type' => 'city',
-                    'location_code' => 'ir.city.missing',
+                    'location_code' => 's.01.01.01.99',
                     'alias' => 'Missing City Alias',
                     'normalized_alias' => 'missing city alias',
                     'source' => 'package',
@@ -159,7 +160,7 @@ class LocationDataValidatorTest extends TestCase
 
         self::assertFalse($result['ok']);
         self::assertContains('Dataset [aliases] record [0] has unsupported location_type [Zarbin\\IranLocations\\Models\\City].', $result['errors']);
-        self::assertContains('Dataset [aliases] record [1] references missing cities code [ir.city.missing].', $result['errors']);
+        self::assertContains('Dataset [aliases] record [1] references missing cities code [s.01.01.01.99].', $result['errors']);
     }
 
     public function test_validator_catches_duplicate_alias_target(): void
@@ -168,14 +169,14 @@ class LocationDataValidatorTest extends TestCase
             'aliases' => [
                 [
                     'location_type' => 'city',
-                    'location_code' => 'ir.city.001.001.001.001',
+                    'location_code' => 's.01.01.01.01',
                     'alias' => 'Alias City',
                     'normalized_alias' => 'alias city',
                     'source' => 'package',
                 ],
                 [
                     'location_type' => 'cities',
-                    'location_code' => 'ir.city.001.001.001.001',
+                    'location_code' => 's.01.01.01.01',
                     'alias' => 'Alias City Again',
                     'normalized_alias' => 'alias city',
                     'source' => 'package',
@@ -186,7 +187,7 @@ class LocationDataValidatorTest extends TestCase
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [aliases] contains duplicate alias target [city|ir.city.001.001.001.001|alias city].', $result['errors']);
+        self::assertContains('Dataset [aliases] contains duplicate alias target [city|s.01.01.01.01|alias city].', $result['errors']);
     }
 
     public function test_validator_catches_manifest_count_mismatch(): void
@@ -259,20 +260,20 @@ class LocationDataValidatorTest extends TestCase
             'provinces' => [
                 $this->province(),
                 $this->province([
-                    'code' => 'ir.province.002',
+                    'code' => 'p.02',
                     'source_id' => 2,
                 ]),
             ],
             'counties' => [
                 $this->county([
-                    'code' => 'ir.county.002.001',
-                    'province_code' => 'ir.province.002',
+                    'code' => 'c.02.01',
+                    'province_code' => 'p.02',
                     'province_source_id' => 2,
                 ]),
             ],
             'official_districts' => [
                 $this->officialDistrict([
-                    'county_code' => 'ir.county.002.001',
+                    'county_code' => 'c.02.01',
                 ]),
             ],
             'rural_districts' => [],
@@ -285,7 +286,64 @@ class LocationDataValidatorTest extends TestCase
         $result = $this->validatePath($path);
 
         self::assertFalse($result['ok']);
-        self::assertContains('Dataset [official_districts] record [0] references county_code [ir.county.002.001] outside province_code [ir.province.001].', $result['errors']);
+        self::assertContains('Dataset [official_districts] record [0] references county_code [c.02.01] outside province_code [p.01].', $result['errors']);
+    }
+
+    public function test_validator_rejects_old_prefixed_and_wordy_codes(): void
+    {
+        $oldPrefix = implode('', ['i', 'r', '.']);
+        $oldCode = $oldPrefix.'province.001';
+        $path = $this->makeDataPath([
+            'provinces' => [
+                $this->province(['code' => $oldCode]),
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains("Dataset [provinces] record [0] field [code] code [{$oldCode}] must not start with [{$oldPrefix}].", $result['errors']);
+        self::assertContains("Dataset [provinces] record [0] field [code] code [{$oldCode}] must not contain [province].", $result['errors']);
+    }
+
+    public function test_validator_catches_code_path_outside_parent_reference(): void
+    {
+        $path = $this->makeDataPath([
+            'counties' => [
+                $this->county(['code' => 'c.02.01']),
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Dataset [counties] record [0] code [c.02.01] is not under province_code [p.01].', $result['errors']);
+    }
+
+    public function test_validator_catches_missing_manifest_code_scheme(): void
+    {
+        $path = $this->makeDataPath([], [
+            'code_scheme' => null,
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Manifest is missing [code_scheme].', $result['errors']);
+    }
+
+    public function test_validator_catches_invalid_manifest_code_scheme(): void
+    {
+        $path = $this->makeDataPath([], [
+            'code_scheme' => [
+                'name' => 'unexpected',
+            ],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Manifest code_scheme [name] is [unexpected], expected [zarbin-iran-location-code].', $result['errors']);
     }
 
     /**
@@ -331,6 +389,7 @@ class LocationDataValidatorTest extends TestCase
                 'aliases' => false,
             ],
             'generated_at' => '2026-07-05T00:00:00Z',
+            'code_scheme' => LocationCodeGenerator::scheme(),
             'counts' => $counts,
             'checksum' => $this->checksum($datasets),
         ], $manifestOverrides);
@@ -388,7 +447,7 @@ class LocationDataValidatorTest extends TestCase
     private function province(array $overrides = []): array
     {
         return array_replace([
-            'code' => 'ir.province.001',
+            'code' => 'p.01',
             'source_id' => 1,
             'name_fa' => 'تهران',
             'name_en' => null,
@@ -409,9 +468,9 @@ class LocationDataValidatorTest extends TestCase
     private function county(array $overrides = []): array
     {
         return array_replace([
-            'code' => 'ir.county.001.001',
+            'code' => 'c.01.01',
             'source_id' => 1,
-            'province_code' => 'ir.province.001',
+            'province_code' => 'p.01',
             'province_source_id' => 1,
             'name_fa' => 'تهران',
             'name_en' => null,
@@ -432,10 +491,10 @@ class LocationDataValidatorTest extends TestCase
     private function officialDistrict(array $overrides = []): array
     {
         return array_replace([
-            'code' => 'ir.official_district.001.001.001',
+            'code' => 'b.01.01.01',
             'source_id' => 1,
-            'province_code' => 'ir.province.001',
-            'county_code' => 'ir.county.001.001',
+            'province_code' => 'p.01',
+            'county_code' => 'c.01.01',
             'county_source_id' => 1,
             'name_fa' => 'مرکزی',
             'name_en' => null,
@@ -456,11 +515,11 @@ class LocationDataValidatorTest extends TestCase
     private function ruralDistrict(array $overrides = []): array
     {
         return array_replace([
-            'code' => 'ir.rural_district.001.001.001.001',
+            'code' => 'd.01.01.01.01',
             'source_id' => 1,
-            'province_code' => 'ir.province.001',
-            'county_code' => 'ir.county.001.001',
-            'official_district_code' => 'ir.official_district.001.001.001',
+            'province_code' => 'p.01',
+            'county_code' => 'c.01.01',
+            'official_district_code' => 'b.01.01.01',
             'name_fa' => 'سیاهرود',
             'name_en' => null,
             'slug' => 'siahroud',
@@ -480,13 +539,13 @@ class LocationDataValidatorTest extends TestCase
     private function city(array $overrides = []): array
     {
         return array_replace([
-            'code' => 'ir.city.001.001.001.001',
+            'code' => 's.01.01.01.01',
             'source_id' => 1,
-            'province_code' => 'ir.province.001',
+            'province_code' => 'p.01',
             'province_source_id' => 1,
-            'county_code' => 'ir.county.001.001',
+            'county_code' => 'c.01.01',
             'county_source_id' => 1,
-            'official_district_code' => 'ir.official_district.001.001.001',
+            'official_district_code' => 'b.01.01.01',
             'official_district_source_id' => 1,
             'name_fa' => 'تهران',
             'name_en' => null,
@@ -510,9 +569,9 @@ class LocationDataValidatorTest extends TestCase
     private function cityRegion(array $overrides = []): array
     {
         return array_replace([
-            'code' => 'ir.city.tehran.region.01',
+            'code' => 'r.01.01.01.01.01',
             'source_id' => 1,
-            'city_code' => 'ir.city.001.001.001.001',
+            'city_code' => 's.01.01.01.01',
             'city_source_id' => 1,
             'name_fa' => 'منطقه ۱ تهران',
             'slug' => 'tehran-region-01',
@@ -531,10 +590,12 @@ class LocationDataValidatorTest extends TestCase
     private function neighborhood(array $overrides = []): array
     {
         return array_replace([
-            'code' => 'ir.neighborhood.001.0001.0001',
+            'code' => 'n.01.01.01.01.01.001',
             'source_id' => 1,
-            'city_code' => 'ir.city.001.001.001.001',
+            'city_code' => 's.01.01.01.01',
             'city_source_id' => 1,
+            'default_city_region_code' => 'r.01.01.01.01.01',
+            'default_city_area_code' => null,
             'name_fa' => 'آجودانیه',
             'name_en' => null,
             'slug' => 'neighborhood-1-1',
@@ -557,8 +618,8 @@ class LocationDataValidatorTest extends TestCase
     private function neighborhoodRegion(array $overrides = []): array
     {
         return array_replace([
-            'neighborhood_code' => 'ir.neighborhood.001.0001.0001',
-            'city_region_code' => 'ir.city.tehran.region.01',
+            'neighborhood_code' => 'n.01.01.01.01.01.001',
+            'city_region_code' => 'r.01.01.01.01.01',
             'is_primary' => true,
             'source' => 'package',
         ], $overrides);

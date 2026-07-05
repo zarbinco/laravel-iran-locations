@@ -39,11 +39,14 @@ class ExcelLocationDataConverterTest extends TestCase
         );
 
         $provinces = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('provinces'));
+        $counties = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('counties'));
         $officialDistricts = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('official_districts'));
         $ruralDistricts = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('rural_districts'));
         $cities = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('cities'));
+        $cityRegions = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('city_regions'));
         $neighborhoods = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('neighborhoods'));
         $neighborhoodRegion = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::fileFor('neighborhood_region'));
+        $manifest = $this->readJson($outputPath.DIRECTORY_SEPARATOR.LocationDataManifest::MANIFEST_FILE);
 
         self::assertSame(1, $summary['counts']['provinces']);
         self::assertSame(2, $summary['counts']['counties']);
@@ -59,8 +62,14 @@ class ExcelLocationDataConverterTest extends TestCase
         self::assertSame('slug:تهران', $cities[0]['slug']);
         self::assertSame('official-district-1', $officialDistricts[0]['slug']);
         self::assertSame('rural-district-1', $ruralDistricts[0]['slug']);
-        self::assertSame('ir.city.001.001.001.001', $cities[0]['code']);
-        self::assertSame('ir.city.tehran.region.01', $neighborhoods[0]['default_city_region_code']);
+        self::assertSame('p.01', $provinces[0]['code']);
+        self::assertSame('c.01.01', $counties[0]['code']);
+        self::assertSame('b.01.01.01', $officialDistricts[0]['code']);
+        self::assertSame('s.01.01.01.01', $cities[0]['code']);
+        self::assertSame('r.01.01.01.01.01', $cityRegions[0]['code']);
+        self::assertSame('n.01.01.01.01.01.001', $neighborhoods[0]['code']);
+        self::assertSame('r.01.01.01.01.01', $neighborhoods[0]['default_city_region_code']);
+        self::assertSame('zarbin-iran-location-code', $manifest['code_scheme']['name']);
         self::assertSame($neighborhoods[0]['code'], $neighborhoodRegion[0]['neighborhood_code']);
         self::assertFileDoesNotExist($outputPath.DIRECTORY_SEPARATOR.'districts.json');
     }
@@ -87,7 +96,7 @@ class ExcelLocationDataConverterTest extends TestCase
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<string, mixed>|array<int, array<string, mixed>>
      */
     private function readJson(string $path): array
     {

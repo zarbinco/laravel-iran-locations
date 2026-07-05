@@ -1,8 +1,8 @@
 [
     {
-        "code": "ir.county.001.001",
+        "code": "c.01.01",
         "source_id": 1,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "تهران",
         "name_en": null,
@@ -15,9 +15,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.002",
+        "code": "c.01.02",
         "source_id": 2,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "دماوند",
         "name_en": null,
@@ -30,9 +30,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.003",
+        "code": "c.01.03",
         "source_id": 3,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "ری",
         "name_en": null,
@@ -45,9 +45,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.004",
+        "code": "c.01.04",
         "source_id": 4,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "شمیرانات",
         "name_en": null,
@@ -60,9 +60,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.005",
+        "code": "c.01.05",
         "source_id": 5,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "ورامین",
         "name_en": null,
@@ -75,9 +75,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.006",
+        "code": "c.01.06",
         "source_id": 6,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "شهریار",
         "name_en": null,
@@ -90,9 +90,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.007",
+        "code": "c.01.07",
         "source_id": 7,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "اسلامشهر",
         "name_en": null,
@@ -105,9 +105,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.008",
+        "code": "c.01.08",
         "source_id": 8,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "رباط‌کریم",
         "name_en": null,
@@ -120,9 +120,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.009",
+        "code": "c.01.09",
         "source_id": 9,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "پاکدشت",
         "name_en": null,
@@ -135,9 +135,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.010",
+        "code": "c.01.10",
         "source_id": 10,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "فیروزکوه",
         "name_en": null,
@@ -150,9 +150,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.011",
+        "code": "c.01.11",
         "source_id": 11,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "قدس",
         "name_en": null,
@@ -165,9 +165,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.012",
+        "code": "c.01.12",
         "source_id": 12,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "ملارد",
         "name_en": null,
@@ -180,9 +180,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.013",
+        "code": "c.01.13",
         "source_id": 13,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "پیشوا",
         "name_en": null,
@@ -195,9 +195,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.014",
+        "code": "c.01.14",
         "source_id": 14,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "بهارستان",
         "name_en": null,
@@ -210,9 +210,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.015",
+        "code": "c.01.15",
         "source_id": 15,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "پردیس",
         "name_en": null,
@@ -225,9 +225,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.001.016",
+        "code": "c.01.16",
         "source_id": 16,
-        "province_code": "ir.province.001",
+        "province_code": "p.01",
         "province_source_id": 1,
         "name_fa": "قرچک",
         "name_en": null,
@@ -240,9 +240,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.001",
+        "code": "c.02.01",
         "source_id": 17,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "اراک",
         "name_en": null,
@@ -255,9 +255,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.002",
+        "code": "c.02.02",
         "source_id": 18,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "آشتیان",
         "name_en": null,
@@ -270,9 +270,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.003",
+        "code": "c.02.03",
         "source_id": 19,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "تفرش",
         "name_en": null,
@@ -285,9 +285,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.004",
+        "code": "c.02.04",
         "source_id": 20,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "خمین",
         "name_en": null,
@@ -300,9 +300,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.005",
+        "code": "c.02.05",
         "source_id": 21,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "دلیجان",
         "name_en": null,
@@ -315,9 +315,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.006",
+        "code": "c.02.06",
         "source_id": 22,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "شازند",
         "name_en": null,
@@ -330,9 +330,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.007",
+        "code": "c.02.07",
         "source_id": 23,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "ساوه",
         "name_en": null,
@@ -345,9 +345,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.008",
+        "code": "c.02.08",
         "source_id": 24,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "خنداب",
         "name_en": null,
@@ -360,9 +360,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.009",
+        "code": "c.02.09",
         "source_id": 25,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "محلات",
         "name_en": null,
@@ -375,9 +375,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.010",
+        "code": "c.02.10",
         "source_id": 26,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "زرندیه",
         "name_en": null,
@@ -390,9 +390,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.011",
+        "code": "c.02.11",
         "source_id": 27,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "کمیجان",
         "name_en": null,
@@ -405,9 +405,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.002.012",
+        "code": "c.02.12",
         "source_id": 28,
-        "province_code": "ir.province.002",
+        "province_code": "p.02",
         "province_source_id": 2,
         "name_fa": "فراهان",
         "name_en": null,
@@ -420,9 +420,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.001",
+        "code": "c.03.01",
         "source_id": 29,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "آستارا",
         "name_en": null,
@@ -435,9 +435,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.002",
+        "code": "c.03.02",
         "source_id": 30,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "آستانه اشرفیه",
         "name_en": null,
@@ -450,9 +450,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.003",
+        "code": "c.03.03",
         "source_id": 31,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "بندرانزلی",
         "name_en": null,
@@ -465,9 +465,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.004",
+        "code": "c.03.04",
         "source_id": 32,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "طوالش",
         "name_en": null,
@@ -480,9 +480,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.005",
+        "code": "c.03.05",
         "source_id": 33,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "رشت",
         "name_en": null,
@@ -495,9 +495,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.006",
+        "code": "c.03.06",
         "source_id": 34,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "رودبار",
         "name_en": null,
@@ -510,9 +510,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.007",
+        "code": "c.03.07",
         "source_id": 35,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "رودسر",
         "name_en": null,
@@ -525,9 +525,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.008",
+        "code": "c.03.08",
         "source_id": 36,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "صومعه سرا",
         "name_en": null,
@@ -540,9 +540,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.009",
+        "code": "c.03.09",
         "source_id": 37,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "فومن",
         "name_en": null,
@@ -555,9 +555,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.010",
+        "code": "c.03.10",
         "source_id": 38,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "لنگرود",
         "name_en": null,
@@ -570,9 +570,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.011",
+        "code": "c.03.11",
         "source_id": 39,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "لاهیجان",
         "name_en": null,
@@ -585,9 +585,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.012",
+        "code": "c.03.12",
         "source_id": 40,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "شفت",
         "name_en": null,
@@ -600,9 +600,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.013",
+        "code": "c.03.13",
         "source_id": 41,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "املش",
         "name_en": null,
@@ -615,9 +615,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.014",
+        "code": "c.03.14",
         "source_id": 42,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "رضوانشهر",
         "name_en": null,
@@ -630,9 +630,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.015",
+        "code": "c.03.15",
         "source_id": 43,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "سیاهکل",
         "name_en": null,
@@ -645,9 +645,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.016",
+        "code": "c.03.16",
         "source_id": 44,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "ماسال",
         "name_en": null,
@@ -660,9 +660,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.003.017",
+        "code": "c.03.17",
         "source_id": 45,
-        "province_code": "ir.province.003",
+        "province_code": "p.03",
         "province_source_id": 3,
         "name_fa": "خمام",
         "name_en": null,
@@ -675,9 +675,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.001",
+        "code": "c.04.01",
         "source_id": 46,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "آمل",
         "name_en": null,
@@ -690,9 +690,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.002",
+        "code": "c.04.02",
         "source_id": 47,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "بابل",
         "name_en": null,
@@ -705,9 +705,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.003",
+        "code": "c.04.03",
         "source_id": 48,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "بهشهر",
         "name_en": null,
@@ -720,9 +720,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.004",
+        "code": "c.04.04",
         "source_id": 49,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "تنکابن",
         "name_en": null,
@@ -735,9 +735,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.005",
+        "code": "c.04.05",
         "source_id": 50,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "رامسر",
         "name_en": null,
@@ -750,9 +750,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.006",
+        "code": "c.04.06",
         "source_id": 51,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "ساری",
         "name_en": null,
@@ -765,9 +765,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.007",
+        "code": "c.04.07",
         "source_id": 52,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "نور",
         "name_en": null,
@@ -780,9 +780,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.008",
+        "code": "c.04.08",
         "source_id": 53,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "سوادکوه",
         "name_en": null,
@@ -795,9 +795,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.009",
+        "code": "c.04.09",
         "source_id": 54,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "قایم شهر",
         "name_en": null,
@@ -810,9 +810,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.010",
+        "code": "c.04.10",
         "source_id": 55,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "محمودآباد",
         "name_en": null,
@@ -825,9 +825,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.011",
+        "code": "c.04.11",
         "source_id": 56,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "نوشهر",
         "name_en": null,
@@ -840,9 +840,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.012",
+        "code": "c.04.12",
         "source_id": 57,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "بابلسر",
         "name_en": null,
@@ -855,9 +855,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.013",
+        "code": "c.04.13",
         "source_id": 58,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "نکا",
         "name_en": null,
@@ -870,9 +870,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.014",
+        "code": "c.04.14",
         "source_id": 59,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "عباس آباد",
         "name_en": null,
@@ -885,9 +885,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.015",
+        "code": "c.04.15",
         "source_id": 60,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "چالوس",
         "name_en": null,
@@ -900,9 +900,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.016",
+        "code": "c.04.16",
         "source_id": 61,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "جویبار",
         "name_en": null,
@@ -915,9 +915,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.017",
+        "code": "c.04.17",
         "source_id": 62,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "گلوگاه",
         "name_en": null,
@@ -930,9 +930,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.018",
+        "code": "c.04.18",
         "source_id": 63,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "فریدونکنار",
         "name_en": null,
@@ -945,9 +945,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.019",
+        "code": "c.04.19",
         "source_id": 64,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "میاندورود",
         "name_en": null,
@@ -960,9 +960,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.020",
+        "code": "c.04.20",
         "source_id": 65,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "سیمرغ",
         "name_en": null,
@@ -975,9 +975,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.021",
+        "code": "c.04.21",
         "source_id": 66,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "سوادکوه شمالی",
         "name_en": null,
@@ -990,9 +990,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.004.022",
+        "code": "c.04.22",
         "source_id": 67,
-        "province_code": "ir.province.004",
+        "province_code": "p.04",
         "province_source_id": 4,
         "name_fa": "کلاردشت",
         "name_en": null,
@@ -1005,9 +1005,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.001",
+        "code": "c.05.01",
         "source_id": 68,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "اهر",
         "name_en": null,
@@ -1020,9 +1020,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.002",
+        "code": "c.05.02",
         "source_id": 69,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "تبریز",
         "name_en": null,
@@ -1035,9 +1035,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.003",
+        "code": "c.05.03",
         "source_id": 70,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "سراب",
         "name_en": null,
@@ -1050,9 +1050,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.004",
+        "code": "c.05.04",
         "source_id": 71,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "مراغه",
         "name_en": null,
@@ -1065,9 +1065,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.005",
+        "code": "c.05.05",
         "source_id": 72,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "مرند",
         "name_en": null,
@@ -1080,9 +1080,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.006",
+        "code": "c.05.06",
         "source_id": 73,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "میانه",
         "name_en": null,
@@ -1095,9 +1095,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.007",
+        "code": "c.05.07",
         "source_id": 74,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "بناب",
         "name_en": null,
@@ -1110,9 +1110,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.008",
+        "code": "c.05.08",
         "source_id": 75,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "هشترود",
         "name_en": null,
@@ -1125,9 +1125,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.009",
+        "code": "c.05.09",
         "source_id": 76,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "بستان آباد",
         "name_en": null,
@@ -1140,9 +1140,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.010",
+        "code": "c.05.10",
         "source_id": 77,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "شبستر",
         "name_en": null,
@@ -1155,9 +1155,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.011",
+        "code": "c.05.11",
         "source_id": 78,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "کلیبر",
         "name_en": null,
@@ -1170,9 +1170,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.012",
+        "code": "c.05.12",
         "source_id": 79,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "هریس",
         "name_en": null,
@@ -1185,9 +1185,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.013",
+        "code": "c.05.13",
         "source_id": 80,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "جلفا",
         "name_en": null,
@@ -1200,9 +1200,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.014",
+        "code": "c.05.14",
         "source_id": 81,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "ملکان",
         "name_en": null,
@@ -1215,9 +1215,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.015",
+        "code": "c.05.15",
         "source_id": 82,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "آذرشهر",
         "name_en": null,
@@ -1230,9 +1230,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.016",
+        "code": "c.05.16",
         "source_id": 83,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "اسکو",
         "name_en": null,
@@ -1245,9 +1245,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.017",
+        "code": "c.05.17",
         "source_id": 84,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "چاراویماق",
         "name_en": null,
@@ -1260,9 +1260,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.018",
+        "code": "c.05.18",
         "source_id": 85,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "ورزقان",
         "name_en": null,
@@ -1275,9 +1275,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.019",
+        "code": "c.05.19",
         "source_id": 86,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "عجب شیر",
         "name_en": null,
@@ -1290,9 +1290,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.020",
+        "code": "c.05.20",
         "source_id": 87,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "خدا آفرین",
         "name_en": null,
@@ -1305,9 +1305,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.021",
+        "code": "c.05.21",
         "source_id": 88,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "هوراند",
         "name_en": null,
@@ -1320,9 +1320,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.022",
+        "code": "c.05.22",
         "source_id": 89,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "لیلان",
         "name_en": null,
@@ -1335,9 +1335,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.005.023",
+        "code": "c.05.23",
         "source_id": 90,
-        "province_code": "ir.province.005",
+        "province_code": "p.05",
         "province_source_id": 5,
         "name_fa": "ترکمانچای",
         "name_en": null,
@@ -1350,9 +1350,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.001",
+        "code": "c.06.01",
         "source_id": 91,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "ارومیه",
         "name_en": null,
@@ -1365,9 +1365,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.002",
+        "code": "c.06.02",
         "source_id": 92,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "پیرانشهر",
         "name_en": null,
@@ -1380,9 +1380,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.003",
+        "code": "c.06.03",
         "source_id": 93,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "سردشت",
         "name_en": null,
@@ -1395,9 +1395,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.004",
+        "code": "c.06.04",
         "source_id": 94,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "خوی",
         "name_en": null,
@@ -1410,9 +1410,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.005",
+        "code": "c.06.05",
         "source_id": 95,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "سلماس",
         "name_en": null,
@@ -1425,9 +1425,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.006",
+        "code": "c.06.06",
         "source_id": 96,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "ماکو",
         "name_en": null,
@@ -1440,9 +1440,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.007",
+        "code": "c.06.07",
         "source_id": 97,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "مهاباد",
         "name_en": null,
@@ -1455,9 +1455,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.008",
+        "code": "c.06.08",
         "source_id": 98,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "میاندوآب",
         "name_en": null,
@@ -1470,9 +1470,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.009",
+        "code": "c.06.09",
         "source_id": 99,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "نقده",
         "name_en": null,
@@ -1485,9 +1485,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.010",
+        "code": "c.06.10",
         "source_id": 100,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "بوکان",
         "name_en": null,
@@ -1500,9 +1500,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.011",
+        "code": "c.06.11",
         "source_id": 101,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "چالدران",
         "name_en": null,
@@ -1515,9 +1515,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.012",
+        "code": "c.06.12",
         "source_id": 102,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "شاهین دژ",
         "name_en": null,
@@ -1530,9 +1530,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.013",
+        "code": "c.06.13",
         "source_id": 103,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "تکاب",
         "name_en": null,
@@ -1545,9 +1545,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.014",
+        "code": "c.06.14",
         "source_id": 104,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "اشنویه",
         "name_en": null,
@@ -1560,9 +1560,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.015",
+        "code": "c.06.15",
         "source_id": 105,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "پلدشت",
         "name_en": null,
@@ -1575,9 +1575,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.016",
+        "code": "c.06.16",
         "source_id": 106,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "چایپاره",
         "name_en": null,
@@ -1590,9 +1590,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.017",
+        "code": "c.06.17",
         "source_id": 107,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "شوط",
         "name_en": null,
@@ -1605,9 +1605,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.018",
+        "code": "c.06.18",
         "source_id": 108,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "چهاربرج",
         "name_en": null,
@@ -1620,9 +1620,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.019",
+        "code": "c.06.19",
         "source_id": 109,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "باروق",
         "name_en": null,
@@ -1635,9 +1635,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.006.020",
+        "code": "c.06.20",
         "source_id": 110,
-        "province_code": "ir.province.006",
+        "province_code": "p.06",
         "province_source_id": 6,
         "name_fa": "میرآباد",
         "name_en": null,
@@ -1650,9 +1650,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.001",
+        "code": "c.07.01",
         "source_id": 111,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "اسلام‌آبادغرب",
         "name_en": null,
@@ -1665,9 +1665,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.002",
+        "code": "c.07.02",
         "source_id": 112,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "کرمانشاه",
         "name_en": null,
@@ -1680,9 +1680,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.003",
+        "code": "c.07.03",
         "source_id": 113,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "پاوه",
         "name_en": null,
@@ -1695,9 +1695,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.004",
+        "code": "c.07.04",
         "source_id": 114,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "سرپل ذهاب",
         "name_en": null,
@@ -1710,9 +1710,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.005",
+        "code": "c.07.05",
         "source_id": 115,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "سنقر",
         "name_en": null,
@@ -1725,9 +1725,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.006",
+        "code": "c.07.06",
         "source_id": 116,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "قصرشیرین",
         "name_en": null,
@@ -1740,9 +1740,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.007",
+        "code": "c.07.07",
         "source_id": 117,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "کنگاور",
         "name_en": null,
@@ -1755,9 +1755,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.008",
+        "code": "c.07.08",
         "source_id": 118,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "گیلانغرب",
         "name_en": null,
@@ -1770,9 +1770,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.009",
+        "code": "c.07.09",
         "source_id": 119,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "جوانرود",
         "name_en": null,
@@ -1785,9 +1785,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.010",
+        "code": "c.07.10",
         "source_id": 120,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "صحنه",
         "name_en": null,
@@ -1800,9 +1800,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.011",
+        "code": "c.07.11",
         "source_id": 121,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "هرسین",
         "name_en": null,
@@ -1815,9 +1815,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.012",
+        "code": "c.07.12",
         "source_id": 122,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "ثلاث باباجانی",
         "name_en": null,
@@ -1830,9 +1830,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.013",
+        "code": "c.07.13",
         "source_id": 123,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "دالاهو",
         "name_en": null,
@@ -1845,9 +1845,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.007.014",
+        "code": "c.07.14",
         "source_id": 124,
-        "province_code": "ir.province.007",
+        "province_code": "p.07",
         "province_source_id": 7,
         "name_fa": "روانسر",
         "name_en": null,
@@ -1860,9 +1860,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.001",
+        "code": "c.08.01",
         "source_id": 125,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "آبادان",
         "name_en": null,
@@ -1875,9 +1875,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.002",
+        "code": "c.08.02",
         "source_id": 126,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "اندیمشک",
         "name_en": null,
@@ -1890,9 +1890,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.003",
+        "code": "c.08.03",
         "source_id": 127,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "اهواز",
         "name_en": null,
@@ -1905,9 +1905,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.004",
+        "code": "c.08.04",
         "source_id": 128,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "ایذه",
         "name_en": null,
@@ -1920,9 +1920,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.005",
+        "code": "c.08.05",
         "source_id": 129,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "بندر ماهشهر",
         "name_en": null,
@@ -1935,9 +1935,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.006",
+        "code": "c.08.06",
         "source_id": 130,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "بهبهان",
         "name_en": null,
@@ -1950,9 +1950,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.007",
+        "code": "c.08.07",
         "source_id": 131,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "خرمشهر",
         "name_en": null,
@@ -1965,9 +1965,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.008",
+        "code": "c.08.08",
         "source_id": 132,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "دزفول",
         "name_en": null,
@@ -1980,9 +1980,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.009",
+        "code": "c.08.09",
         "source_id": 133,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "دشت آزادگان",
         "name_en": null,
@@ -1995,9 +1995,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.010",
+        "code": "c.08.10",
         "source_id": 134,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "رامهرمز",
         "name_en": null,
@@ -2010,9 +2010,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.011",
+        "code": "c.08.11",
         "source_id": 135,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "شادگان",
         "name_en": null,
@@ -2025,9 +2025,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.012",
+        "code": "c.08.12",
         "source_id": 136,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "شوشتر",
         "name_en": null,
@@ -2040,9 +2040,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.013",
+        "code": "c.08.13",
         "source_id": 137,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "مسجدسلیمان",
         "name_en": null,
@@ -2055,9 +2055,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.014",
+        "code": "c.08.14",
         "source_id": 138,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "شوش",
         "name_en": null,
@@ -2070,9 +2070,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.015",
+        "code": "c.08.15",
         "source_id": 139,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "هندیجان",
         "name_en": null,
@@ -2085,9 +2085,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.016",
+        "code": "c.08.16",
         "source_id": 140,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "باغ ملک",
         "name_en": null,
@@ -2100,9 +2100,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.017",
+        "code": "c.08.17",
         "source_id": 141,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "امیدیه",
         "name_en": null,
@@ -2115,9 +2115,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.018",
+        "code": "c.08.18",
         "source_id": 142,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "لالی",
         "name_en": null,
@@ -2130,9 +2130,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.019",
+        "code": "c.08.19",
         "source_id": 143,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "رامشیر",
         "name_en": null,
@@ -2145,9 +2145,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.020",
+        "code": "c.08.20",
         "source_id": 144,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "گتوند",
         "name_en": null,
@@ -2160,9 +2160,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.021",
+        "code": "c.08.21",
         "source_id": 145,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "اندیکا",
         "name_en": null,
@@ -2175,9 +2175,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.022",
+        "code": "c.08.22",
         "source_id": 146,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "هفتکل",
         "name_en": null,
@@ -2190,9 +2190,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.023",
+        "code": "c.08.23",
         "source_id": 147,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "هویزه",
         "name_en": null,
@@ -2205,9 +2205,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.024",
+        "code": "c.08.24",
         "source_id": 148,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "باوی",
         "name_en": null,
@@ -2220,9 +2220,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.025",
+        "code": "c.08.25",
         "source_id": 149,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "حمیدیه",
         "name_en": null,
@@ -2235,9 +2235,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.026",
+        "code": "c.08.26",
         "source_id": 150,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "آغاجاری",
         "name_en": null,
@@ -2250,9 +2250,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.027",
+        "code": "c.08.27",
         "source_id": 151,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "کارون",
         "name_en": null,
@@ -2265,9 +2265,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.028",
+        "code": "c.08.28",
         "source_id": 152,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "کرخه",
         "name_en": null,
@@ -2280,9 +2280,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.029",
+        "code": "c.08.29",
         "source_id": 153,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "دزپارت",
         "name_en": null,
@@ -2295,9 +2295,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.008.030",
+        "code": "c.08.30",
         "source_id": 154,
-        "province_code": "ir.province.008",
+        "province_code": "p.08",
         "province_source_id": 8,
         "name_fa": "صیدون",
         "name_en": null,
@@ -2310,9 +2310,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.001",
+        "code": "c.09.01",
         "source_id": 155,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "آباده",
         "name_en": null,
@@ -2325,9 +2325,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.002",
+        "code": "c.09.02",
         "source_id": 156,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "جهرم",
         "name_en": null,
@@ -2340,9 +2340,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.003",
+        "code": "c.09.03",
         "source_id": 157,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "استهبان",
         "name_en": null,
@@ -2355,9 +2355,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.004",
+        "code": "c.09.04",
         "source_id": 158,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "اقلید",
         "name_en": null,
@@ -2370,9 +2370,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.005",
+        "code": "c.09.05",
         "source_id": 159,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "داراب",
         "name_en": null,
@@ -2385,9 +2385,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.006",
+        "code": "c.09.06",
         "source_id": 160,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "سپیدان",
         "name_en": null,
@@ -2400,9 +2400,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.007",
+        "code": "c.09.07",
         "source_id": 161,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "شیراز",
         "name_en": null,
@@ -2415,9 +2415,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.008",
+        "code": "c.09.08",
         "source_id": 162,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "فسا",
         "name_en": null,
@@ -2430,9 +2430,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.009",
+        "code": "c.09.09",
         "source_id": 163,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "فیروزآباد",
         "name_en": null,
@@ -2445,9 +2445,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.010",
+        "code": "c.09.10",
         "source_id": 164,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "کازرون",
         "name_en": null,
@@ -2460,9 +2460,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.011",
+        "code": "c.09.11",
         "source_id": 165,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "لارستان",
         "name_en": null,
@@ -2475,9 +2475,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.012",
+        "code": "c.09.12",
         "source_id": 166,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "مرودشت",
         "name_en": null,
@@ -2490,9 +2490,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.013",
+        "code": "c.09.13",
         "source_id": 167,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "نی ریز",
         "name_en": null,
@@ -2505,9 +2505,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.014",
+        "code": "c.09.14",
         "source_id": 168,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "ممسنی",
         "name_en": null,
@@ -2520,9 +2520,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.015",
+        "code": "c.09.15",
         "source_id": 169,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "لامرد",
         "name_en": null,
@@ -2535,9 +2535,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.016",
+        "code": "c.09.16",
         "source_id": 170,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "بوانات",
         "name_en": null,
@@ -2550,9 +2550,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.017",
+        "code": "c.09.17",
         "source_id": 171,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "ارسنجان",
         "name_en": null,
@@ -2565,9 +2565,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.018",
+        "code": "c.09.18",
         "source_id": 172,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "خرم بید",
         "name_en": null,
@@ -2580,9 +2580,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.019",
+        "code": "c.09.19",
         "source_id": 173,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "زرین دشت",
         "name_en": null,
@@ -2595,9 +2595,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.020",
+        "code": "c.09.20",
         "source_id": 174,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "قیرو کارزین",
         "name_en": null,
@@ -2610,9 +2610,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.021",
+        "code": "c.09.21",
         "source_id": 175,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "مهر",
         "name_en": null,
@@ -2625,9 +2625,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.022",
+        "code": "c.09.22",
         "source_id": 176,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "فراشبند",
         "name_en": null,
@@ -2640,9 +2640,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.023",
+        "code": "c.09.23",
         "source_id": 177,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "پاسارگاد",
         "name_en": null,
@@ -2655,9 +2655,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.024",
+        "code": "c.09.24",
         "source_id": 178,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "خنج",
         "name_en": null,
@@ -2670,9 +2670,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.025",
+        "code": "c.09.25",
         "source_id": 179,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "کوار",
         "name_en": null,
@@ -2685,9 +2685,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.026",
+        "code": "c.09.26",
         "source_id": 180,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "خرامه",
         "name_en": null,
@@ -2700,9 +2700,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.027",
+        "code": "c.09.27",
         "source_id": 181,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "سروستان",
         "name_en": null,
@@ -2715,9 +2715,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.028",
+        "code": "c.09.28",
         "source_id": 182,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "رستم",
         "name_en": null,
@@ -2730,9 +2730,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.029",
+        "code": "c.09.29",
         "source_id": 183,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "گراش",
         "name_en": null,
@@ -2745,9 +2745,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.030",
+        "code": "c.09.30",
         "source_id": 184,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "زرقان",
         "name_en": null,
@@ -2760,9 +2760,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.031",
+        "code": "c.09.31",
         "source_id": 185,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "بیضاء",
         "name_en": null,
@@ -2775,9 +2775,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.032",
+        "code": "c.09.32",
         "source_id": 186,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "سرچهان",
         "name_en": null,
@@ -2790,9 +2790,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.033",
+        "code": "c.09.33",
         "source_id": 187,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "کوه چنار",
         "name_en": null,
@@ -2805,9 +2805,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.034",
+        "code": "c.09.34",
         "source_id": 188,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "خفر",
         "name_en": null,
@@ -2820,9 +2820,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.035",
+        "code": "c.09.35",
         "source_id": 189,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "بختگان",
         "name_en": null,
@@ -2835,9 +2835,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.036",
+        "code": "c.09.36",
         "source_id": 190,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "اوز",
         "name_en": null,
@@ -2850,9 +2850,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.009.037",
+        "code": "c.09.37",
         "source_id": 191,
-        "province_code": "ir.province.009",
+        "province_code": "p.09",
         "province_source_id": 9,
         "name_fa": "جویم",
         "name_en": null,
@@ -2865,9 +2865,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.001",
+        "code": "c.10.01",
         "source_id": 192,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "بم",
         "name_en": null,
@@ -2880,9 +2880,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.002",
+        "code": "c.10.02",
         "source_id": 193,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "بافت",
         "name_en": null,
@@ -2895,9 +2895,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.003",
+        "code": "c.10.03",
         "source_id": 194,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "جیرفت",
         "name_en": null,
@@ -2910,9 +2910,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.004",
+        "code": "c.10.04",
         "source_id": 195,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "رفسنجان",
         "name_en": null,
@@ -2925,9 +2925,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.005",
+        "code": "c.10.05",
         "source_id": 196,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "زرند",
         "name_en": null,
@@ -2940,9 +2940,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.006",
+        "code": "c.10.06",
         "source_id": 197,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "سیرجان",
         "name_en": null,
@@ -2955,9 +2955,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.007",
+        "code": "c.10.07",
         "source_id": 198,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "کرمان",
         "name_en": null,
@@ -2970,9 +2970,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.008",
+        "code": "c.10.08",
         "source_id": 199,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "شهربابک",
         "name_en": null,
@@ -2985,9 +2985,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.009",
+        "code": "c.10.09",
         "source_id": 200,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "کهنوج",
         "name_en": null,
@@ -3000,9 +3000,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.010",
+        "code": "c.10.10",
         "source_id": 201,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "بردسیر",
         "name_en": null,
@@ -3015,9 +3015,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.011",
+        "code": "c.10.11",
         "source_id": 202,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "راور",
         "name_en": null,
@@ -3030,9 +3030,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.012",
+        "code": "c.10.12",
         "source_id": 203,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "عنبرآباد",
         "name_en": null,
@@ -3045,9 +3045,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.013",
+        "code": "c.10.13",
         "source_id": 204,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "منوجان",
         "name_en": null,
@@ -3060,9 +3060,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.014",
+        "code": "c.10.14",
         "source_id": 205,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "کوهبنان",
         "name_en": null,
@@ -3075,9 +3075,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.015",
+        "code": "c.10.15",
         "source_id": 206,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "رودبارجنوب",
         "name_en": null,
@@ -3090,9 +3090,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.016",
+        "code": "c.10.16",
         "source_id": 207,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "قلعه گنج",
         "name_en": null,
@@ -3105,9 +3105,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.017",
+        "code": "c.10.17",
         "source_id": 208,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "ریگان",
         "name_en": null,
@@ -3120,9 +3120,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.018",
+        "code": "c.10.18",
         "source_id": 209,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "رابر",
         "name_en": null,
@@ -3135,9 +3135,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.019",
+        "code": "c.10.19",
         "source_id": 210,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "فهرج",
         "name_en": null,
@@ -3150,9 +3150,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.020",
+        "code": "c.10.20",
         "source_id": 211,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "انار",
         "name_en": null,
@@ -3165,9 +3165,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.021",
+        "code": "c.10.21",
         "source_id": 212,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "نرماشیر",
         "name_en": null,
@@ -3180,9 +3180,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.022",
+        "code": "c.10.22",
         "source_id": 213,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "فاریاب",
         "name_en": null,
@@ -3195,9 +3195,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.023",
+        "code": "c.10.23",
         "source_id": 214,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "ارزوییه",
         "name_en": null,
@@ -3210,9 +3210,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.024",
+        "code": "c.10.24",
         "source_id": 215,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "گنبکی",
         "name_en": null,
@@ -3225,9 +3225,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.010.025",
+        "code": "c.10.25",
         "source_id": 216,
-        "province_code": "ir.province.010",
+        "province_code": "p.10",
         "province_source_id": 10,
         "name_fa": "جازموریان",
         "name_en": null,
@@ -3240,9 +3240,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.001",
+        "code": "c.11.01",
         "source_id": 217,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "تایباد",
         "name_en": null,
@@ -3255,9 +3255,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.002",
+        "code": "c.11.02",
         "source_id": 218,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "تربت حیدریه",
         "name_en": null,
@@ -3270,9 +3270,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.003",
+        "code": "c.11.03",
         "source_id": 219,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "تربت جام",
         "name_en": null,
@@ -3285,9 +3285,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.004",
+        "code": "c.11.04",
         "source_id": 220,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "درگز",
         "name_en": null,
@@ -3300,9 +3300,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.005",
+        "code": "c.11.05",
         "source_id": 221,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "قوچان",
         "name_en": null,
@@ -3315,9 +3315,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.006",
+        "code": "c.11.06",
         "source_id": 222,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "سبزوار",
         "name_en": null,
@@ -3330,9 +3330,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.007",
+        "code": "c.11.07",
         "source_id": 223,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "کاشمر",
         "name_en": null,
@@ -3345,9 +3345,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.008",
+        "code": "c.11.08",
         "source_id": 224,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "گناباد",
         "name_en": null,
@@ -3360,9 +3360,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.009",
+        "code": "c.11.09",
         "source_id": 225,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "مشهد",
         "name_en": null,
@@ -3375,9 +3375,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.010",
+        "code": "c.11.10",
         "source_id": 226,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "نیشابور",
         "name_en": null,
@@ -3390,9 +3390,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.011",
+        "code": "c.11.11",
         "source_id": 227,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "فریمان",
         "name_en": null,
@@ -3405,9 +3405,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.012",
+        "code": "c.11.12",
         "source_id": 228,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "چناران",
         "name_en": null,
@@ -3420,9 +3420,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.013",
+        "code": "c.11.13",
         "source_id": 229,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "خواف",
         "name_en": null,
@@ -3435,9 +3435,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.014",
+        "code": "c.11.14",
         "source_id": 230,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "سرخس",
         "name_en": null,
@@ -3450,9 +3450,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.015",
+        "code": "c.11.15",
         "source_id": 231,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "بردسکن",
         "name_en": null,
@@ -3465,9 +3465,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.016",
+        "code": "c.11.16",
         "source_id": 232,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "رشتخوار",
         "name_en": null,
@@ -3480,9 +3480,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.017",
+        "code": "c.11.17",
         "source_id": 233,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "کلات",
         "name_en": null,
@@ -3495,9 +3495,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.018",
+        "code": "c.11.18",
         "source_id": 234,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "خلیل آباد",
         "name_en": null,
@@ -3510,9 +3510,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.019",
+        "code": "c.11.19",
         "source_id": 235,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "مه ولات",
         "name_en": null,
@@ -3525,9 +3525,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.020",
+        "code": "c.11.20",
         "source_id": 236,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "بجستان",
         "name_en": null,
@@ -3540,9 +3540,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.021",
+        "code": "c.11.21",
         "source_id": 237,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "طرقبه شاندیز",
         "name_en": null,
@@ -3555,9 +3555,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.022",
+        "code": "c.11.22",
         "source_id": 238,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "فیروزه",
         "name_en": null,
@@ -3570,9 +3570,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.023",
+        "code": "c.11.23",
         "source_id": 239,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "جغتای",
         "name_en": null,
@@ -3585,9 +3585,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.024",
+        "code": "c.11.24",
         "source_id": 240,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "زاوه",
         "name_en": null,
@@ -3600,9 +3600,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.025",
+        "code": "c.11.25",
         "source_id": 241,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "خوشاب",
         "name_en": null,
@@ -3615,9 +3615,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.026",
+        "code": "c.11.26",
         "source_id": 242,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "جوین",
         "name_en": null,
@@ -3630,9 +3630,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.027",
+        "code": "c.11.27",
         "source_id": 243,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "باخرز",
         "name_en": null,
@@ -3645,9 +3645,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.028",
+        "code": "c.11.28",
         "source_id": 244,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "داورزن",
         "name_en": null,
@@ -3660,9 +3660,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.029",
+        "code": "c.11.29",
         "source_id": 245,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "صالح آباد",
         "name_en": null,
@@ -3675,9 +3675,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.030",
+        "code": "c.11.30",
         "source_id": 246,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "کوهسرخ",
         "name_en": null,
@@ -3690,9 +3690,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.031",
+        "code": "c.11.31",
         "source_id": 247,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "زبرخان",
         "name_en": null,
@@ -3705,9 +3705,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.032",
+        "code": "c.11.32",
         "source_id": 248,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "گلبهار",
         "name_en": null,
@@ -3720,9 +3720,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.033",
+        "code": "c.11.33",
         "source_id": 249,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "ششتمد",
         "name_en": null,
@@ -3735,9 +3735,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.011.034",
+        "code": "c.11.34",
         "source_id": 250,
-        "province_code": "ir.province.011",
+        "province_code": "p.11",
         "province_source_id": 11,
         "name_fa": "میان جلگه",
         "name_en": null,
@@ -3750,9 +3750,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.001",
+        "code": "c.12.01",
         "source_id": 251,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "اردستان",
         "name_en": null,
@@ -3765,9 +3765,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.002",
+        "code": "c.12.02",
         "source_id": 252,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "اصفهان",
         "name_en": null,
@@ -3780,9 +3780,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.003",
+        "code": "c.12.03",
         "source_id": 253,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "خمینی شهر",
         "name_en": null,
@@ -3795,9 +3795,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.004",
+        "code": "c.12.04",
         "source_id": 254,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "خوانسار",
         "name_en": null,
@@ -3810,9 +3810,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.005",
+        "code": "c.12.05",
         "source_id": 255,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "سمیرم",
         "name_en": null,
@@ -3825,9 +3825,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.006",
+        "code": "c.12.06",
         "source_id": 256,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "فریدن",
         "name_en": null,
@@ -3840,9 +3840,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.007",
+        "code": "c.12.07",
         "source_id": 257,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "فریدونشهر",
         "name_en": null,
@@ -3855,9 +3855,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.008",
+        "code": "c.12.08",
         "source_id": 258,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "فلاورجان",
         "name_en": null,
@@ -3870,9 +3870,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.009",
+        "code": "c.12.09",
         "source_id": 259,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "شهرضا",
         "name_en": null,
@@ -3885,9 +3885,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.010",
+        "code": "c.12.10",
         "source_id": 260,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "کاشان",
         "name_en": null,
@@ -3900,9 +3900,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.011",
+        "code": "c.12.11",
         "source_id": 261,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "گلپایگان",
         "name_en": null,
@@ -3915,9 +3915,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.012",
+        "code": "c.12.12",
         "source_id": 262,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "لنجان",
         "name_en": null,
@@ -3930,9 +3930,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.013",
+        "code": "c.12.13",
         "source_id": 263,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "نایین",
         "name_en": null,
@@ -3945,9 +3945,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.014",
+        "code": "c.12.14",
         "source_id": 264,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "نجف آباد",
         "name_en": null,
@@ -3960,9 +3960,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.015",
+        "code": "c.12.15",
         "source_id": 265,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "نطنز",
         "name_en": null,
@@ -3975,9 +3975,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.016",
+        "code": "c.12.16",
         "source_id": 266,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "شاهین شهرو میمه",
         "name_en": null,
@@ -3990,9 +3990,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.017",
+        "code": "c.12.17",
         "source_id": 267,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "مبارکه",
         "name_en": null,
@@ -4005,9 +4005,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.018",
+        "code": "c.12.18",
         "source_id": 268,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "آران و بیدگل",
         "name_en": null,
@@ -4020,9 +4020,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.019",
+        "code": "c.12.19",
         "source_id": 269,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "تیران وکرون",
         "name_en": null,
@@ -4035,9 +4035,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.020",
+        "code": "c.12.20",
         "source_id": 270,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "چادگان",
         "name_en": null,
@@ -4050,9 +4050,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.021",
+        "code": "c.12.21",
         "source_id": 271,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "دهاقان",
         "name_en": null,
@@ -4065,9 +4065,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.022",
+        "code": "c.12.22",
         "source_id": 272,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "برخوار",
         "name_en": null,
@@ -4080,9 +4080,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.023",
+        "code": "c.12.23",
         "source_id": 273,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "خور و بیابانک",
         "name_en": null,
@@ -4095,9 +4095,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.024",
+        "code": "c.12.24",
         "source_id": 274,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "بویین و میاندشت",
         "name_en": null,
@@ -4110,9 +4110,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.025",
+        "code": "c.12.25",
         "source_id": 275,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "کوهپایه",
         "name_en": null,
@@ -4125,9 +4125,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.026",
+        "code": "c.12.26",
         "source_id": 276,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "جرقویه",
         "name_en": null,
@@ -4140,9 +4140,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.027",
+        "code": "c.12.27",
         "source_id": 277,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "ورزنه",
         "name_en": null,
@@ -4155,9 +4155,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.012.028",
+        "code": "c.12.28",
         "source_id": 278,
-        "province_code": "ir.province.012",
+        "province_code": "p.12",
         "province_source_id": 12,
         "name_fa": "هرند",
         "name_en": null,
@@ -4170,9 +4170,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.001",
+        "code": "c.13.01",
         "source_id": 279,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "ایرانشهر",
         "name_en": null,
@@ -4185,9 +4185,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.002",
+        "code": "c.13.02",
         "source_id": 280,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "چاه بهار",
         "name_en": null,
@@ -4200,9 +4200,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.003",
+        "code": "c.13.03",
         "source_id": 281,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "خاش",
         "name_en": null,
@@ -4215,9 +4215,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.004",
+        "code": "c.13.04",
         "source_id": 282,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "زابل",
         "name_en": null,
@@ -4230,9 +4230,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.005",
+        "code": "c.13.05",
         "source_id": 283,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "زاهدان",
         "name_en": null,
@@ -4245,9 +4245,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.006",
+        "code": "c.13.06",
         "source_id": 284,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "سراوان",
         "name_en": null,
@@ -4260,9 +4260,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.007",
+        "code": "c.13.07",
         "source_id": 285,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "نیک شهر",
         "name_en": null,
@@ -4275,9 +4275,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.008",
+        "code": "c.13.08",
         "source_id": 286,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "راسک",
         "name_en": null,
@@ -4290,9 +4290,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.009",
+        "code": "c.13.09",
         "source_id": 287,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "کنارک",
         "name_en": null,
@@ -4305,9 +4305,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.010",
+        "code": "c.13.10",
         "source_id": 288,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "زهک",
         "name_en": null,
@@ -4320,9 +4320,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.011",
+        "code": "c.13.11",
         "source_id": 289,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "هیرمند",
         "name_en": null,
@@ -4335,9 +4335,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.012",
+        "code": "c.13.12",
         "source_id": 290,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "دلگان",
         "name_en": null,
@@ -4350,9 +4350,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.013",
+        "code": "c.13.13",
         "source_id": 291,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "مهرستان",
         "name_en": null,
@@ -4365,9 +4365,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.014",
+        "code": "c.13.14",
         "source_id": 292,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "سیب و سوران",
         "name_en": null,
@@ -4380,9 +4380,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.015",
+        "code": "c.13.15",
         "source_id": 293,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "نیمروز",
         "name_en": null,
@@ -4395,9 +4395,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.016",
+        "code": "c.13.16",
         "source_id": 294,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "هامون",
         "name_en": null,
@@ -4410,9 +4410,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.017",
+        "code": "c.13.17",
         "source_id": 295,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "میرجاوه",
         "name_en": null,
@@ -4425,9 +4425,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.018",
+        "code": "c.13.18",
         "source_id": 296,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "قصرقند",
         "name_en": null,
@@ -4440,9 +4440,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.019",
+        "code": "c.13.19",
         "source_id": 297,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "فنوج",
         "name_en": null,
@@ -4455,9 +4455,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.020",
+        "code": "c.13.20",
         "source_id": 298,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "بمپور",
         "name_en": null,
@@ -4470,9 +4470,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.021",
+        "code": "c.13.21",
         "source_id": 299,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "تفتان",
         "name_en": null,
@@ -4485,9 +4485,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.022",
+        "code": "c.13.22",
         "source_id": 300,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "زرآباد",
         "name_en": null,
@@ -4500,9 +4500,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.023",
+        "code": "c.13.23",
         "source_id": 301,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "دشتیاری",
         "name_en": null,
@@ -4515,9 +4515,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.024",
+        "code": "c.13.24",
         "source_id": 302,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "سرباز",
         "name_en": null,
@@ -4530,9 +4530,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.025",
+        "code": "c.13.25",
         "source_id": 303,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "گلشن",
         "name_en": null,
@@ -4545,9 +4545,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.013.026",
+        "code": "c.13.26",
         "source_id": 304,
-        "province_code": "ir.province.013",
+        "province_code": "p.13",
         "province_source_id": 13,
         "name_fa": "لاشار",
         "name_en": null,
@@ -4560,9 +4560,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.001",
+        "code": "c.14.01",
         "source_id": 305,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "بانه",
         "name_en": null,
@@ -4575,9 +4575,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.002",
+        "code": "c.14.02",
         "source_id": 306,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "بیجار",
         "name_en": null,
@@ -4590,9 +4590,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.003",
+        "code": "c.14.03",
         "source_id": 307,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "سقز",
         "name_en": null,
@@ -4605,9 +4605,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.004",
+        "code": "c.14.04",
         "source_id": 308,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "سنندج",
         "name_en": null,
@@ -4620,9 +4620,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.005",
+        "code": "c.14.05",
         "source_id": 309,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "قروه",
         "name_en": null,
@@ -4635,9 +4635,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.006",
+        "code": "c.14.06",
         "source_id": 310,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "مریوان",
         "name_en": null,
@@ -4650,9 +4650,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.007",
+        "code": "c.14.07",
         "source_id": 311,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "دیواندره",
         "name_en": null,
@@ -4665,9 +4665,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.008",
+        "code": "c.14.08",
         "source_id": 312,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "کامیاران",
         "name_en": null,
@@ -4680,9 +4680,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.009",
+        "code": "c.14.09",
         "source_id": 313,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "سروآباد",
         "name_en": null,
@@ -4695,9 +4695,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.014.010",
+        "code": "c.14.10",
         "source_id": 314,
-        "province_code": "ir.province.014",
+        "province_code": "p.14",
         "province_source_id": 14,
         "name_fa": "دهگلان",
         "name_en": null,
@@ -4710,9 +4710,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.001",
+        "code": "c.15.01",
         "source_id": 315,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "تویسرکان",
         "name_en": null,
@@ -4725,9 +4725,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.002",
+        "code": "c.15.02",
         "source_id": 316,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "ملایر",
         "name_en": null,
@@ -4740,9 +4740,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.003",
+        "code": "c.15.03",
         "source_id": 317,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "نهاوند",
         "name_en": null,
@@ -4755,9 +4755,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.004",
+        "code": "c.15.04",
         "source_id": 318,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "همدان",
         "name_en": null,
@@ -4770,9 +4770,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.005",
+        "code": "c.15.05",
         "source_id": 319,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "کبودرآهنگ",
         "name_en": null,
@@ -4785,9 +4785,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.006",
+        "code": "c.15.06",
         "source_id": 320,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "اسدآباد",
         "name_en": null,
@@ -4800,9 +4800,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.007",
+        "code": "c.15.07",
         "source_id": 321,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "بهار",
         "name_en": null,
@@ -4815,9 +4815,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.008",
+        "code": "c.15.08",
         "source_id": 322,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "رزن",
         "name_en": null,
@@ -4830,9 +4830,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.009",
+        "code": "c.15.09",
         "source_id": 323,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "فامنین",
         "name_en": null,
@@ -4845,9 +4845,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.015.010",
+        "code": "c.15.10",
         "source_id": 324,
-        "province_code": "ir.province.015",
+        "province_code": "p.15",
         "province_source_id": 15,
         "name_fa": "درگزین",
         "name_en": null,
@@ -4860,9 +4860,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.001",
+        "code": "c.16.01",
         "source_id": 325,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "بروجن",
         "name_en": null,
@@ -4875,9 +4875,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.002",
+        "code": "c.16.02",
         "source_id": 326,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "شهرکرد",
         "name_en": null,
@@ -4890,9 +4890,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.003",
+        "code": "c.16.03",
         "source_id": 327,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "فارسان",
         "name_en": null,
@@ -4905,9 +4905,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.004",
+        "code": "c.16.04",
         "source_id": 328,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "لردگان",
         "name_en": null,
@@ -4920,9 +4920,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.005",
+        "code": "c.16.05",
         "source_id": 329,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "اردل",
         "name_en": null,
@@ -4935,9 +4935,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.006",
+        "code": "c.16.06",
         "source_id": 330,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "کوهرنگ",
         "name_en": null,
@@ -4950,9 +4950,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.007",
+        "code": "c.16.07",
         "source_id": 331,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "کیار",
         "name_en": null,
@@ -4965,9 +4965,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.008",
+        "code": "c.16.08",
         "source_id": 332,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "سامان",
         "name_en": null,
@@ -4980,9 +4980,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.009",
+        "code": "c.16.09",
         "source_id": 333,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "بن",
         "name_en": null,
@@ -4995,9 +4995,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.010",
+        "code": "c.16.10",
         "source_id": 334,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "خانمیرزا",
         "name_en": null,
@@ -5010,9 +5010,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.011",
+        "code": "c.16.11",
         "source_id": 335,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "فلارد",
         "name_en": null,
@@ -5025,9 +5025,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.016.012",
+        "code": "c.16.12",
         "source_id": 336,
-        "province_code": "ir.province.016",
+        "province_code": "p.16",
         "province_source_id": 16,
         "name_fa": "فرخ شهر",
         "name_en": null,
@@ -5040,9 +5040,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.001",
+        "code": "c.17.01",
         "source_id": 337,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "الیگودرز",
         "name_en": null,
@@ -5055,9 +5055,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.002",
+        "code": "c.17.02",
         "source_id": 338,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "بروجرد",
         "name_en": null,
@@ -5070,9 +5070,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.003",
+        "code": "c.17.03",
         "source_id": 339,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "خرم آباد",
         "name_en": null,
@@ -5085,9 +5085,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.004",
+        "code": "c.17.04",
         "source_id": 340,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "دلفان",
         "name_en": null,
@@ -5100,9 +5100,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.005",
+        "code": "c.17.05",
         "source_id": 341,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "دورود",
         "name_en": null,
@@ -5115,9 +5115,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.006",
+        "code": "c.17.06",
         "source_id": 342,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "کوهدشت",
         "name_en": null,
@@ -5130,9 +5130,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.007",
+        "code": "c.17.07",
         "source_id": 343,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "ازنا",
         "name_en": null,
@@ -5145,9 +5145,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.008",
+        "code": "c.17.08",
         "source_id": 344,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "پلدختر",
         "name_en": null,
@@ -5160,9 +5160,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.009",
+        "code": "c.17.09",
         "source_id": 345,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "سلسله",
         "name_en": null,
@@ -5175,9 +5175,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.010",
+        "code": "c.17.10",
         "source_id": 346,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "چگنی",
         "name_en": null,
@@ -5190,9 +5190,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.011",
+        "code": "c.17.11",
         "source_id": 347,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "رومشکان",
         "name_en": null,
@@ -5205,9 +5205,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.017.012",
+        "code": "c.17.12",
         "source_id": 348,
-        "province_code": "ir.province.017",
+        "province_code": "p.17",
         "province_source_id": 17,
         "name_fa": "معمولان",
         "name_en": null,
@@ -5220,9 +5220,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.001",
+        "code": "c.18.01",
         "source_id": 349,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "ایلام",
         "name_en": null,
@@ -5235,9 +5235,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.002",
+        "code": "c.18.02",
         "source_id": 350,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "دره شهر",
         "name_en": null,
@@ -5250,9 +5250,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.003",
+        "code": "c.18.03",
         "source_id": 351,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "دهلران",
         "name_en": null,
@@ -5265,9 +5265,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.004",
+        "code": "c.18.04",
         "source_id": 352,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "چرداول",
         "name_en": null,
@@ -5280,9 +5280,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.005",
+        "code": "c.18.05",
         "source_id": 353,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "مهران",
         "name_en": null,
@@ -5295,9 +5295,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.006",
+        "code": "c.18.06",
         "source_id": 354,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "آبدانان",
         "name_en": null,
@@ -5310,9 +5310,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.007",
+        "code": "c.18.07",
         "source_id": 355,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "ایوان",
         "name_en": null,
@@ -5325,9 +5325,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.008",
+        "code": "c.18.08",
         "source_id": 356,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "چوار",
         "name_en": null,
@@ -5340,9 +5340,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.009",
+        "code": "c.18.09",
         "source_id": 357,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "ملکشاهی",
         "name_en": null,
@@ -5355,9 +5355,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.010",
+        "code": "c.18.10",
         "source_id": 358,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "سیروان",
         "name_en": null,
@@ -5370,9 +5370,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.011",
+        "code": "c.18.11",
         "source_id": 359,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "بدره",
         "name_en": null,
@@ -5385,9 +5385,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.018.012",
+        "code": "c.18.12",
         "source_id": 360,
-        "province_code": "ir.province.018",
+        "province_code": "p.18",
         "province_source_id": 18,
         "name_fa": "هلیلان",
         "name_en": null,
@@ -5400,9 +5400,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.001",
+        "code": "c.19.01",
         "source_id": 361,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "بویراحمد",
         "name_en": null,
@@ -5415,9 +5415,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.002",
+        "code": "c.19.02",
         "source_id": 362,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "کهگیلویه",
         "name_en": null,
@@ -5430,9 +5430,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.003",
+        "code": "c.19.03",
         "source_id": 363,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "گچساران",
         "name_en": null,
@@ -5445,9 +5445,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.004",
+        "code": "c.19.04",
         "source_id": 364,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "دنا",
         "name_en": null,
@@ -5460,9 +5460,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.005",
+        "code": "c.19.05",
         "source_id": 365,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "بهمیی",
         "name_en": null,
@@ -5475,9 +5475,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.006",
+        "code": "c.19.06",
         "source_id": 366,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "چرام",
         "name_en": null,
@@ -5490,9 +5490,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.007",
+        "code": "c.19.07",
         "source_id": 367,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "باشت",
         "name_en": null,
@@ -5505,9 +5505,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.008",
+        "code": "c.19.08",
         "source_id": 368,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "لنده",
         "name_en": null,
@@ -5520,9 +5520,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.019.009",
+        "code": "c.19.09",
         "source_id": 369,
-        "province_code": "ir.province.019",
+        "province_code": "p.19",
         "province_source_id": 19,
         "name_fa": "مارگون",
         "name_en": null,
@@ -5535,9 +5535,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.001",
+        "code": "c.20.01",
         "source_id": 370,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "بوشهر",
         "name_en": null,
@@ -5550,9 +5550,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.002",
+        "code": "c.20.02",
         "source_id": 371,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "تنگستان",
         "name_en": null,
@@ -5565,9 +5565,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.003",
+        "code": "c.20.03",
         "source_id": 372,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "دشتستان",
         "name_en": null,
@@ -5580,9 +5580,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.004",
+        "code": "c.20.04",
         "source_id": 373,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "دشتی",
         "name_en": null,
@@ -5595,9 +5595,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.005",
+        "code": "c.20.05",
         "source_id": 374,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "دیر",
         "name_en": null,
@@ -5610,9 +5610,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.006",
+        "code": "c.20.06",
         "source_id": 375,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "کنگان",
         "name_en": null,
@@ -5625,9 +5625,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.007",
+        "code": "c.20.07",
         "source_id": 376,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "گناوه",
         "name_en": null,
@@ -5640,9 +5640,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.008",
+        "code": "c.20.08",
         "source_id": 377,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "دیلم",
         "name_en": null,
@@ -5655,9 +5655,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.009",
+        "code": "c.20.09",
         "source_id": 378,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "جم",
         "name_en": null,
@@ -5670,9 +5670,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.020.010",
+        "code": "c.20.10",
         "source_id": 379,
-        "province_code": "ir.province.020",
+        "province_code": "p.20",
         "province_source_id": 20,
         "name_fa": "عسلویه",
         "name_en": null,
@@ -5685,9 +5685,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.021.001",
+        "code": "c.21.01",
         "source_id": 380,
-        "province_code": "ir.province.021",
+        "province_code": "p.21",
         "province_source_id": 21,
         "name_fa": "ابهر",
         "name_en": null,
@@ -5700,9 +5700,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.021.002",
+        "code": "c.21.02",
         "source_id": 381,
-        "province_code": "ir.province.021",
+        "province_code": "p.21",
         "province_source_id": 21,
         "name_fa": "خدابنده",
         "name_en": null,
@@ -5715,9 +5715,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.021.003",
+        "code": "c.21.03",
         "source_id": 382,
-        "province_code": "ir.province.021",
+        "province_code": "p.21",
         "province_source_id": 21,
         "name_fa": "زنجان",
         "name_en": null,
@@ -5730,9 +5730,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.021.004",
+        "code": "c.21.04",
         "source_id": 383,
-        "province_code": "ir.province.021",
+        "province_code": "p.21",
         "province_source_id": 21,
         "name_fa": "ایجرود",
         "name_en": null,
@@ -5745,9 +5745,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.021.005",
+        "code": "c.21.05",
         "source_id": 384,
-        "province_code": "ir.province.021",
+        "province_code": "p.21",
         "province_source_id": 21,
         "name_fa": "خرمدره",
         "name_en": null,
@@ -5760,9 +5760,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.021.006",
+        "code": "c.21.06",
         "source_id": 385,
-        "province_code": "ir.province.021",
+        "province_code": "p.21",
         "province_source_id": 21,
         "name_fa": "طارم",
         "name_en": null,
@@ -5775,9 +5775,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.021.007",
+        "code": "c.21.07",
         "source_id": 386,
-        "province_code": "ir.province.021",
+        "province_code": "p.21",
         "province_source_id": 21,
         "name_fa": "ماهنشان",
         "name_en": null,
@@ -5790,9 +5790,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.021.008",
+        "code": "c.21.08",
         "source_id": 387,
-        "province_code": "ir.province.021",
+        "province_code": "p.21",
         "province_source_id": 21,
         "name_fa": "سلطانیه",
         "name_en": null,
@@ -5805,9 +5805,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.022.001",
+        "code": "c.22.01",
         "source_id": 388,
-        "province_code": "ir.province.022",
+        "province_code": "p.22",
         "province_source_id": 22,
         "name_fa": "دامغان",
         "name_en": null,
@@ -5820,9 +5820,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.022.002",
+        "code": "c.22.02",
         "source_id": 389,
-        "province_code": "ir.province.022",
+        "province_code": "p.22",
         "province_source_id": 22,
         "name_fa": "سمنان",
         "name_en": null,
@@ -5835,9 +5835,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.022.003",
+        "code": "c.22.03",
         "source_id": 390,
-        "province_code": "ir.province.022",
+        "province_code": "p.22",
         "province_source_id": 22,
         "name_fa": "شاهرود",
         "name_en": null,
@@ -5850,9 +5850,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.022.004",
+        "code": "c.22.04",
         "source_id": 391,
-        "province_code": "ir.province.022",
+        "province_code": "p.22",
         "province_source_id": 22,
         "name_fa": "گرمسار",
         "name_en": null,
@@ -5865,9 +5865,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.022.005",
+        "code": "c.22.05",
         "source_id": 392,
-        "province_code": "ir.province.022",
+        "province_code": "p.22",
         "province_source_id": 22,
         "name_fa": "مهدی شهر",
         "name_en": null,
@@ -5880,9 +5880,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.022.006",
+        "code": "c.22.06",
         "source_id": 393,
-        "province_code": "ir.province.022",
+        "province_code": "p.22",
         "province_source_id": 22,
         "name_fa": "آرادان",
         "name_en": null,
@@ -5895,9 +5895,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.022.007",
+        "code": "c.22.07",
         "source_id": 394,
-        "province_code": "ir.province.022",
+        "province_code": "p.22",
         "province_source_id": 22,
         "name_fa": "میامی",
         "name_en": null,
@@ -5910,9 +5910,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.022.008",
+        "code": "c.22.08",
         "source_id": 395,
-        "province_code": "ir.province.022",
+        "province_code": "p.22",
         "province_source_id": 22,
         "name_fa": "سرخه",
         "name_en": null,
@@ -5925,9 +5925,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.001",
+        "code": "c.23.01",
         "source_id": 396,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "اردکان",
         "name_en": null,
@@ -5940,9 +5940,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.002",
+        "code": "c.23.02",
         "source_id": 397,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "بافق",
         "name_en": null,
@@ -5955,9 +5955,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.003",
+        "code": "c.23.03",
         "source_id": 398,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "تفت",
         "name_en": null,
@@ -5970,9 +5970,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.004",
+        "code": "c.23.04",
         "source_id": 399,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "مهریز",
         "name_en": null,
@@ -5985,9 +5985,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.005",
+        "code": "c.23.05",
         "source_id": 400,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "یزد",
         "name_en": null,
@@ -6000,9 +6000,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.006",
+        "code": "c.23.06",
         "source_id": 401,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "ابرکوه",
         "name_en": null,
@@ -6015,9 +6015,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.007",
+        "code": "c.23.07",
         "source_id": 402,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "میبد",
         "name_en": null,
@@ -6030,9 +6030,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.008",
+        "code": "c.23.08",
         "source_id": 403,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "اشکذر",
         "name_en": null,
@@ -6045,9 +6045,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.009",
+        "code": "c.23.09",
         "source_id": 404,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "خاتم",
         "name_en": null,
@@ -6060,9 +6060,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.010",
+        "code": "c.23.10",
         "source_id": 405,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "بهاباد",
         "name_en": null,
@@ -6075,9 +6075,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.011",
+        "code": "c.23.11",
         "source_id": 406,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "مروست",
         "name_en": null,
@@ -6090,9 +6090,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.023.012",
+        "code": "c.23.12",
         "source_id": 407,
-        "province_code": "ir.province.023",
+        "province_code": "p.23",
         "province_source_id": 23,
         "name_fa": "زارچ",
         "name_en": null,
@@ -6105,9 +6105,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.001",
+        "code": "c.24.01",
         "source_id": 408,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "ابوموسی",
         "name_en": null,
@@ -6120,9 +6120,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.002",
+        "code": "c.24.02",
         "source_id": 409,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "بندر عباس",
         "name_en": null,
@@ -6135,9 +6135,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.003",
+        "code": "c.24.03",
         "source_id": 410,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "بندر لنگه",
         "name_en": null,
@@ -6150,9 +6150,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.004",
+        "code": "c.24.04",
         "source_id": 411,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "قشم",
         "name_en": null,
@@ -6165,9 +6165,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.005",
+        "code": "c.24.05",
         "source_id": 412,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "میناب",
         "name_en": null,
@@ -6180,9 +6180,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.006",
+        "code": "c.24.06",
         "source_id": 413,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "جاسک",
         "name_en": null,
@@ -6195,9 +6195,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.007",
+        "code": "c.24.07",
         "source_id": 414,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "رودان",
         "name_en": null,
@@ -6210,9 +6210,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.008",
+        "code": "c.24.08",
         "source_id": 415,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "حاجی آباد",
         "name_en": null,
@@ -6225,9 +6225,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.009",
+        "code": "c.24.09",
         "source_id": 416,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "بستک",
         "name_en": null,
@@ -6240,9 +6240,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.010",
+        "code": "c.24.10",
         "source_id": 417,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "خمیر",
         "name_en": null,
@@ -6255,9 +6255,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.011",
+        "code": "c.24.11",
         "source_id": 418,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "پارسیان",
         "name_en": null,
@@ -6270,9 +6270,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.012",
+        "code": "c.24.12",
         "source_id": 419,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "سیریک",
         "name_en": null,
@@ -6285,9 +6285,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.024.013",
+        "code": "c.24.13",
         "source_id": 420,
-        "province_code": "ir.province.024",
+        "province_code": "p.24",
         "province_source_id": 24,
         "name_fa": "بشاگرد",
         "name_en": null,
@@ -6300,9 +6300,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.001",
+        "code": "c.25.01",
         "source_id": 421,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "خلخال",
         "name_en": null,
@@ -6315,9 +6315,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.002",
+        "code": "c.25.02",
         "source_id": 422,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "اردبیل",
         "name_en": null,
@@ -6330,9 +6330,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.003",
+        "code": "c.25.03",
         "source_id": 423,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "بیله سوار",
         "name_en": null,
@@ -6345,9 +6345,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.004",
+        "code": "c.25.04",
         "source_id": 424,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "مشگین شهر",
         "name_en": null,
@@ -6360,9 +6360,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.005",
+        "code": "c.25.05",
         "source_id": 425,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "گرمی",
         "name_en": null,
@@ -6375,9 +6375,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.006",
+        "code": "c.25.06",
         "source_id": 426,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "پارس آباد",
         "name_en": null,
@@ -6390,9 +6390,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.007",
+        "code": "c.25.07",
         "source_id": 427,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "کوثر",
         "name_en": null,
@@ -6405,9 +6405,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.008",
+        "code": "c.25.08",
         "source_id": 428,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "نمین",
         "name_en": null,
@@ -6420,9 +6420,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.009",
+        "code": "c.25.09",
         "source_id": 429,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "نیر",
         "name_en": null,
@@ -6435,9 +6435,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.010",
+        "code": "c.25.10",
         "source_id": 430,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "سرعین",
         "name_en": null,
@@ -6450,9 +6450,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.011",
+        "code": "c.25.11",
         "source_id": 431,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "اصلاندوز",
         "name_en": null,
@@ -6465,9 +6465,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.025.012",
+        "code": "c.25.12",
         "source_id": 432,
-        "province_code": "ir.province.025",
+        "province_code": "p.25",
         "province_source_id": 25,
         "name_fa": "انگوت",
         "name_en": null,
@@ -6480,9 +6480,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.026.001",
+        "code": "c.26.01",
         "source_id": 433,
-        "province_code": "ir.province.026",
+        "province_code": "p.26",
         "province_source_id": 26,
         "name_fa": "قم",
         "name_en": null,
@@ -6495,9 +6495,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.026.002",
+        "code": "c.26.02",
         "source_id": 434,
-        "province_code": "ir.province.026",
+        "province_code": "p.26",
         "province_source_id": 26,
         "name_fa": "جعفرآباد",
         "name_en": null,
@@ -6510,9 +6510,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.026.003",
+        "code": "c.26.03",
         "source_id": 435,
-        "province_code": "ir.province.026",
+        "province_code": "p.26",
         "province_source_id": 26,
         "name_fa": "کهک",
         "name_en": null,
@@ -6525,9 +6525,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.027.001",
+        "code": "c.27.01",
         "source_id": 436,
-        "province_code": "ir.province.027",
+        "province_code": "p.27",
         "province_source_id": 27,
         "name_fa": "بویین زهرا",
         "name_en": null,
@@ -6540,9 +6540,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.027.002",
+        "code": "c.27.02",
         "source_id": 437,
-        "province_code": "ir.province.027",
+        "province_code": "p.27",
         "province_source_id": 27,
         "name_fa": "تاکستان",
         "name_en": null,
@@ -6555,9 +6555,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.027.003",
+        "code": "c.27.03",
         "source_id": 438,
-        "province_code": "ir.province.027",
+        "province_code": "p.27",
         "province_source_id": 27,
         "name_fa": "قزوین",
         "name_en": null,
@@ -6570,9 +6570,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.027.004",
+        "code": "c.27.04",
         "source_id": 439,
-        "province_code": "ir.province.027",
+        "province_code": "p.27",
         "province_source_id": 27,
         "name_fa": "آبیک",
         "name_en": null,
@@ -6585,9 +6585,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.027.005",
+        "code": "c.27.05",
         "source_id": 440,
-        "province_code": "ir.province.027",
+        "province_code": "p.27",
         "province_source_id": 27,
         "name_fa": "البرز",
         "name_en": null,
@@ -6600,9 +6600,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.027.006",
+        "code": "c.27.06",
         "source_id": 441,
-        "province_code": "ir.province.027",
+        "province_code": "p.27",
         "province_source_id": 27,
         "name_fa": "آوج",
         "name_en": null,
@@ -6615,9 +6615,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.001",
+        "code": "c.28.01",
         "source_id": 442,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "بندرگز",
         "name_en": null,
@@ -6630,9 +6630,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.002",
+        "code": "c.28.02",
         "source_id": 443,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "ترکمن",
         "name_en": null,
@@ -6645,9 +6645,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.003",
+        "code": "c.28.03",
         "source_id": 444,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "علی آباد کتول",
         "name_en": null,
@@ -6660,9 +6660,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.004",
+        "code": "c.28.04",
         "source_id": 445,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "کردکوی",
         "name_en": null,
@@ -6675,9 +6675,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.005",
+        "code": "c.28.05",
         "source_id": 446,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "گرگان",
         "name_en": null,
@@ -6690,9 +6690,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.006",
+        "code": "c.28.06",
         "source_id": 447,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "گنبدکاووس",
         "name_en": null,
@@ -6705,9 +6705,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.007",
+        "code": "c.28.07",
         "source_id": 448,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "مینودشت",
         "name_en": null,
@@ -6720,9 +6720,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.008",
+        "code": "c.28.08",
         "source_id": 449,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "آق قلا",
         "name_en": null,
@@ -6735,9 +6735,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.009",
+        "code": "c.28.09",
         "source_id": 450,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "کلاله",
         "name_en": null,
@@ -6750,9 +6750,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.010",
+        "code": "c.28.10",
         "source_id": 451,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "آزادشهر",
         "name_en": null,
@@ -6765,9 +6765,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.011",
+        "code": "c.28.11",
         "source_id": 452,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "رامیان",
         "name_en": null,
@@ -6780,9 +6780,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.012",
+        "code": "c.28.12",
         "source_id": 453,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "مراوه تپه",
         "name_en": null,
@@ -6795,9 +6795,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.013",
+        "code": "c.28.13",
         "source_id": 454,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "گمیشان",
         "name_en": null,
@@ -6810,9 +6810,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.028.014",
+        "code": "c.28.14",
         "source_id": 455,
-        "province_code": "ir.province.028",
+        "province_code": "p.28",
         "province_source_id": 28,
         "name_fa": "گالیکش",
         "name_en": null,
@@ -6825,9 +6825,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.001",
+        "code": "c.29.01",
         "source_id": 456,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "اسفراین",
         "name_en": null,
@@ -6840,9 +6840,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.002",
+        "code": "c.29.02",
         "source_id": 457,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "بجنورد",
         "name_en": null,
@@ -6855,9 +6855,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.003",
+        "code": "c.29.03",
         "source_id": 458,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "جاجرم",
         "name_en": null,
@@ -6870,9 +6870,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.004",
+        "code": "c.29.04",
         "source_id": 459,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "شیروان",
         "name_en": null,
@@ -6885,9 +6885,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.005",
+        "code": "c.29.05",
         "source_id": 460,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "فاروج",
         "name_en": null,
@@ -6900,9 +6900,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.006",
+        "code": "c.29.06",
         "source_id": 461,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "سملقان",
         "name_en": null,
@@ -6915,9 +6915,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.007",
+        "code": "c.29.07",
         "source_id": 462,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "گرمه",
         "name_en": null,
@@ -6930,9 +6930,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.008",
+        "code": "c.29.08",
         "source_id": 463,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "راز و جرگلان",
         "name_en": null,
@@ -6945,9 +6945,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.009",
+        "code": "c.29.09",
         "source_id": 464,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "بام و صفی آباد",
         "name_en": null,
@@ -6960,9 +6960,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.029.010",
+        "code": "c.29.10",
         "source_id": 465,
-        "province_code": "ir.province.029",
+        "province_code": "p.29",
         "province_source_id": 29,
         "name_fa": "مانه",
         "name_en": null,
@@ -6975,9 +6975,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.001",
+        "code": "c.30.01",
         "source_id": 466,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "بیرجند",
         "name_en": null,
@@ -6990,9 +6990,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.002",
+        "code": "c.30.02",
         "source_id": 467,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "درمیان",
         "name_en": null,
@@ -7005,9 +7005,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.003",
+        "code": "c.30.03",
         "source_id": 468,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "سربیشه",
         "name_en": null,
@@ -7020,9 +7020,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.004",
+        "code": "c.30.04",
         "source_id": 469,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "قاینات",
         "name_en": null,
@@ -7035,9 +7035,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.005",
+        "code": "c.30.05",
         "source_id": 470,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "نهبندان",
         "name_en": null,
@@ -7050,9 +7050,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.006",
+        "code": "c.30.06",
         "source_id": 471,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "فردوس",
         "name_en": null,
@@ -7065,9 +7065,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.007",
+        "code": "c.30.07",
         "source_id": 472,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "سرایان",
         "name_en": null,
@@ -7080,9 +7080,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.008",
+        "code": "c.30.08",
         "source_id": 473,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "بشرویه",
         "name_en": null,
@@ -7095,9 +7095,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.009",
+        "code": "c.30.09",
         "source_id": 474,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "زیرکوه",
         "name_en": null,
@@ -7110,9 +7110,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.010",
+        "code": "c.30.10",
         "source_id": 475,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "خوسف",
         "name_en": null,
@@ -7125,9 +7125,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.011",
+        "code": "c.30.11",
         "source_id": 476,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "طبس",
         "name_en": null,
@@ -7140,9 +7140,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.030.012",
+        "code": "c.30.12",
         "source_id": 477,
-        "province_code": "ir.province.030",
+        "province_code": "p.30",
         "province_source_id": 30,
         "name_fa": "عشق‌آباد",
         "name_en": null,
@@ -7155,9 +7155,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.031.001",
+        "code": "c.31.01",
         "source_id": 478,
-        "province_code": "ir.province.031",
+        "province_code": "p.31",
         "province_source_id": 31,
         "name_fa": "فردیس",
         "name_en": null,
@@ -7170,9 +7170,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.031.002",
+        "code": "c.31.02",
         "source_id": 479,
-        "province_code": "ir.province.031",
+        "province_code": "p.31",
         "province_source_id": 31,
         "name_fa": "کرج",
         "name_en": null,
@@ -7185,9 +7185,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.031.003",
+        "code": "c.31.03",
         "source_id": 480,
-        "province_code": "ir.province.031",
+        "province_code": "p.31",
         "province_source_id": 31,
         "name_fa": "ساوجبلاغ",
         "name_en": null,
@@ -7200,9 +7200,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.031.004",
+        "code": "c.31.04",
         "source_id": 481,
-        "province_code": "ir.province.031",
+        "province_code": "p.31",
         "province_source_id": 31,
         "name_fa": "نظرآباد",
         "name_en": null,
@@ -7215,9 +7215,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.031.005",
+        "code": "c.31.05",
         "source_id": 482,
-        "province_code": "ir.province.031",
+        "province_code": "p.31",
         "province_source_id": 31,
         "name_fa": "طالقان",
         "name_en": null,
@@ -7230,9 +7230,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.031.006",
+        "code": "c.31.06",
         "source_id": 483,
-        "province_code": "ir.province.031",
+        "province_code": "p.31",
         "province_source_id": 31,
         "name_fa": "اشتهارد",
         "name_en": null,
@@ -7245,9 +7245,9 @@
         "data_version": "0.2.0-dev"
     },
     {
-        "code": "ir.county.031.007",
+        "code": "c.31.07",
         "source_id": 484,
-        "province_code": "ir.province.031",
+        "province_code": "p.31",
         "province_source_id": 31,
         "name_fa": "چهارباغ",
         "name_en": null,

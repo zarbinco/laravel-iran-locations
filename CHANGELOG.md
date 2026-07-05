@@ -23,6 +23,8 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 
 ### Changed
 
+- Reset the unreleased public location code scheme from long mixed `ir.*` strings to generated short fixed-width codes such as `p.01`, `c.01.01`, `s.01.01.01.01`, and `r.01.01.01.01.05`; no legacy map or compatibility aliases were kept because the package has not been published.
+- Added a central `LocationCodeGenerator`, regenerated packaged JSON data and manifest `code_scheme` metadata, and taught doctor/data-quality tests to validate generated code patterns and hierarchy paths.
 - Allowed installation with the current stable `zarbinco/laravel-persian-core` `^0.1` line while keeping future `^1.0` compatibility.
 - Enforced `search.min_length` through API and admin HTTP request validation.
 - Enforced package-owned admin edit/delete protection through `data.allow_package_record_direct_edit`.
