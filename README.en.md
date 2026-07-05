@@ -2,6 +2,13 @@
 
 Languages: [فارسی](README.md) | English
 
+<p>
+<a href="https://github.com/zarbinco/laravel-iran-locations/actions/workflows/tests.yml"><img src="https://github.com/zarbinco/laravel-iran-locations/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
+<a href="https://packagist.org/packages/zarbinco/laravel-iran-locations"><img src="https://img.shields.io/packagist/v/zarbinco/laravel-iran-locations.svg?style=flat-square&logo=packagist" alt="Latest Version on Packagist"></a>
+<a href="https://packagist.org/packages/zarbinco/laravel-iran-locations"><img src="https://img.shields.io/packagist/dt/zarbinco/laravel-iran-locations.svg?style=flat-square&logo=packagist" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/zarbinco/laravel-iran-locations"><img src="https://img.shields.io/packagist/l/zarbinco/laravel-iran-locations.svg?style=flat-square" alt="License"></a>
+</p>
+
 > The Persian README is the primary GitHub documentation. This English README is kept for English-speaking maintainers and consumers.
 
 Laravel Iran Locations provides Iran location data, Eloquent models, safe database sync, a read-only JSON driver, query helpers, optional admin screens, optional read-only API endpoints, and plain Blade select components for Laravel applications.

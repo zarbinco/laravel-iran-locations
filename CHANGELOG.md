@@ -61,3 +61,4 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Hardened pre-release metadata, data provenance notes, doctor validation, sync version tracking, package-owned display-name updates, and fallback API search behavior.
 - Made the Persian README the primary GitHub documentation, preserved the English README as `README.en.md`, and clarified JSON/database driver usage with code-based public values in the main documentation.
 - Polished the Persian README language, moved English README assertions to `README.en.md`, and fixed consumer smoke component examples to use code-based field names.
+- Added Packagist badges and the verified GitHub Actions tests badge to the Persian and English READMEs.

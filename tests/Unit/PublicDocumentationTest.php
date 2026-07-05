@@ -49,6 +49,9 @@ class PublicDocumentationTest extends TestCase
         self::assertStringContainsString('Laravel Iran Locations', $readme);
         self::assertStringContainsString('زبان‌ها: فارسی', $readme);
         self::assertStringContainsString('[English](README.en.md)', $readme);
+        self::assertStringContainsString('<p dir="ltr">', $readme);
+        self::assertStringContainsString('https://packagist.org/packages/zarbinco/laravel-iran-locations', $readme);
+        self::assertStringContainsString('https://github.com/zarbinco/laravel-iran-locations/actions/workflows/tests.yml/badge.svg', $readme);
         self::assertStringContainsString('JSON driver', $readme);
         self::assertStringContainsString('database driver', $readme);
         self::assertStringContainsString('بدون migration', $readme);
@@ -72,6 +75,8 @@ class PublicDocumentationTest extends TestCase
         self::assertIsString($readme);
         self::assertStringContainsString('Languages: [فارسی](README.md) | English', $readme);
         self::assertStringContainsString('The Persian README is the primary GitHub documentation.', $readme);
+        self::assertStringContainsString('https://packagist.org/packages/zarbinco/laravel-iran-locations', $readme);
+        self::assertStringContainsString('https://github.com/zarbinco/laravel-iran-locations/actions/workflows/tests.yml/badge.svg', $readme);
         self::assertStringContainsString('31 provinces', $readme);
         self::assertStringContainsString('484 counties', $readme);
         self::assertStringContainsString('1087 official districts', $readme);

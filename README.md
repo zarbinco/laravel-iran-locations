@@ -2,6 +2,13 @@
 
 زبان‌ها: فارسی | [English](README.en.md)
 
+<p dir="ltr">
+<a href="https://github.com/zarbinco/laravel-iran-locations/actions/workflows/tests.yml"><img src="https://github.com/zarbinco/laravel-iran-locations/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
+<a href="https://packagist.org/packages/zarbinco/laravel-iran-locations"><img src="https://img.shields.io/packagist/v/zarbinco/laravel-iran-locations.svg?style=flat-square&logo=packagist" alt="Latest Version on Packagist"></a>
+<a href="https://packagist.org/packages/zarbinco/laravel-iran-locations"><img src="https://img.shields.io/packagist/dt/zarbinco/laravel-iran-locations.svg?style=flat-square&logo=packagist" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/zarbinco/laravel-iran-locations"><img src="https://img.shields.io/packagist/l/zarbinco/laravel-iran-locations.svg?style=flat-square" alt="License"></a>
+</p>
+
 این پکیج داده‌های مکانی ایران را برای پروژه‌های Laravel آماده می‌کند؛ از استان و شهرستان تا بخش، دهستان، شهر، منطقه شهری و محله. اگر فقط لیست آماده برای select، API خواندنی یا اعتبارسنجی می‌خواهید، می‌توانید از `JSON driver` استفاده کنید و هیچ migration یا sync اجرا نکنید. اگر لازم دارید داده‌ها وارد دیتابیس شوند، رکورد سفارشی داشته باشید، admin CRUD فعال کنید یا با رابطه‌های Eloquent کار کنید، `database driver` برای همین سناریو است.
 
 > وضعیت انتشار: پکیج هنوز منتشر نشده و برای فاز beta/pre-release آماده می‌شود. نسخه داده فعلی `0.2.0-dev` است. برای release پایدار، وضعیت منبع داده، مجوز بازنشر و کامل‌بودن داده‌ها باید جداگانه بررسی شود.
