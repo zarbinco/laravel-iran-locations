@@ -41,12 +41,37 @@ class PublicDocumentationTest extends TestCase
         }
     }
 
-    public function test_readme_documents_release_safety_and_data_scope(): void
+    public function test_persian_readme_documents_primary_usage_and_data_scope(): void
     {
         $readme = file_get_contents($this->path('README.md'));
 
         self::assertIsString($readme);
         self::assertStringContainsString('Laravel Iran Locations', $readme);
+        self::assertStringContainsString('زبان‌ها: فارسی', $readme);
+        self::assertStringContainsString('[English](README.en.md)', $readme);
+        self::assertStringContainsString('JSON driver', $readme);
+        self::assertStringContainsString('database driver', $readme);
+        self::assertStringContainsString('بدون migration', $readme);
+        self::assertStringContainsString('کدهای عمومی', $readme);
+        self::assertStringContainsString('p.01', $readme);
+        self::assertStringContainsString('s.01.01.01.01', $readme);
+        self::assertStringContainsString('31 استان', $readme);
+        self::assertStringContainsString('484 شهرستان', $readme);
+        self::assertStringContainsString('1087 بخش', $readme);
+        self::assertStringContainsString('1456 شهر', $readme);
+        self::assertStringContainsString('568 محله یا مکان شهری تهران', $readme);
+        self::assertStringContainsString('جدول‌ها را truncate نمی‌کند', $readme);
+        self::assertStringContainsString('رکوردهای `source = custom` حفظ می‌شوند', $readme);
+        self::assertStringContainsString('zarbinco/laravel-persian-core', $readme);
+    }
+
+    public function test_english_readme_documents_release_safety_and_data_scope(): void
+    {
+        $readme = file_get_contents($this->path('README.en.md'));
+
+        self::assertIsString($readme);
+        self::assertStringContainsString('Languages: [فارسی](README.md) | English', $readme);
+        self::assertStringContainsString('The Persian README is the primary GitHub documentation.', $readme);
         self::assertStringContainsString('31 provinces', $readme);
         self::assertStringContainsString('484 counties', $readme);
         self::assertStringContainsString('1087 official districts', $readme);
@@ -54,7 +79,8 @@ class PublicDocumentationTest extends TestCase
         self::assertStringContainsString('568 Tehran neighborhood', $readme);
         self::assertStringContainsString('never truncates', $readme);
         self::assertStringContainsString('Custom records are preserved', $readme);
-        self::assertStringContainsString('zarbinco/laravel-persian-core', $readme);
+        self::assertStringContainsString('read-only JSON driver', $readme);
+        self::assertStringContainsString('database IDs', $readme);
     }
 
     public function test_public_documentation_avoids_removed_config_keys_and_private_paths(): void
@@ -91,6 +117,20 @@ class PublicDocumentationTest extends TestCase
         self::assertStringContainsString('rm -rf iran-locations-smoke', $smoke);
     }
 
+    public function test_consumer_smoke_components_use_code_based_examples(): void
+    {
+        $smoke = file_get_contents($this->path('docs/consumer-smoke-test.md'));
+
+        self::assertIsString($smoke);
+        self::assertStringContainsString('name="province_code"', $smoke);
+        self::assertStringContainsString('name="city_code"', $smoke);
+        self::assertStringContainsString('province-code="p.01"', $smoke);
+        self::assertStringContainsString('city-code="s.01.01.01.01"', $smoke);
+        self::assertStringContainsString('ID-based names and parent props are database-driver-only.', $smoke);
+        self::assertStringNotContainsString('<x-iran-locations::province-select name="province_id" />', $smoke);
+        self::assertStringNotContainsString('<x-iran-locations::city-select name="city_id" />', $smoke);
+    }
+
     /**
      * @return array<int, string>
      */
@@ -98,6 +138,7 @@ class PublicDocumentationTest extends TestCase
     {
         return [
             'README.md',
+            'README.en.md',
             'CHANGELOG.md',
             'CONTRIBUTING.md',
             'DATA-SOURCES.md',

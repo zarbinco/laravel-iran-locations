@@ -115,7 +115,7 @@ Render the main select components in a temporary view or through `Blade::render(
 <x-iran-locations::neighborhood-select name="neighborhood_code" city-code="s.01.01.01.01" />
 ```
 
-Also check filtered variants for province, county, official district, city, and neighborhood parents. Components render stable public codes as values, so JSON/no-migration smoke checks should use code props such as `province-code` and `city-code`. Components should render active, non-deprecated records by default and should preserve `selected`, `placeholder`, `class`, `required`, and `disabled` props.
+Also check filtered variants for province, county, official district, city, and neighborhood parents. Component option values are public `code` values by default, so JSON/no-migration smoke checks should use code-based names and props such as `province-code` and `city-code`. ID-based names and parent props are database-driver-only. Components should render active, non-deprecated records by default and should preserve `selected`, `placeholder`, `class`, `required`, and `disabled` props.
 
 ## Package Checks
 
