@@ -102,12 +102,48 @@ trait ResolvesLocationApiModels
             }
         });
 
+        if ($query instanceof LocationBuilder) {
+            $query->active();
+        } else {
+            $this->applyFallbackStatus($query, $model, 'active');
+        }
+
         return $query->first();
     }
 
     protected function missingLocationResponse(string $label = 'Location'): JsonResponse
     {
         return response()->json(['message' => "{$label} not found."], 404);
+    }
+
+    /**
+     * @param  array<string, mixed>  $filters
+     * @param  array<string, mixed>  $expected
+     */
+    protected function nestedFilterConflictResponse(array $filters, array $expected): ?JsonResponse
+    {
+        $errors = [];
+
+        foreach ($expected as $field => $value) {
+            if (! filled($filters[$field] ?? null)) {
+                continue;
+            }
+
+            if ((string) $filters[$field] === (string) $value) {
+                continue;
+            }
+
+            $errors[$field] = ["The selected {$field} conflicts with the route parent."];
+        }
+
+        if ($errors === []) {
+            return null;
+        }
+
+        return response()->json([
+            'message' => 'The selected parent filter conflicts with the route parent.',
+            'errors' => $errors,
+        ], 422);
     }
 
     /**

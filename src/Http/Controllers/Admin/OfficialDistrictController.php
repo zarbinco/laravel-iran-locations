@@ -14,8 +14,6 @@ class OfficialDistrictController extends AdminController
 {
     public function index(OfficialDistrictIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $query = $this->newModel('official_district')->newQuery()->with(['province', 'county']);
 
         if ($query instanceof OfficialDistrictBuilder) {
@@ -31,8 +29,6 @@ class OfficialDistrictController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('official-districts.create', [
             'officialDistrict' => $this->newModel('official_district'),
             'provinces' => $this->optionRecords('province'),
@@ -42,8 +38,6 @@ class OfficialDistrictController extends AdminController
 
     public function store(OfficialDistrictRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $officialDistrict = $this->newModel('official_district');
         $officialDistrict->fill($this->payload($request->validated(), creating: true));
         $officialDistrict->save();
@@ -55,8 +49,6 @@ class OfficialDistrictController extends AdminController
 
     public function edit(int|string $official_district): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('official-districts.edit', [
             'officialDistrict' => $this->findModel('official_district', $official_district),
             'provinces' => $this->optionRecords('province'),
@@ -66,8 +58,6 @@ class OfficialDistrictController extends AdminController
 
     public function update(OfficialDistrictRequest $request, int|string $official_district): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('official_district', $official_district);
         $this->guardPackageRecordDirectEdit($model, 'Official district');
         $model->fill($this->payload($request->validated()));
@@ -80,8 +70,6 @@ class OfficialDistrictController extends AdminController
 
     public function destroy(int|string $official_district): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('official_district', $official_district), 'Official district');
     }
 }

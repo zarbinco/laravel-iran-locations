@@ -14,8 +14,6 @@ class NeighborhoodController extends AdminController
 {
     public function index(NeighborhoodIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $query = $this->newModel('neighborhood')->newQuery();
 
         if ($query instanceof NeighborhoodBuilder) {
@@ -34,8 +32,6 @@ class NeighborhoodController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('neighborhoods.create', [
             'neighborhood' => $this->newModel('neighborhood'),
             'cities' => $this->optionRecords('city'),
@@ -47,8 +43,6 @@ class NeighborhoodController extends AdminController
 
     public function store(NeighborhoodRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $neighborhood = $this->newModel('neighborhood');
         $neighborhood->fill($this->payload($request->validated(), creating: true));
         $neighborhood->save();
@@ -60,8 +54,6 @@ class NeighborhoodController extends AdminController
 
     public function edit(int|string $neighborhood): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('neighborhoods.edit', [
             'neighborhood' => $this->findModel('neighborhood', $neighborhood),
             'cities' => $this->optionRecords('city'),
@@ -73,8 +65,6 @@ class NeighborhoodController extends AdminController
 
     public function update(NeighborhoodRequest $request, int|string $neighborhood): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('neighborhood', $neighborhood);
         $this->guardPackageRecordDirectEdit($model, 'Neighborhood');
         $model->fill($this->payload($request->validated()));
@@ -87,8 +77,6 @@ class NeighborhoodController extends AdminController
 
     public function destroy(int|string $neighborhood): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('neighborhood', $neighborhood), 'Neighborhood');
     }
 

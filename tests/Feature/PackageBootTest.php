@@ -30,6 +30,7 @@ class PackageBootTest extends TestCase
         self::assertSame('persian-core', config('iran-locations.normalization.driver'));
         self::assertFalse(config('iran-locations.admin.enabled'));
         self::assertFalse(config('iran-locations.api.enabled'));
+        self::assertSame(['api'], config('iran-locations.api.middleware'));
     }
 
     public function test_manager_resolves_from_container_and_alias(): void

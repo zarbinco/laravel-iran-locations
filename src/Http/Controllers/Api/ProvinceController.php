@@ -35,8 +35,18 @@ class ProvinceController extends Controller
             return $this->missingLocationResponse('Province');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'province_id' => $model->getKey(),
+            'province_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('city')->with(['province', 'county', 'officialDistrict']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'province_id' => $model->getKey(),
         ]));
 
@@ -51,8 +61,18 @@ class ProvinceController extends Controller
             return $this->missingLocationResponse('Province');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'province_id' => $model->getKey(),
+            'province_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('county')->with('province');
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'province_id' => $model->getKey(),
         ]));
 

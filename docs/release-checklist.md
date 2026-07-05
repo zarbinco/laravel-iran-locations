@@ -23,6 +23,10 @@
 - Confirm migration publishing works.
 - Confirm view publishing works.
 - Confirm admin and API routes are disabled by default.
+- Confirm admin routes are protected by application auth middleware and the configured `admin.gate`.
+- Confirm admin mutation forms reject mismatched parent hierarchy selections and alias targets without real records.
+- Confirm public API middleware is deliberate, preferably including `api` middleware and throttling/auth when exposed publicly.
+- Confirm nested API route parents hide inactive/deprecated records and conflicting nested filters return `422`.
 - Run the [consumer smoke test](consumer-smoke-test.md) in a fresh Laravel app.
 - Run `php artisan iran-locations:sync --dry-run` in a test app.
 - Confirm safe sync behavior before applying data.

@@ -9,11 +9,12 @@ Responses expose versioned package data. Treat that data as package-maintained l
 'api' => [
     'enabled' => true,
     'prefix' => 'iran-locations/api',
-    'middleware' => ['web'],
+    'middleware' => ['api'],
 ],
 ```
 
 Route names use `iran-locations.api.*`.
+The API remains disabled by default. If exposing it publicly, configure middleware deliberately, for example `['api', 'throttle:60,1']` or your application's own throttle/auth stack.
 
 ## Endpoints
 
@@ -50,7 +51,7 @@ Route names use `iran-locations.api.*`.
 - `GET /options/city-areas`
 - `GET /options/neighborhoods`
 
-Route parameters can resolve records by id, code, or slug where practical.
+Route parameters can resolve records by id, code, or slug where practical. Nested route parents resolve active, non-deprecated records by default, so inactive or deprecated parents return `404` even though list endpoints can still use `status=all` when that endpoint supports lifecycle filtering.
 
 ## Filters
 
@@ -59,6 +60,24 @@ List endpoints support builder-backed filters such as `q`, `status`, `source`, `
 When `q` is present, HTTP request validation enforces the configured `search.min_length`. The grouped `/search` endpoint requires `q`; list, option, and alias endpoints allow it to be omitted.
 
 Pagination uses `per_page` and `page` with the configured maximum.
+Integer ID filters reject non-integer and negative values.
+
+Nested endpoints reject conflicting parent filters instead of silently overriding them. Matching duplicate filters are allowed, but a conflicting filter returns `422` with field errors:
+
+```http
+GET /iran-locations/api/provinces/1/cities?province_id=2
+```
+
+```json
+{
+  "message": "The selected parent filter conflicts with the route parent.",
+  "errors": {
+    "province_id": [
+      "The selected province_id conflicts with the route parent."
+    ]
+  }
+}
+```
 
 `GET /aliases` accepts `location_type` as one of the stable public keys: `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, or `neighborhood`. Responses return that same stable key. Class names and unsupported type strings are rejected by request validation.
 

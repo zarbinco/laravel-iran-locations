@@ -37,8 +37,18 @@ class CityController extends Controller
             return $this->missingLocationResponse('City');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'city_id' => $model->getKey(),
+            'city_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('city_region')->with('city');
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'city_id' => $model->getKey(),
         ]));
 
@@ -53,8 +63,18 @@ class CityController extends Controller
             return $this->missingLocationResponse('City');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'city_id' => $model->getKey(),
+            'city_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('city_area')->with('region.city');
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'city_id' => $model->getKey(),
         ]));
 
@@ -69,8 +89,18 @@ class CityController extends Controller
             return $this->missingLocationResponse('City');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'city_id' => $model->getKey(),
+            'city_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('neighborhood')->with(['city', 'defaultRegion', 'defaultArea']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'city_id' => $model->getKey(),
         ]));
 

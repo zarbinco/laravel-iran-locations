@@ -14,8 +14,6 @@ class CityAreaController extends AdminController
 {
     public function index(CityAreaIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $query = $this->newModel('city_area')->newQuery();
 
         if ($query instanceof CityAreaBuilder) {
@@ -31,8 +29,6 @@ class CityAreaController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('city-areas.create', [
             'area' => $this->newModel('city_area'),
             'regions' => $this->optionRecords('city_region'),
@@ -41,8 +37,6 @@ class CityAreaController extends AdminController
 
     public function store(CityAreaRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $area = $this->newModel('city_area');
         $area->fill($this->payload($request->validated(), creating: true));
         $area->save();
@@ -54,8 +48,6 @@ class CityAreaController extends AdminController
 
     public function edit(int|string $city_area): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('city-areas.edit', [
             'area' => $this->findModel('city_area', $city_area),
             'regions' => $this->optionRecords('city_region'),
@@ -64,8 +56,6 @@ class CityAreaController extends AdminController
 
     public function update(CityAreaRequest $request, int|string $city_area): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('city_area', $city_area);
         $this->guardPackageRecordDirectEdit($model, 'City area');
         $model->fill($this->payload($request->validated()));
@@ -78,8 +68,6 @@ class CityAreaController extends AdminController
 
     public function destroy(int|string $city_area): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('city_area', $city_area), 'City area');
     }
 }

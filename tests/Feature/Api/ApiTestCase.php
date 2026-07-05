@@ -21,7 +21,7 @@ abstract class ApiTestCase extends TestCase
 
         $app['config']->set('app.key', 'base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=');
         $app['config']->set('iran-locations.api.enabled', true);
-        $app['config']->set('iran-locations.api.middleware', ['web']);
+        $app['config']->set('iran-locations.api.middleware', ['api']);
         $app['config']->set('iran-locations.api.prefix', 'iran-locations/api');
         $app['config']->set('iran-locations.api.pagination.per_page', 2);
         $app['config']->set('iran-locations.api.pagination.max_per_page', 3);

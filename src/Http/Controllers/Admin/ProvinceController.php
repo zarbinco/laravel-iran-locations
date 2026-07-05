@@ -14,8 +14,6 @@ class ProvinceController extends AdminController
 {
     public function index(ProvinceIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $query = $this->newModel('province')->newQuery();
 
         if ($query instanceof ProvinceBuilder) {
@@ -29,8 +27,6 @@ class ProvinceController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('provinces.create', [
             'province' => $this->newModel('province'),
         ]);
@@ -38,8 +34,6 @@ class ProvinceController extends AdminController
 
     public function store(ProvinceRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $province = $this->newModel('province');
         $province->fill($this->payload($request->validated(), creating: true));
         $province->save();
@@ -51,8 +45,6 @@ class ProvinceController extends AdminController
 
     public function edit(int|string $province): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('provinces.edit', [
             'province' => $this->findModel('province', $province),
         ]);
@@ -60,8 +52,6 @@ class ProvinceController extends AdminController
 
     public function update(ProvinceRequest $request, int|string $province): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('province', $province);
         $this->guardPackageRecordDirectEdit($model, 'Province');
         $model->fill($this->payload($request->validated()));
@@ -74,8 +64,6 @@ class ProvinceController extends AdminController
 
     public function destroy(int|string $province): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('province', $province), 'Province');
     }
 }

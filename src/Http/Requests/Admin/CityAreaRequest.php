@@ -12,7 +12,7 @@ class CityAreaRequest extends AdminFormRequest
         unset($rules['name_en']);
 
         return array_merge($rules, [
-            'city_region_id' => ['required', 'integer', $this->existsIn('city_region')],
+            'city_region_id' => $this->requiredIdRules('city_region'),
             'number' => ['nullable', 'integer', 'min:1'],
         ]);
     }

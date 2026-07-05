@@ -14,8 +14,6 @@ class RuralDistrictController extends AdminController
 {
     public function index(RuralDistrictIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $query = $this->newModel('rural_district')->newQuery()->with(['province', 'county', 'officialDistrict']);
 
         if ($query instanceof RuralDistrictBuilder) {
@@ -32,8 +30,6 @@ class RuralDistrictController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('rural-districts.create', [
             'ruralDistrict' => $this->newModel('rural_district'),
             'provinces' => $this->optionRecords('province'),
@@ -44,8 +40,6 @@ class RuralDistrictController extends AdminController
 
     public function store(RuralDistrictRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $ruralDistrict = $this->newModel('rural_district');
         $ruralDistrict->fill($this->payload($request->validated(), creating: true));
         $ruralDistrict->save();
@@ -57,8 +51,6 @@ class RuralDistrictController extends AdminController
 
     public function edit(int|string $rural_district): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('rural-districts.edit', [
             'ruralDistrict' => $this->findModel('rural_district', $rural_district),
             'provinces' => $this->optionRecords('province'),
@@ -69,8 +61,6 @@ class RuralDistrictController extends AdminController
 
     public function update(RuralDistrictRequest $request, int|string $rural_district): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('rural_district', $rural_district);
         $this->guardPackageRecordDirectEdit($model, 'Rural district');
         $model->fill($this->payload($request->validated()));
@@ -83,8 +73,6 @@ class RuralDistrictController extends AdminController
 
     public function destroy(int|string $rural_district): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('rural_district', $rural_district), 'Rural district');
     }
 }

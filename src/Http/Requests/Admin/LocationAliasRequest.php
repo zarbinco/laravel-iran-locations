@@ -14,7 +14,7 @@ class LocationAliasRequest extends AdminFormRequest
     {
         return [
             'location_type' => ['required', Rule::in(LocationModelResolver::locationTypeKeys())],
-            'location_id' => ['required', 'integer'],
+            'location_id' => ['required', 'integer', 'min:1'],
             'alias' => ['required', 'string', 'max:255'],
             'reason' => ['nullable', 'string', 'max:255'],
             'source' => $this->sourceRule(),

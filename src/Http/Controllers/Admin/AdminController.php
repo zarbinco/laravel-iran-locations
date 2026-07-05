@@ -20,6 +20,15 @@ abstract class AdminController extends Controller
 {
     use AuthorizesIranLocationsAdmin;
 
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->authorizeIranLocationsAdmin();
+
+            return $next($request);
+        });
+    }
+
     protected function perPage(?int $perPage = null): int
     {
         $perPage ??= (int) request('per_page', config('iran-locations.admin.per_page', 25));

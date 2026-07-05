@@ -120,12 +120,52 @@ class LocationResourceAdminTest extends AdminTestCase
         ])->assertSessionHasErrors(['location_id']);
     }
 
-    private function province(): Province
+    public function test_alias_target_validation_uses_stable_location_type_keys(): void
+    {
+        $province = $this->province('alias');
+
+        $this->post(route('iran-locations.admin.cities.store'), [
+            'province_id' => $province->getKey(),
+            'code' => 'admin.alias.city',
+            'name_fa' => 'Admin Alias City',
+            'is_active' => '1',
+        ])->assertRedirect();
+
+        $city = City::query()->where('code', 'admin.alias.city')->firstOrFail();
+
+        $this->post(route('iran-locations.admin.aliases.store'), [
+            'location_type' => 'city',
+            'location_id' => $city->getKey(),
+            'alias' => 'Stable City Alias',
+        ])->assertRedirect();
+
+        self::assertTrue(LocationAlias::query()->where('alias', 'Stable City Alias')->exists());
+
+        $this->post(route('iran-locations.admin.aliases.store'), [
+            'location_type' => 'city',
+            'location_id' => 999999,
+            'alias' => 'Missing City Alias',
+        ])->assertSessionHasErrors(['location_id']);
+
+        $this->post(route('iran-locations.admin.aliases.store'), [
+            'location_type' => 'unsupported',
+            'location_id' => $city->getKey(),
+            'alias' => 'Unsupported Type Alias',
+        ])->assertSessionHasErrors(['location_type']);
+
+        $this->post(route('iran-locations.admin.aliases.store'), [
+            'location_type' => City::class,
+            'location_id' => $city->getKey(),
+            'alias' => 'Class Name Alias',
+        ])->assertSessionHasErrors(['location_type']);
+    }
+
+    private function province(string $suffix = 'main'): Province
     {
         $province = new Province([
-            'code' => 'admin.parent-province',
-            'name_fa' => 'Parent Province',
-            'normalized_name' => 'parent province',
+            'code' => 'admin.parent-province.'.$suffix,
+            'name_fa' => 'Parent Province '.$suffix,
+            'normalized_name' => 'parent province '.$suffix,
             'source' => 'custom',
         ]);
         $province->save();

@@ -37,8 +37,18 @@ class CountyController extends Controller
             return $this->missingLocationResponse('County');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'county_id' => $model->getKey(),
+            'county_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('official_district')->with(['province', 'county']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'county_id' => $model->getKey(),
         ]));
 
@@ -53,8 +63,18 @@ class CountyController extends Controller
             return $this->missingLocationResponse('County');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'county_id' => $model->getKey(),
+            'county_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('city')->with(['province', 'county', 'officialDistrict']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'county_id' => $model->getKey(),
         ]));
 
@@ -69,8 +89,18 @@ class CountyController extends Controller
             return $this->missingLocationResponse('County');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'county_id' => $model->getKey(),
+            'county_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('rural_district')->with(['province', 'county', 'officialDistrict']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'county_id' => $model->getKey(),
         ]));
 

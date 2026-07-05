@@ -35,8 +35,18 @@ class CityRegionController extends Controller
             return $this->missingLocationResponse('City region');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'region_id' => $model->getKey(),
+            'region_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('city_area')->with('region.city');
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'region_id' => $model->getKey(),
         ]));
 
@@ -51,8 +61,18 @@ class CityRegionController extends Controller
             return $this->missingLocationResponse('City region');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'region_id' => $model->getKey(),
+            'region_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('neighborhood')->with(['city', 'defaultRegion', 'defaultArea']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'region_id' => $model->getKey(),
         ]));
 

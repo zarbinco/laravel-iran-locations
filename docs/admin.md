@@ -15,6 +15,7 @@ The optional admin UI is disabled by default.
 
 Routes are named under `iran-locations.admin.*`.
 Admin search inputs that include `q` are validated against `search.min_length`.
+Keep these routes behind application auth middleware. The package does not force authentication if you replace the middleware stack, but it does enforce the configured `admin.gate` whenever one is set.
 
 ## Managed Records
 
@@ -23,10 +24,19 @@ The admin UI includes screens for provinces, counties, official districts, rural
 County, official district, and rural district screens use the official administrative hierarchy. City region, city area, and neighborhood screens remain municipal hierarchy screens.
 
 Alias forms and filters use stable location type keys: `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, and `neighborhood`. Admin requests persist those keys directly and reject unsupported type values such as PHP class names.
+Alias mutation requests also validate that the selected target record exists for the submitted stable type key.
+
+Mutation forms reject inconsistent parent selections:
+
+- Official districts require a county from the selected province.
+- Rural districts require county, province, and official district parents that belong together.
+- Cities require optional county and official district parents to match the selected province and each other.
+- Neighborhood default regions and areas must belong to the selected city, and default areas must match the selected default region when one is provided.
 
 ## Authorization
 
 Set `iran-locations.admin.gate` to a Laravel gate name if you want package-level authorization. A null gate allows access when the configured middleware allows the request.
+When set, the gate is applied centrally to every admin route, including dashboard/data routes and resource mutations.
 
 ## Views
 

@@ -150,7 +150,9 @@ The admin UI is disabled by default. Enable it in `config/iran-locations.php`:
 ```
 
 Configure the prefix, middleware, and optional gate in the same config file.
+Keep admin routes behind application auth middleware. When `admin.gate` is configured, every package admin route enforces that gate consistently.
 By default, admin users can create and maintain `source = custom` records, but direct edits or delete/deprecate actions for `source = package` records are blocked. Set `data.allow_package_record_direct_edit` to `true` only when you intentionally need to override package-owned records during private testing or release preparation.
+Admin mutation forms validate parent hierarchy consistency, and alias forms accept only stable location type keys whose target records exist.
 Public/stable release should wait until the release checklist and consumer smoke tests pass.
 
 ## API
@@ -164,6 +166,8 @@ The API is disabled by default. Enable it in config:
 ```
 
 Default endpoints are mounted under `iran-locations/api` and include status, search, list, nested list, alias, and option endpoints. The API is read-only.
+The default API middleware stack is `['api']`; public applications should configure middleware deliberately, for example `['api', 'throttle:60,1']` or their own throttle/auth stack.
+Nested API route parents resolve active, non-deprecated records by default. Conflicting nested parent filters, such as `/provinces/1/cities?province_id=2`, return `422` instead of being silently overridden.
 HTTP request validation enforces `search.min_length` for API/admin search inputs that include `q`.
 
 ## Blade Components

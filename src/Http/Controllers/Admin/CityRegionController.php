@@ -14,8 +14,6 @@ class CityRegionController extends AdminController
 {
     public function index(CityRegionIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $query = $this->newModel('city_region')->newQuery();
 
         if ($query instanceof CityRegionBuilder) {
@@ -30,8 +28,6 @@ class CityRegionController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('city-regions.create', [
             'region' => $this->newModel('city_region'),
             'cities' => $this->optionRecords('city'),
@@ -40,8 +36,6 @@ class CityRegionController extends AdminController
 
     public function store(CityRegionRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $region = $this->newModel('city_region');
         $region->fill($this->payload($request->validated(), creating: true));
         $region->save();
@@ -53,8 +47,6 @@ class CityRegionController extends AdminController
 
     public function edit(int|string $city_region): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('city-regions.edit', [
             'region' => $this->findModel('city_region', $city_region),
             'cities' => $this->optionRecords('city'),
@@ -63,8 +55,6 @@ class CityRegionController extends AdminController
 
     public function update(CityRegionRequest $request, int|string $city_region): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('city_region', $city_region);
         $this->guardPackageRecordDirectEdit($model, 'City region');
         $model->fill($this->payload($request->validated()));
@@ -77,8 +67,6 @@ class CityRegionController extends AdminController
 
     public function destroy(int|string $city_region): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('city_region', $city_region), 'City region');
     }
 }

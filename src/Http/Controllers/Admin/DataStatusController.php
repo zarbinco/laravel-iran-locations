@@ -13,8 +13,6 @@ class DataStatusController extends AdminController
 {
     public function index(IranLocationsManager $locations, LocationDatabaseInspector $database): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('data.index', [
             'manifest' => $locations->dataManifest(),
             'datasets' => LocationDataManifest::datasets(),

@@ -33,8 +33,18 @@ class CityAreaController extends Controller
             return $this->missingLocationResponse('City area');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'area_id' => $model->getKey(),
+            'area_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('neighborhood')->with(['city', 'defaultRegion', 'defaultArea']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'area_id' => $model->getKey(),
         ]));
 

@@ -96,7 +96,7 @@ class IranLocationsServiceProvider extends ServiceProvider
         }
 
         if ((bool) config('iran-locations.api.enabled', false)) {
-            Route::middleware((array) config('iran-locations.api.middleware', ['web']))
+            Route::middleware((array) config('iran-locations.api.middleware', ['api']))
                 ->prefix((string) config('iran-locations.api.prefix', 'iran-locations/api'))
                 ->group($this->packagePath('routes/api.php'));
         }

@@ -78,7 +78,7 @@ return [
     'api' => [
         'enabled' => false,
         'prefix' => 'iran-locations/api',
-        'middleware' => ['web'],
+        'middleware' => ['api'],
         'pagination' => [
             'per_page' => 25,
             'max_per_page' => 100,

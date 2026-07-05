@@ -14,8 +14,6 @@ class DataSyncController extends AdminController
 {
     public function sync(DataSyncRequest $request, LocationSyncService $sync): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         try {
             $result = $sync->sync(LocationSyncOptions::make(
                 dryRun: (bool) $request->boolean('dry_run'),

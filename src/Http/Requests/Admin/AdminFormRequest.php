@@ -6,6 +6,7 @@ namespace Zarbin\IranLocations\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 use Zarbin\IranLocations\Support\LocationModelResolver;
 
 abstract class AdminFormRequest extends FormRequest
@@ -28,6 +29,61 @@ abstract class AdminFormRequest extends FormRequest
     protected function existsIn(string $tableKey): mixed
     {
         return Rule::exists($this->table($tableKey), 'id');
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    protected function requiredIdRules(string $tableKey): array
+    {
+        return ['required', 'integer', 'min:1', $this->existsIn($tableKey)];
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    protected function nullableIdRules(string $tableKey): array
+    {
+        return ['nullable', 'integer', 'min:1', $this->existsIn($tableKey)];
+    }
+
+    protected function modelExistsById(string $modelKey, int|string|null $id): bool
+    {
+        if (blank($id)) {
+            return false;
+        }
+
+        $class = LocationModelResolver::model($modelKey);
+
+        return $class::query()->whereKey($id)->exists();
+    }
+
+    protected function modelColumnValue(string $modelKey, int|string|null $id, string $column): mixed
+    {
+        if (blank($id)) {
+            return null;
+        }
+
+        $class = LocationModelResolver::model($modelKey);
+        $model = $class::query()->whereKey($id)->first();
+
+        return $model?->getAttribute($column);
+    }
+
+    protected function parentMatches(string $modelKey, int|string|null $id, string $column, int|string|null $expected): bool
+    {
+        if (blank($id) || blank($expected)) {
+            return true;
+        }
+
+        $actual = $this->modelColumnValue($modelKey, $id, $column);
+
+        return $actual !== null && (string) $actual === (string) $expected;
+    }
+
+    protected function addHierarchyError(Validator $validator, string $field, string $message): void
+    {
+        $validator->errors()->add($field, $message);
     }
 
     /**

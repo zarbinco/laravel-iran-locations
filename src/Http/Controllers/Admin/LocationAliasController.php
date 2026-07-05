@@ -16,8 +16,6 @@ class LocationAliasController extends AdminController
 {
     public function index(LocationAliasIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $filters = $request->validated();
         $query = $this->newModel('location_alias')->newQuery();
 
@@ -31,8 +29,6 @@ class LocationAliasController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('aliases.create', [
             'alias' => $this->newModel('location_alias'),
             'locationTypes' => $this->locationTypes(),
@@ -41,8 +37,6 @@ class LocationAliasController extends AdminController
 
     public function store(LocationAliasRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $alias = $this->newModel('location_alias');
         $alias->fill($this->aliasPayload($request->validated(), creating: true));
         $alias->save();
@@ -54,8 +48,6 @@ class LocationAliasController extends AdminController
 
     public function edit(int|string $alias): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('aliases.edit', [
             'alias' => $this->findModel('location_alias', $alias),
             'locationTypes' => $this->locationTypes(),
@@ -64,8 +56,6 @@ class LocationAliasController extends AdminController
 
     public function update(LocationAliasRequest $request, int|string $alias): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('location_alias', $alias);
         $this->guardPackageRecordDirectEdit($model, 'Alias');
         $model->fill($this->aliasPayload($request->validated()));
@@ -78,8 +68,6 @@ class LocationAliasController extends AdminController
 
     public function destroy(int|string $alias): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('location_alias', $alias), 'Alias');
     }
 

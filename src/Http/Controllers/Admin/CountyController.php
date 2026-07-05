@@ -14,8 +14,6 @@ class CountyController extends AdminController
 {
     public function index(CountyIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $query = $this->newModel('county')->newQuery()->with('province');
 
         if ($query instanceof CountyBuilder) {
@@ -30,8 +28,6 @@ class CountyController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('counties.create', [
             'county' => $this->newModel('county'),
             'provinces' => $this->optionRecords('province'),
@@ -40,8 +36,6 @@ class CountyController extends AdminController
 
     public function store(CountyRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $county = $this->newModel('county');
         $county->fill($this->payload($request->validated(), creating: true));
         $county->save();
@@ -53,8 +47,6 @@ class CountyController extends AdminController
 
     public function edit(int|string $county): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('counties.edit', [
             'county' => $this->findModel('county', $county),
             'provinces' => $this->optionRecords('province'),
@@ -63,8 +55,6 @@ class CountyController extends AdminController
 
     public function update(CountyRequest $request, int|string $county): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('county', $county);
         $this->guardPackageRecordDirectEdit($model, 'County');
         $model->fill($this->payload($request->validated()));
@@ -77,8 +67,6 @@ class CountyController extends AdminController
 
     public function destroy(int|string $county): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('county', $county), 'County');
     }
 }

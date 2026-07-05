@@ -14,8 +14,6 @@ class CityController extends AdminController
 {
     public function index(CityIndexRequest $request): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         $query = $this->newModel('city')->newQuery();
 
         if ($query instanceof CityBuilder) {
@@ -32,8 +30,6 @@ class CityController extends AdminController
 
     public function create(): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('cities.create', [
             'city' => $this->newModel('city'),
             'provinces' => $this->optionRecords('province'),
@@ -44,8 +40,6 @@ class CityController extends AdminController
 
     public function store(CityRequest $request): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $city = $this->newModel('city');
         $city->fill($this->payload($request->validated(), creating: true));
         $city->save();
@@ -57,8 +51,6 @@ class CityController extends AdminController
 
     public function edit(int|string $city): View
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->adminView('cities.edit', [
             'city' => $this->findModel('city', $city),
             'provinces' => $this->optionRecords('province'),
@@ -69,8 +61,6 @@ class CityController extends AdminController
 
     public function update(CityRequest $request, int|string $city): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         $model = $this->findModel('city', $city);
         $this->guardPackageRecordDirectEdit($model, 'City');
         $model->fill($this->payload($request->validated()));
@@ -83,8 +73,6 @@ class CityController extends AdminController
 
     public function destroy(int|string $city): RedirectResponse
     {
-        $this->authorizeIranLocationsAdmin();
-
         return $this->safeDestroy($this->findModel('city', $city), 'City');
     }
 }

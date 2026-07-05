@@ -38,3 +38,10 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Normalized packaged Persian display data from Arabic `ك/ي` to Persian `ک/ی`.
 - Populated 31 province capital city flags and guarded them with data-quality tests.
 - Added permanent packaged-data quality coverage for manifest checksums, references, duplicate codes, Persian display fields, and documented duplicate neighborhood names.
+- Centralized admin gate enforcement so every admin route consistently applies the configured `admin.gate`.
+- Added admin parent hierarchy validation for official districts, rural districts, cities, neighborhoods, and related ID fields.
+- Added admin alias target validation against stable type keys and real target records.
+- Changed the default API middleware stack to `['api']` while keeping API routes disabled by default.
+- Made nested API route parent resolution active-safe so inactive or deprecated parents return `404`.
+- Changed nested API endpoints to return `422` for conflicting parent filters instead of silently overriding them.
+- Tightened admin and API ID filter validation so negative IDs fail validation.

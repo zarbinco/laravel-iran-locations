@@ -9,9 +9,9 @@ class CityAreaIndexRequest extends AdminFormRequest
     public function rules(): array
     {
         return array_merge($this->commonIndexRules(), [
-            'city_id' => ['nullable', 'integer'],
+            'city_id' => ['nullable', 'integer', 'min:1'],
             'city_code' => ['nullable', 'string', 'max:255'],
-            'region_id' => ['nullable', 'integer'],
+            'region_id' => ['nullable', 'integer', 'min:1'],
             'region_code' => ['nullable', 'string', 'max:255'],
             'number' => ['nullable', 'integer', 'min:1'],
         ]);

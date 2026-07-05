@@ -35,8 +35,18 @@ class OfficialDistrictController extends Controller
             return $this->missingLocationResponse('Official district');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'official_district_id' => $model->getKey(),
+            'official_district_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('city')->with(['province', 'county', 'officialDistrict']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'official_district_id' => $model->getKey(),
         ]));
 
@@ -51,8 +61,18 @@ class OfficialDistrictController extends Controller
             return $this->missingLocationResponse('Official district');
         }
 
+        $filters = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($filters, [
+            'official_district_id' => $model->getKey(),
+            'official_district_code' => $model->getAttribute('code'),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
         $query = $this->query('rural_district')->with(['province', 'county', 'officialDistrict']);
-        $this->applyLocationFilters($query, array_merge($request->validated(), [
+        $this->applyLocationFilters($query, array_merge($filters, [
             'official_district_id' => $model->getKey(),
         ]));
 

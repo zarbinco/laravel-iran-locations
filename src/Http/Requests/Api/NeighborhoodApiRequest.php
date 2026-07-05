@@ -9,17 +9,17 @@ class NeighborhoodApiRequest extends ApiRequest
     public function rules(): array
     {
         return array_merge($this->commonRules(), [
-            'province_id' => ['nullable', 'integer'],
+            'province_id' => ['nullable', 'integer', 'min:1'],
             'province_code' => ['nullable', 'string', 'max:255'],
-            'county_id' => ['nullable', 'integer'],
+            'county_id' => ['nullable', 'integer', 'min:1'],
             'county_code' => ['nullable', 'string', 'max:255'],
-            'official_district_id' => ['nullable', 'integer'],
+            'official_district_id' => ['nullable', 'integer', 'min:1'],
             'official_district_code' => ['nullable', 'string', 'max:255'],
-            'city_id' => ['nullable', 'integer'],
+            'city_id' => ['nullable', 'integer', 'min:1'],
             'city_code' => ['nullable', 'string', 'max:255'],
-            'region_id' => ['nullable', 'integer'],
+            'region_id' => ['nullable', 'integer', 'min:1'],
             'region_code' => ['nullable', 'string', 'max:255'],
-            'area_id' => ['nullable', 'integer'],
+            'area_id' => ['nullable', 'integer', 'min:1'],
             'area_code' => ['nullable', 'string', 'max:255'],
             'type' => ['nullable', 'in:neighborhood,street,boulevard,square,highway,park,area,unknown,all'],
             'has_region' => ['nullable', 'boolean'],
