@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zarbin\IranLocations\Tests\Feature\Api;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Database\Eloquent\Model;
 use Zarbin\IranLocations\Models\City;
 
 class SearchAndOptionApiTest extends ApiTestCase
@@ -50,6 +51,34 @@ class SearchAndOptionApiTest extends ApiTestCase
         $this->getJson('/iran-locations/api/search?q=Deprecated Search City&limit=1')
             ->assertOk()
             ->assertJsonPath('results.cities', []);
+    }
+
+    public function test_search_endpoint_applies_query_to_fallback_eloquent_models(): void
+    {
+        config()->set('iran-locations.models.province', FallbackSearchProvince::class);
+
+        FallbackSearchProvince::query()->create([
+            'code' => 'fallback-province-needle',
+            'name_fa' => 'Needle Province',
+            'normalized_name' => 'normalized:Needle Province',
+            'slug' => 'needle-province',
+            'is_active' => true,
+            'source' => 'custom',
+        ]);
+        FallbackSearchProvince::query()->create([
+            'code' => 'fallback-province-other',
+            'name_fa' => 'Other Province',
+            'normalized_name' => 'normalized:Other Province',
+            'slug' => 'other-province',
+            'is_active' => true,
+            'source' => 'custom',
+        ]);
+
+        $this->getJson('/iran-locations/api/search?q=Needle Province&limit=3')
+            ->assertOk()
+            ->assertJsonCount(1, 'results.provinces')
+            ->assertJsonPath('results.provinces.0.code', 'fallback-province-needle')
+            ->assertJsonMissing(['code' => 'fallback-province-other']);
     }
 
     public function test_alias_endpoint_filters_aliases(): void
@@ -208,4 +237,15 @@ class SearchAndOptionApiTest extends ApiTestCase
             ->assertJsonCount(1)
             ->assertJsonPath('0.name_fa', 'Province limit-a-api');
     }
+}
+
+class FallbackSearchProvince extends Model
+{
+    protected $table = 'iran_provinces';
+
+    protected $guarded = [];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 }

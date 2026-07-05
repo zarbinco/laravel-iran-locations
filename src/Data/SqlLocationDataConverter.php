@@ -613,7 +613,7 @@ class SqlLocationDataConverter
                 'neighborhoods' => $counts['neighborhoods'] > 0,
                 'aliases' => false,
             ],
-            'generated_at' => null,
+            'generated_at' => gmdate('Y-m-d\TH:i:s\Z'),
             'counts' => $counts,
             'checksum' => $this->checksum($datasets),
         ];

@@ -19,6 +19,8 @@ The current data version is `0.2.0-dev`. Treat this as private pre-release packa
 
 The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. Municipal data remains separate: city regions, city areas, and neighborhoods. Official divisions and municipal locations are available through the schema, models, builders, sync, admin UI, API, and Blade components. City areas and aliases are structurally supported, but packaged data version `0.2.0-dev` does not populate them by default.
 
+Source and licensing notes live in [DATA-SOURCES.md](../DATA-SOURCES.md) and [DATA-LICENSE.md](../DATA-LICENSE.md). The package currently supports imported and curated pre-release data; a stable public release should wait until redistribution and licensing suitability are verified.
+
 Public Persian display fields in the packaged JSON have been normalized from Arabic `ك` and `ي` to Persian `ک` and `ی`. Province capital flags are populated for one city per province, so `is_province_capital` identifies 31 capital cities in data version `0.2.0-dev`.
 
 Automated data quality tests guard public Persian characters, leading/trailing display whitespace, duplicate codes, manifest counts and checksum, package reference integrity, province-capital mappings, and documented duplicate neighborhood names. The current documented duplicate neighborhood names are two ambiguous Tehran source rows: `استاد معین` in region 09 and `مشیریه` in region 15.
@@ -52,4 +54,4 @@ The alias lifecycle columns are `is_active`, `source`, `source_version`, `data_v
 
 Stale package-owned aliases are deprecated during sync. Custom aliases are preserved. Normal location search consumes active, non-deprecated aliases only. Use `activeAliases()` for lifecycle-filtered alias access and `aliases()` when an admin or maintenance workflow needs the full alias relationship.
 
-Data-version rows store the latest applied state for each `data_version` and checksum pair. Missing package checksums are persisted as an empty string so the uniqueness contract remains enforceable across databases.
+Data-version rows store the latest applied state for each `data_version` and checksum pair. Normal packaged data must include a manifest checksum, and `iran-locations:doctor` validates that checksum against the packaged JSON data. The sync service may defensively store an empty checksum only for non-standard or test repositories that omit manifest checksums.

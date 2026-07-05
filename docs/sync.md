@@ -20,8 +20,8 @@ Dry-run mode validates package data, resolves dependencies, reports creates, upd
 php artisan iran-locations:sync
 ```
 
-Successful syncs write a data-version record with the package data version, checksum, and summary.
-Repeated successful syncs for the same `data_version` and checksum update that row with the latest summary and timestamps instead of creating duplicate data-version rows. Missing checksums are persisted as an empty string so the latest-state uniqueness contract remains enforceable.
+Successful full syncs write a data-version record with the package data version, checksum, and summary.
+Repeated successful syncs for the same `data_version` and checksum update that row with the latest summary and timestamps instead of creating duplicate data-version rows. Normal packaged data must include a manifest checksum, and `iran-locations:doctor` validates it against the packaged JSON data.
 
 ## Safety Behavior
 
@@ -56,7 +56,7 @@ php artisan iran-locations:install --sync
 
 ## Options
 
-Use `--only` to sync selected datasets. Use `--no-deprecate` to preserve missing package records during a sync. Use `--force` only when you intentionally want package sync to manage records with an unexpected source.
+Use `--only` to sync selected datasets. Partial syncs apply only the selected datasets and do not mark the global package data version as fully applied. Use `--no-deprecate` to preserve missing package records during a sync. Use `--force` only when you intentionally want package sync to manage records with an unexpected source.
 
 Use `--chunk` to control how many package data records are processed per sync batch:
 

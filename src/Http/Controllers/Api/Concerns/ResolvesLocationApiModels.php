@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Schema;
 use Zarbin\IranLocations\Builders\LocationBuilder;
+use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Http\Requests\Api\ApiRequest;
 use Zarbin\IranLocations\Http\Requests\Api\OptionApiRequest;
 use Zarbin\IranLocations\Http\Resources\LocationOptionResource;
@@ -185,6 +186,10 @@ trait ResolvesLocationApiModels
      */
     private function applyFallbackCommonFilters(Builder $query, Model $model, array $filters): void
     {
+        if (filled($filters['q'] ?? null)) {
+            $this->applyFallbackSearch($query, $model, (string) $filters['q']);
+        }
+
         if (filled($filters['source'] ?? null) && $filters['source'] !== 'all' && $this->hasColumn($model, 'source')) {
             $query->where($model->qualifyColumn('source'), $filters['source']);
         }
@@ -196,6 +201,52 @@ trait ResolvesLocationApiModels
         if (filled($filters['slug'] ?? null) && $this->hasColumn($model, 'slug')) {
             $query->where($model->qualifyColumn('slug'), $filters['slug']);
         }
+    }
+
+    private function applyFallbackSearch(Builder $query, Model $model, string $term): void
+    {
+        $term = trim($term);
+
+        if ($term === '') {
+            return;
+        }
+
+        /** @var LocationNormalizer $normalizer */
+        $normalizer = app(LocationNormalizer::class);
+        $normalized = trim($normalizer->search($term));
+        $columns = $this->fallbackSearchColumns($model);
+        $terms = array_values(array_unique(array_filter(
+            [$term, $normalized],
+            static fn (string $value): bool => $value !== '',
+        )));
+
+        if ($columns === []) {
+            return;
+        }
+
+        $query->where(function (Builder $query) use ($model, $columns, $terms): void {
+            foreach ($columns as $column) {
+                foreach ($terms as $value) {
+                    $query->orWhere($model->qualifyColumn($column), 'like', '%'.$value.'%');
+                }
+            }
+        });
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function fallbackSearchColumns(Model $model): array
+    {
+        $columns = [];
+
+        foreach (['normalized_name', 'name_fa', 'name_en', 'slug', 'code'] as $column) {
+            if ($this->hasColumn($model, $column)) {
+                $columns[] = $column;
+            }
+        }
+
+        return $columns;
     }
 
     private function applyFallbackStatus(Builder $query, Model $model, string $status): void

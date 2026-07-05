@@ -64,7 +64,7 @@ class LocationSyncService
         return DB::transaction(function () use ($datasets, $options, $dataVersion, $manifest): LocationSyncResult {
             $result = $this->run($datasets, $options, $dataVersion, $manifest);
 
-            if ($result->isSuccessful()) {
+            if ($result->isSuccessful() && $this->syncCoversAllDatasets($datasets)) {
                 $this->recordDataVersion($result, $manifest);
             }
 
@@ -168,8 +168,6 @@ class LocationSyncService
 
             return;
         }
-
-        $this->preserveDisplayOverride($existing, $payload);
 
         $changes = $this->changedAttributes($existing, $payload);
 
@@ -878,18 +876,6 @@ class LocationSyncService
 
     /**
      * @param  array<string, mixed>  $payload
-     */
-    private function preserveDisplayOverride(Model $model, array &$payload): void
-    {
-        $display = $this->string($model->getAttribute('display_name_fa'));
-
-        if ($display !== null) {
-            unset($payload['display_name_fa']);
-        }
-    }
-
-    /**
-     * @param  array<string, mixed>  $payload
      * @return array<string, mixed>
      */
     private function snapshot(Model $model, array $payload): array
@@ -1166,6 +1152,14 @@ class LocationSyncService
         }
 
         return $this->string($source['version'] ?? null);
+    }
+
+    /**
+     * @param  array<int, string>  $datasets
+     */
+    private function syncCoversAllDatasets(array $datasets): bool
+    {
+        return $datasets === LocationDataManifest::datasets();
     }
 
     /**

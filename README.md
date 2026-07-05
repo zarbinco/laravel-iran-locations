@@ -21,8 +21,12 @@ Laravel Iran Locations provides Iran location data, Eloquent models, safe databa
 
 ## Requirements
 
-- PHP 8.2 or newer
-- Laravel 11, 12, or 13
+| Laravel | PHP |
+| --- | --- |
+| 11 | PHP 8.2+ |
+| 12 | PHP 8.2+ |
+| 13 | PHP 8.3+ |
+
 - `zarbinco/laravel-persian-core` `^0.1` or `^1.0`
 - PHP `zip` extension for package development/release archive checks only
 
@@ -80,7 +84,7 @@ The packaged data is generated from spreadsheet source files. The official hiera
 
 Public Persian display names in the packaged data are normalized from Arabic `ك/ي` to Persian `ک/ی`, and the 31 province capital city flags are populated. Data quality tests guard manifest counts, checksums, reference integrity, duplicate codes, public Persian text fields, documented duplicate neighborhood names, and province-capital mappings.
 
-Treat this as versioned package data, not automatically complete, official, current national coverage. It does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless explicitly documented. Verify source assumptions and licensing suitability before production, legal, regulatory, logistics, or high-stakes use.
+Treat this as versioned package data, not automatically complete, official, current national coverage. It does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless explicitly documented. Verify source assumptions and licensing suitability before production, legal, regulatory, logistics, or high-stakes use. See [DATA-SOURCES.md](DATA-SOURCES.md) and [DATA-LICENSE.md](DATA-LICENSE.md) for source and licensing notes.
 
 ## Not Included
 

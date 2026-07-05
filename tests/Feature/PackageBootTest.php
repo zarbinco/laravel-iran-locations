@@ -66,10 +66,11 @@ class PackageBootTest extends TestCase
             'iran-locations:status',
             'iran-locations:sync',
             'iran-locations:doctor',
-            'iran-locations:normalize',
         ] as $command) {
             self::assertArrayHasKey($command, $commands);
         }
+
+        self::assertArrayNotHasKey('iran-locations:normalize', $commands);
     }
 
     public function test_views_publish_groups_and_component_namespace_are_registered(): void

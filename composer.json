@@ -15,6 +15,10 @@
     ],
     "homepage": "https://github.com/zarbinco/laravel-iran-locations",
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/zarbinco/laravel-iran-locations/issues",
+        "source": "https://github.com/zarbinco/laravel-iran-locations"
+    },
     "require": {
         "php": "^8.2",
         "illuminate/contracts": "^11.0|^12.0|^13.0",
@@ -52,7 +56,10 @@
         }
     },
     "scripts": {
-        "archive:check": "php tools/check-archive.php",
+        "archive:check": [
+            "composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check",
+            "php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip"
+        ],
         "analyse": "phpstan analyse",
         "format": "pint",
         "format:test": "pint --test",
@@ -61,8 +68,7 @@
             "@test",
             "@format:test",
             "@analyse",
-            "composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check",
-            "php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip"
+            "@archive:check"
         ],
         "test": "phpunit",
         "test:ci": [
@@ -75,7 +81,6 @@
     "config": {
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true,
             "phpstan/extension-installer": true
         }
     },

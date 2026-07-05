@@ -1012,7 +1012,7 @@ final class ExcelLocationDataConverter
                 'neighborhood_region' => $counts['neighborhood_region'] > 0,
                 'aliases' => $counts['aliases'] > 0,
             ],
-            'generated_at' => null,
+            'generated_at' => gmdate('Y-m-d\TH:i:s\Z'),
             'counts' => $counts,
             'checksum' => $this->checksum($datasets),
         ];

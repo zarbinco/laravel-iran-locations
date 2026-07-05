@@ -119,6 +119,8 @@ class LocationDataQualityTest extends TestCase
 
         self::assertSame($checksum, $manifest['checksum'] ?? null);
         self::assertSame('0.2.0-dev', $manifest['data_version'] ?? null);
+        self::assertIsString($manifest['generated_at']);
+        self::assertNotSame('', trim($manifest['generated_at']));
         self::assertFalse($manifest['contains']['city_areas'] ?? true);
         self::assertFalse($manifest['contains']['aliases'] ?? true);
         self::assertSame(0, count($datasets['city_areas']));

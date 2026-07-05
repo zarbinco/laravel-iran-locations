@@ -100,6 +100,8 @@ class PublicDocumentationTest extends TestCase
             'README.md',
             'CHANGELOG.md',
             'CONTRIBUTING.md',
+            'DATA-SOURCES.md',
+            'DATA-LICENSE.md',
             'SECURITY.md',
             'LICENSE.md',
             'docs/data.md',

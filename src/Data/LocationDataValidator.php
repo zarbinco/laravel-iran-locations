@@ -46,7 +46,9 @@ class LocationDataValidator
 
         $this->validateRecords($datasets, $errors, $checks);
         $this->validateReferences($datasets, $errors, $checks);
+        $this->validateManifestGeneratedAt($manifest, $errors, $checks);
         $this->validateManifestCounts($manifest, $datasets, $errors, $checks);
+        $this->validateManifestChecksum($manifest, $datasets, $errors, $checks);
 
         return $this->result($errors, $checks);
     }
@@ -250,14 +252,22 @@ class LocationDataValidator
      */
     private function validateReferences(array $datasets, array &$errors, array &$checks): void
     {
-        $provinceCodes = $this->codes($datasets['provinces'] ?? []);
-        $countyCodes = $this->codes($datasets['counties'] ?? []);
-        $officialDistrictCodes = $this->codes($datasets['official_districts'] ?? []);
-        $ruralDistrictCodes = $this->codes($datasets['rural_districts'] ?? []);
-        $cityCodes = $this->codes($datasets['cities'] ?? []);
-        $cityRegionCodes = $this->codes($datasets['city_regions'] ?? []);
-        $cityAreaCodes = $this->codes($datasets['city_areas'] ?? []);
-        $neighborhoodCodes = $this->codes($datasets['neighborhoods'] ?? []);
+        $provincesByCode = $this->recordsByCode($datasets['provinces'] ?? []);
+        $countiesByCode = $this->recordsByCode($datasets['counties'] ?? []);
+        $officialDistrictsByCode = $this->recordsByCode($datasets['official_districts'] ?? []);
+        $ruralDistrictsByCode = $this->recordsByCode($datasets['rural_districts'] ?? []);
+        $citiesByCode = $this->recordsByCode($datasets['cities'] ?? []);
+        $cityRegionsByCode = $this->recordsByCode($datasets['city_regions'] ?? []);
+        $cityAreasByCode = $this->recordsByCode($datasets['city_areas'] ?? []);
+        $neighborhoodsByCode = $this->recordsByCode($datasets['neighborhoods'] ?? []);
+        $provinceCodes = $this->codeMap($provincesByCode);
+        $countyCodes = $this->codeMap($countiesByCode);
+        $officialDistrictCodes = $this->codeMap($officialDistrictsByCode);
+        $ruralDistrictCodes = $this->codeMap($ruralDistrictsByCode);
+        $cityCodes = $this->codeMap($citiesByCode);
+        $cityRegionCodes = $this->codeMap($cityRegionsByCode);
+        $cityAreaCodes = $this->codeMap($cityAreasByCode);
+        $neighborhoodCodes = $this->codeMap($neighborhoodsByCode);
         $codesByDataset = [
             'provinces' => $provinceCodes,
             'counties' => $countyCodes,
@@ -275,6 +285,12 @@ class LocationDataValidator
             if (! is_string($provinceCode) || ! isset($provinceCodes[$provinceCode])) {
                 $errors[] = "Dataset [counties] record [{$index}] references missing province_code [{$provinceCode}].";
             }
+
+            $province = is_string($provinceCode) ? ($provincesByCode[$provinceCode] ?? null) : null;
+
+            if ($province !== null && ! $this->sameOptionalString($county['province_source_id'] ?? null, $province['source_id'] ?? null)) {
+                $errors[] = "Dataset [counties] record [{$index}] has province_source_id that does not match province_code [{$provinceCode}].";
+            }
         }
 
         foreach ($datasets['official_districts'] ?? [] as $index => $district) {
@@ -287,6 +303,12 @@ class LocationDataValidator
 
             if (! is_string($countyCode) || ! isset($countyCodes[$countyCode])) {
                 $errors[] = "Dataset [official_districts] record [{$index}] references missing county_code [{$countyCode}].";
+            }
+
+            $county = is_string($countyCode) ? ($countiesByCode[$countyCode] ?? null) : null;
+
+            if ($county !== null && is_string($provinceCode) && (string) ($county['province_code'] ?? '') !== $provinceCode) {
+                $errors[] = "Dataset [official_districts] record [{$index}] references county_code [{$countyCode}] outside province_code [{$provinceCode}].";
             }
         }
 
@@ -306,6 +328,20 @@ class LocationDataValidator
             if (! is_string($officialDistrictCode) || ! isset($officialDistrictCodes[$officialDistrictCode])) {
                 $errors[] = "Dataset [rural_districts] record [{$index}] references missing official_district_code [{$officialDistrictCode}].";
             }
+
+            $county = is_string($countyCode) ? ($countiesByCode[$countyCode] ?? null) : null;
+            $officialDistrict = is_string($officialDistrictCode) ? ($officialDistrictsByCode[$officialDistrictCode] ?? null) : null;
+
+            if ($county !== null && is_string($provinceCode) && (string) ($county['province_code'] ?? '') !== $provinceCode) {
+                $errors[] = "Dataset [rural_districts] record [{$index}] references county_code [{$countyCode}] outside province_code [{$provinceCode}].";
+            }
+
+            if ($officialDistrict !== null && (
+                (is_string($provinceCode) && (string) ($officialDistrict['province_code'] ?? '') !== $provinceCode)
+                || (is_string($countyCode) && (string) ($officialDistrict['county_code'] ?? '') !== $countyCode)
+            )) {
+                $errors[] = "Dataset [rural_districts] record [{$index}] references official_district_code [{$officialDistrictCode}] outside province/county chain.";
+            }
         }
 
         foreach ($datasets['cities'] ?? [] as $index => $city) {
@@ -324,6 +360,44 @@ class LocationDataValidator
             if (! blank($officialDistrictCode) && (! is_string($officialDistrictCode) || ! isset($officialDistrictCodes[$officialDistrictCode]))) {
                 $errors[] = "Dataset [cities] record [{$index}] references missing official_district_code [{$officialDistrictCode}].";
             }
+
+            $county = is_string($countyCode) ? ($countiesByCode[$countyCode] ?? null) : null;
+            $officialDistrict = is_string($officialDistrictCode) ? ($officialDistrictsByCode[$officialDistrictCode] ?? null) : null;
+
+            if ($county !== null && is_string($provinceCode) && (string) ($county['province_code'] ?? '') !== $provinceCode) {
+                $errors[] = "Dataset [cities] record [{$index}] references county_code [{$countyCode}] outside province_code [{$provinceCode}].";
+            }
+
+            if ($officialDistrict !== null && is_string($provinceCode) && (string) ($officialDistrict['province_code'] ?? '') !== $provinceCode) {
+                $errors[] = "Dataset [cities] record [{$index}] references official_district_code [{$officialDistrictCode}] outside province_code [{$provinceCode}].";
+            }
+
+            if ($officialDistrict !== null && ! blank($countyCode) && is_string($countyCode) && (string) ($officialDistrict['county_code'] ?? '') !== $countyCode) {
+                $errors[] = "Dataset [cities] record [{$index}] references official_district_code [{$officialDistrictCode}] outside county_code [{$countyCode}].";
+            }
+        }
+
+        foreach ($datasets['city_regions'] ?? [] as $index => $region) {
+            $cityCode = $region['city_code'] ?? null;
+
+            if (! is_string($cityCode) || ! isset($cityCodes[$cityCode])) {
+                $errors[] = "Dataset [city_regions] record [{$index}] references missing city_code [{$cityCode}].";
+            }
+        }
+
+        foreach ($datasets['city_areas'] ?? [] as $index => $area) {
+            $cityRegionCode = $area['city_region_code'] ?? null;
+            $cityCode = $this->firstString($area, ['city_code']);
+
+            if (! is_string($cityRegionCode) || ! isset($cityRegionCodes[$cityRegionCode])) {
+                $errors[] = "Dataset [city_areas] record [{$index}] references missing city_region_code [{$cityRegionCode}].";
+            }
+
+            $region = is_string($cityRegionCode) ? ($cityRegionsByCode[$cityRegionCode] ?? null) : null;
+
+            if ($region !== null && $cityCode !== null && (string) ($region['city_code'] ?? '') !== $cityCode) {
+                $errors[] = "Dataset [city_areas] record [{$index}] references city_region_code [{$cityRegionCode}] outside city_code [{$cityCode}].";
+            }
         }
 
         foreach ($datasets['neighborhoods'] ?? [] as $index => $neighborhood) {
@@ -331,6 +405,32 @@ class LocationDataValidator
 
             if (! is_string($cityCode) || ! isset($cityCodes[$cityCode])) {
                 $errors[] = "Dataset [neighborhoods] record [{$index}] references missing city_code [{$cityCode}].";
+            }
+
+            $cityRegionCode = $this->firstString($neighborhood, ['default_city_region_code', 'city_region_code', 'region_code']);
+            $cityAreaCode = $this->firstString($neighborhood, ['default_city_area_code', 'city_area_code', 'area_code']);
+            $region = $cityRegionCode === null ? null : ($cityRegionsByCode[$cityRegionCode] ?? null);
+            $area = $cityAreaCode === null ? null : ($cityAreasByCode[$cityAreaCode] ?? null);
+
+            if ($cityRegionCode !== null && $region === null) {
+                $errors[] = "Dataset [neighborhoods] record [{$index}] references missing city_region_code [{$cityRegionCode}].";
+            }
+
+            if ($cityAreaCode !== null && $area === null) {
+                $errors[] = "Dataset [neighborhoods] record [{$index}] references missing city_area_code [{$cityAreaCode}].";
+            }
+
+            if ($region !== null && is_string($cityCode) && (string) ($region['city_code'] ?? '') !== $cityCode) {
+                $errors[] = "Dataset [neighborhoods] record [{$index}] references city_region_code [{$cityRegionCode}] outside city_code [{$cityCode}].";
+            }
+
+            if ($area !== null && is_string($cityCode)) {
+                $areaRegionCode = $area['city_region_code'] ?? null;
+                $areaRegion = is_string($areaRegionCode) ? ($cityRegionsByCode[$areaRegionCode] ?? null) : null;
+
+                if ($areaRegion !== null && (string) ($areaRegion['city_code'] ?? '') !== $cityCode) {
+                    $errors[] = "Dataset [neighborhoods] record [{$index}] references city_area_code [{$cityAreaCode}] outside city_code [{$cityCode}].";
+                }
             }
         }
 
@@ -344,6 +444,13 @@ class LocationDataValidator
 
             if (! is_string($cityRegionCode) || ! isset($cityRegionCodes[$cityRegionCode])) {
                 $errors[] = "Dataset [neighborhood_region] record [{$index}] references missing city_region_code [{$cityRegionCode}].";
+            }
+
+            $neighborhood = is_string($neighborhoodCode) ? ($neighborhoodsByCode[$neighborhoodCode] ?? null) : null;
+            $region = is_string($cityRegionCode) ? ($cityRegionsByCode[$cityRegionCode] ?? null) : null;
+
+            if ($neighborhood !== null && $region !== null && (string) ($neighborhood['city_code'] ?? '') !== (string) ($region['city_code'] ?? '')) {
+                $errors[] = "Dataset [neighborhood_region] record [{$index}] connects neighborhood_code [{$neighborhoodCode}] to city_region_code [{$cityRegionCode}] in a different city.";
             }
         }
 
@@ -371,25 +478,61 @@ class LocationDataValidator
         }
 
         $checks[] = 'Dataset foreign references were checked.';
+        $checks[] = 'Dataset hierarchy consistency was checked.';
     }
 
     /**
      * @param  array<int, array<string, mixed>>  $records
-     * @return array<string, true>
+     * @return array<string, array<string, mixed>>
      */
-    private function codes(array $records): array
+    private function recordsByCode(array $records): array
     {
-        $codes = [];
+        $mapped = [];
 
         foreach ($records as $record) {
             $code = $record['code'] ?? null;
 
             if (is_string($code) && $code !== '') {
-                $codes[$code] = true;
+                $mapped[$code] = $record;
             }
         }
 
-        return $codes;
+        return $mapped;
+    }
+
+    /**
+     * @param  array<string, array<string, mixed>>  $records
+     * @return array<string, true>
+     */
+    private function codeMap(array $records): array
+    {
+        return array_fill_keys(array_keys($records), true);
+    }
+
+    /**
+     * @param  array<string, mixed>  $record
+     * @param  array<int, string>  $keys
+     */
+    private function firstString(array $record, array $keys): ?string
+    {
+        foreach ($keys as $key) {
+            $value = $record[$key] ?? null;
+
+            if (is_string($value) && trim($value) !== '') {
+                return trim($value);
+            }
+        }
+
+        return null;
+    }
+
+    private function sameOptionalString(mixed $left, mixed $right): bool
+    {
+        if ($left === null || $right === null) {
+            return true;
+        }
+
+        return (string) $left === (string) $right;
     }
 
     private function messageValue(mixed $value): string
@@ -427,6 +570,90 @@ class LocationDataValidator
         }
 
         $checks[] = 'Manifest counts match data files.';
+    }
+
+    /**
+     * @param  array<string, mixed>  $manifest
+     * @param  array<int, string>  $errors
+     * @param  array<int, string>  $checks
+     */
+    private function validateManifestGeneratedAt(array $manifest, array &$errors, array &$checks): void
+    {
+        $generatedAt = $manifest['generated_at'] ?? null;
+
+        if (! is_string($generatedAt) || trim($generatedAt) === '') {
+            $errors[] = 'Manifest [generated_at] must be a non-empty date-time string.';
+
+            return;
+        }
+
+        if (! $this->isUtcGeneratedAtTimestamp($generatedAt)) {
+            $errors[] = "Manifest [generated_at] must use UTC timestamp format [YYYY-MM-DDTHH:MM:SSZ]; got [{$generatedAt}].";
+
+            return;
+        }
+
+        $checks[] = 'Manifest generated_at is a valid date-time string.';
+    }
+
+    private function isUtcGeneratedAtTimestamp(string $value): bool
+    {
+        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/', $value, $matches) !== 1) {
+            return false;
+        }
+
+        $year = (int) $matches[1];
+        $month = (int) $matches[2];
+        $day = (int) $matches[3];
+        $hour = (int) $matches[4];
+        $minute = (int) $matches[5];
+        $second = (int) $matches[6];
+
+        return checkdate($month, $day, $year)
+            && $hour >= 0 && $hour <= 23
+            && $minute >= 0 && $minute <= 59
+            && $second >= 0 && $second <= 59;
+    }
+
+    /**
+     * @param  array<string, mixed>  $manifest
+     * @param  array<string, array<int, array<string, mixed>>>  $datasets
+     * @param  array<int, string>  $errors
+     * @param  array<int, string>  $checks
+     */
+    private function validateManifestChecksum(array $manifest, array $datasets, array &$errors, array &$checks): void
+    {
+        $expected = $manifest['checksum'] ?? null;
+
+        if (! is_string($expected) || $expected === '') {
+            $errors[] = 'Manifest is missing [checksum].';
+
+            return;
+        }
+
+        $actual = $this->checksum($datasets);
+
+        if ($expected !== $actual) {
+            $errors[] = "Manifest checksum is [{$expected}], actual checksum is [{$actual}].";
+
+            return;
+        }
+
+        $checks[] = 'Manifest checksum matches data files.';
+    }
+
+    /**
+     * @param  array<string, array<int, array<string, mixed>>>  $datasets
+     */
+    private function checksum(array $datasets): string
+    {
+        $payload = [];
+
+        foreach (LocationDataManifest::datasets() as $dataset) {
+            $payload[$dataset] = $datasets[$dataset] ?? [];
+        }
+
+        return hash('sha256', json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR));
     }
 
     /**

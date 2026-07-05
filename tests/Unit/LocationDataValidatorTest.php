@@ -203,6 +203,91 @@ class LocationDataValidatorTest extends TestCase
         self::assertContains('Manifest count for [provinces] is [2], actual count is [1].', $result['errors']);
     }
 
+    public function test_validator_catches_manifest_checksum_mismatch(): void
+    {
+        $path = $this->makeDataPath([], [
+            'checksum' => 'not-the-current-data-checksum',
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Manifest checksum is [not-the-current-data-checksum], actual checksum is ['.$this->checksum($this->defaultDatasets()).'].', $result['errors']);
+    }
+
+    public function test_validator_catches_missing_generated_at(): void
+    {
+        $path = $this->makeDataPath([], [
+            'generated_at' => null,
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Manifest [generated_at] must be a non-empty date-time string.', $result['errors']);
+    }
+
+    public function test_validator_catches_invalid_generated_at(): void
+    {
+        $path = $this->makeDataPath([], [
+            'generated_at' => 'not-a-date',
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Manifest [generated_at] must use UTC timestamp format [YYYY-MM-DDTHH:MM:SSZ]; got [not-a-date].', $result['errors']);
+    }
+
+    public function test_validator_rejects_loose_generated_at_values(): void
+    {
+        foreach (['next tuesday', '2026-07-05', '2026-07-05 16:33:31'] as $generatedAt) {
+            $path = $this->makeDataPath([], [
+                'generated_at' => $generatedAt,
+            ]);
+
+            $result = $this->validatePath($path);
+
+            self::assertFalse($result['ok']);
+            self::assertContains("Manifest [generated_at] must use UTC timestamp format [YYYY-MM-DDTHH:MM:SSZ]; got [{$generatedAt}].", $result['errors']);
+        }
+    }
+
+    public function test_validator_catches_official_district_county_outside_declared_province(): void
+    {
+        $path = $this->makeDataPath([
+            'provinces' => [
+                $this->province(),
+                $this->province([
+                    'code' => 'ir.province.002',
+                    'source_id' => 2,
+                ]),
+            ],
+            'counties' => [
+                $this->county([
+                    'code' => 'ir.county.002.001',
+                    'province_code' => 'ir.province.002',
+                    'province_source_id' => 2,
+                ]),
+            ],
+            'official_districts' => [
+                $this->officialDistrict([
+                    'county_code' => 'ir.county.002.001',
+                ]),
+            ],
+            'rural_districts' => [],
+            'cities' => [],
+            'city_regions' => [],
+            'neighborhoods' => [],
+            'neighborhood_region' => [],
+        ]);
+
+        $result = $this->validatePath($path);
+
+        self::assertFalse($result['ok']);
+        self::assertContains('Dataset [official_districts] record [0] references county_code [ir.county.002.001] outside province_code [ir.province.001].', $result['errors']);
+    }
+
     /**
      * @param  array<string, array<int, array<string, mixed>>>  $datasets
      * @param  array<string, mixed>  $manifestOverrides
@@ -213,18 +298,7 @@ class LocationDataValidatorTest extends TestCase
 
         mkdir($path, 0775, true);
 
-        $datasets = array_replace([
-            'provinces' => [$this->province()],
-            'counties' => [$this->county()],
-            'official_districts' => [$this->officialDistrict()],
-            'rural_districts' => [$this->ruralDistrict()],
-            'cities' => [$this->city()],
-            'city_regions' => [$this->cityRegion()],
-            'city_areas' => [],
-            'neighborhoods' => [$this->neighborhood()],
-            'neighborhood_region' => [$this->neighborhoodRegion()],
-            'aliases' => [],
-        ], $datasets);
+        $datasets = array_replace($this->defaultDatasets(), $datasets);
 
         foreach (LocationDataManifest::datasetFiles() as $dataset => $file) {
             $this->writeJson($path.DIRECTORY_SEPARATOR.$file, $datasets[$dataset] ?? []);
@@ -256,14 +330,47 @@ class LocationDataValidatorTest extends TestCase
                 'neighborhood_region' => true,
                 'aliases' => false,
             ],
-            'generated_at' => null,
+            'generated_at' => '2026-07-05T00:00:00Z',
             'counts' => $counts,
-            'checksum' => null,
+            'checksum' => $this->checksum($datasets),
         ], $manifestOverrides);
 
         $this->writeJson($path.DIRECTORY_SEPARATOR.LocationDataManifest::MANIFEST_FILE, $manifest);
 
         return $path;
+    }
+
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    private function defaultDatasets(): array
+    {
+        return [
+            'provinces' => [$this->province()],
+            'counties' => [$this->county()],
+            'official_districts' => [$this->officialDistrict()],
+            'rural_districts' => [$this->ruralDistrict()],
+            'cities' => [$this->city()],
+            'city_regions' => [$this->cityRegion()],
+            'city_areas' => [],
+            'neighborhoods' => [$this->neighborhood()],
+            'neighborhood_region' => [$this->neighborhoodRegion()],
+            'aliases' => [],
+        ];
+    }
+
+    /**
+     * @param  array<string, array<int, array<string, mixed>>>  $datasets
+     */
+    private function checksum(array $datasets): string
+    {
+        $payload = [];
+
+        foreach (LocationDataManifest::datasets() as $dataset) {
+            $payload[$dataset] = $datasets[$dataset] ?? [];
+        }
+
+        return hash('sha256', json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR));
     }
 
     /**

@@ -187,6 +187,7 @@ class LocationSyncServiceTest extends TestCase
             'code' => 'ir.province.001',
             'name_fa' => 'Custom Tehran',
             'normalized_name' => 'custom-tehran',
+            'display_name_fa' => 'Custom Tehran Display',
             'source' => 'custom',
             'data_version' => 'custom',
         ]);
@@ -203,6 +204,7 @@ class LocationSyncServiceTest extends TestCase
 
         self::assertSame(1, $result->datasetsByName()['provinces']->totals()['skipped']);
         self::assertSame('Custom Tehran', $province->getAttribute('name_fa'));
+        self::assertSame('Custom Tehran Display', $province->getAttribute('display_name_fa'));
         self::assertSame('custom', $province->getAttribute('source'));
         self::assertTrue(Province::query()->where('code', 'custom.province.keep')->exists());
     }
@@ -350,7 +352,7 @@ class LocationSyncServiceTest extends TestCase
         self::assertNotNull($area->getAttribute('deprecated_at'));
     }
 
-    public function test_package_updates_preserve_display_override_and_restore_deprecated_records(): void
+    public function test_package_updates_replace_package_owned_display_name_and_restore_deprecated_records(): void
     {
         Province::query()->create([
             'code' => 'ir.province.001',
@@ -368,9 +370,19 @@ class LocationSyncServiceTest extends TestCase
 
         self::assertGreaterThan(0, $result->datasetsByName()['provinces']->totals()['updated']);
         self::assertSame('تهران', $province->getAttribute('name_fa'));
-        self::assertSame('My Tehran', $province->getAttribute('display_name_fa'));
+        self::assertNull($province->getAttribute('display_name_fa'));
         self::assertTrue((bool) $province->getAttribute('is_active'));
         self::assertNull($province->getAttribute('deprecated_at'));
+    }
+
+    public function test_partial_sync_does_not_record_global_data_version(): void
+    {
+        $result = $this->app->make(LocationSyncService::class)->sync(LocationSyncOptions::make(datasets: ['provinces']));
+
+        self::assertTrue($result->isSuccessful());
+        self::assertSame(31, Province::query()->count());
+        self::assertSame(0, LocationDataVersion::query()->count());
+        self::assertNull(LocationDataVersion::latestAppliedVersion());
     }
 
     public function test_dependency_failures_are_reported_without_creating_orphans(): void
@@ -560,11 +572,11 @@ class LocationSyncServiceTest extends TestCase
         ], omitChecksum: true);
         $service = $this->serviceFor($repository);
 
-        $service->sync(LocationSyncOptions::make(datasets: ['provinces']));
+        $service->sync();
         $firstVersion = LocationDataVersion::query()->first();
         self::assertInstanceOf(LocationDataVersion::class, $firstVersion);
 
-        $service->sync(LocationSyncOptions::make(datasets: ['provinces']));
+        $service->sync();
         $secondVersion = LocationDataVersion::query()->first();
         self::assertInstanceOf(LocationDataVersion::class, $secondVersion);
 

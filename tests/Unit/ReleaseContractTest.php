@@ -43,14 +43,16 @@ class ReleaseContractTest extends TestCase
         $scripts = $composer['scripts'];
 
         self::assertSame(['@test', '@format:test', '@analyse'], $scripts['test:ci']);
-        self::assertSame('php tools/check-archive.php', $scripts['archive:check']);
+        self::assertSame([
+            'composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check',
+            'php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip',
+        ], $scripts['archive:check']);
         self::assertSame([
             'composer validate --strict',
             '@test',
             '@format:test',
             '@analyse',
-            'composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check',
-            'php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip',
+            '@archive:check',
         ], $scripts['release:check']);
     }
 

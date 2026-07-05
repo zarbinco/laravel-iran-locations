@@ -15,6 +15,8 @@ class ComposerMetadataTest extends TestCase
 
         self::assertSame('zarbinco/laravel-iran-locations', $composer['name']);
         self::assertSame('library', $composer['type']);
+        self::assertSame('https://github.com/zarbinco/laravel-iran-locations/issues', $composer['support']['issues']);
+        self::assertSame('https://github.com/zarbinco/laravel-iran-locations', $composer['support']['source']);
         self::assertSame('^8.2', $composer['require']['php']);
         self::assertSame('^0.1|^1.0', $composer['require']['zarbinco/laravel-persian-core']);
         self::assertStringContainsString('^0.1', $composer['require']['zarbinco/laravel-persian-core']);
@@ -43,15 +45,19 @@ class ComposerMetadataTest extends TestCase
 
         self::assertSame(['@test', '@format:test', '@analyse'], $composer['scripts']['test:ci']);
         self::assertSame([
+            'composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check',
+            'php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip',
+        ], $composer['scripts']['archive:check']);
+        self::assertSame([
             'composer validate --strict',
             '@test',
             '@format:test',
             '@analyse',
-            'composer archive --format=zip --dir=build/release-check --file=laravel-iran-locations-release-check',
-            'php tools/check-archive.php build/release-check/laravel-iran-locations-release-check.zip',
+            '@archive:check',
         ], $composer['scripts']['release:check']);
 
         self::assertArrayNotHasKey('spatie/laravel-query-builder', $composer['require']);
+        self::assertArrayNotHasKey('pestphp/pest-plugin', $composer['config']['allow-plugins']);
 
         foreach (['livewire/livewire', 'inertiajs/inertia-laravel', 'laravel/ui'] as $package) {
             self::assertArrayNotHasKey($package, $composer['require']);

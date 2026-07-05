@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Zarbin\IranLocations\Commands\DoctorCommand;
 use Zarbin\IranLocations\Commands\InstallCommand;
-use Zarbin\IranLocations\Commands\NormalizeCommand;
 use Zarbin\IranLocations\Commands\StatusCommand;
 use Zarbin\IranLocations\Commands\SyncCommand;
 use Zarbin\IranLocations\Contracts\LocationDataRepository;
@@ -80,7 +79,6 @@ class IranLocationsServiceProvider extends ServiceProvider
                 StatusCommand::class,
                 SyncCommand::class,
                 DoctorCommand::class,
-                NormalizeCommand::class,
             ]);
         }
 

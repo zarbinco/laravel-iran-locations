@@ -52,7 +52,7 @@ class SearchController extends Controller
         if ($query instanceof LocationBuilder) {
             $query->active()->search($term)->ordered();
         } else {
-            $this->applyLocationFilters($query, ['status' => 'active']);
+            $this->applyLocationFilters($query, ['status' => 'active', 'q' => $term]);
         }
 
         return $query->limit($limit)->get();
