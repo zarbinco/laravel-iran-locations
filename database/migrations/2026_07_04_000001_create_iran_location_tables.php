@@ -146,11 +146,17 @@ return new class extends Migration
             $table->foreignId('city_region_id')->constrained($tables['city_regions'])->cascadeOnDelete();
             $table->boolean('is_primary')->default(false);
             $table->string('source')->default('package')->index();
+            $table->boolean('is_active')->default(true);
+            $table->string('source_version')->nullable();
+            $table->string('data_version')->nullable();
+            $table->timestamp('deprecated_at')->nullable();
             $table->unsignedTinyInteger('confidence')->nullable();
             $table->timestamps();
 
             $table->unique(['neighborhood_id', 'city_region_id'], 'iran_neighborhood_region_unique');
             $table->index(['city_region_id', 'is_primary'], 'iran_neighborhood_region_primary_idx');
+            $table->index(['source', 'is_active', 'deprecated_at'], 'iran_neighborhood_region_source_status_idx');
+            $table->index(['is_active', 'deprecated_at'], 'iran_neighborhood_region_status_idx');
         });
 
         Schema::create($tables['location_aliases'], function (Blueprint $table): void {

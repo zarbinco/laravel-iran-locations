@@ -54,8 +54,9 @@ php artisan iran-locations:status
 php artisan iran-locations:doctor
 ```
 
-The sync engine never truncates package tables. Custom records are preserved. Package-owned records missing from the current package data are deprecated by default instead of being hard deleted.
+The sync engine never truncates package tables. Custom records are preserved. Custom aliases and neighborhood-region mappings are preserved too. Package-owned rows missing from the current package data are deprecated by default instead of being hard deleted.
 Package data is required to contain normalized/searchable fields. Sync writes those normalized fields and fills missing normalized or slug fields through the configured `LocationNormalizer`; sync normalization is not user-toggleable.
+Use `--chunk` to process already-loaded package data records in smaller sync batches.
 
 ## Data Scope
 
@@ -78,6 +79,8 @@ Treat this as versioned package data, not automatically complete, official, curr
 Aliases store stable public location type keys instead of PHP class names: `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, and `neighborhood`. The package registers an Eloquent morph map for those keys and maps them to the configured model classes, so custom model configuration remains respected.
 
 Admin and API inputs accept the supported stable keys and reject unsupported values such as arbitrary class names. Package data and sync may normalize plural dataset-style aliases, for example `cities` to `city`.
+
+Stale package-owned aliases are deprecated by sync. Normal location search and the `activeAliases()` relationship consume only active, non-deprecated aliases, while `aliases()` remains the full relationship for admin or maintenance workflows. The read-only `/aliases` API defaults to active aliases and supports `status=active|inactive|deprecated|all`.
 
 ## Normalization
 
@@ -131,6 +134,8 @@ $countyNeighborhoods = Neighborhood::query()
     ->ordered()
     ->get();
 ```
+
+Normal `Neighborhood::regions()` and `CityRegion::neighborhoods()` relationships return active, non-deprecated mappings. Use `allRegions()` or `allNeighborhoods()` when maintenance code needs to inspect inactive or deprecated mapping rows. Admin record visibility continues to follow the package admin routes and settings.
 
 ## Admin UI
 

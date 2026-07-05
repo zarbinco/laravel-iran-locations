@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Tests\Feature;
 
+use Carbon\CarbonImmutable;
 use Illuminate\Database\QueryException;
 use Zarbin\IranLocations\Models\City;
 use Zarbin\IranLocations\Models\CityArea;
@@ -124,6 +125,64 @@ class ModelRelationshipTest extends TestCase
         self::assertContains($defaultOnly->getKey(), $ids);
     }
 
+    public function test_neighborhood_region_relationships_use_active_mappings_by_default(): void
+    {
+        $records = $this->createLocationGraph('-active-mapping');
+        /** @var City $city */
+        $city = $records['city'];
+        /** @var CityRegion $region */
+        $region = $records['region'];
+
+        $active = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'code' => 'neighborhood-active-mapping-only',
+            'name_fa' => 'Active Mapping',
+        ]);
+        $active->save();
+        $active->allRegions()->attach($region->getKey(), [
+            'is_primary' => true,
+            'source' => 'custom',
+            'is_active' => true,
+        ]);
+
+        $deprecated = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'code' => 'neighborhood-deprecated-mapping',
+            'name_fa' => 'Deprecated Mapping',
+        ]);
+        $deprecated->save();
+        $deprecated->allRegions()->attach($region->getKey(), [
+            'is_primary' => false,
+            'source' => 'package',
+            'is_active' => false,
+            'deprecated_at' => CarbonImmutable::parse('2026-03-01'),
+        ]);
+
+        $inactive = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'code' => 'neighborhood-inactive-mapping',
+            'name_fa' => 'Inactive Mapping',
+        ]);
+        $inactive->save();
+        $inactive->allRegions()->attach($region->getKey(), [
+            'is_primary' => false,
+            'source' => 'package',
+            'is_active' => false,
+        ]);
+
+        self::assertTrue($active->regions()->whereKey($region->getKey())->exists());
+        self::assertFalse($deprecated->regions()->whereKey($region->getKey())->exists());
+        self::assertFalse($inactive->regions()->whereKey($region->getKey())->exists());
+        self::assertTrue($deprecated->allRegions()->whereKey($region->getKey())->exists());
+        self::assertTrue($inactive->allRegions()->whereKey($region->getKey())->exists());
+
+        self::assertTrue($region->neighborhoods()->whereKey($active->getKey())->exists());
+        self::assertFalse($region->neighborhoods()->whereKey($deprecated->getKey())->exists());
+        self::assertFalse($region->neighborhoods()->whereKey($inactive->getKey())->exists());
+        self::assertTrue($region->allNeighborhoods()->whereKey($deprecated->getKey())->exists());
+        self::assertTrue($region->allNeighborhoods()->whereKey($inactive->getKey())->exists());
+    }
+
     public function test_alias_relationships_work_for_location_models(): void
     {
         $records = $this->createLocationGraph();
@@ -153,6 +212,37 @@ class ModelRelationshipTest extends TestCase
             self::assertNotNull($location);
             self::assertTrue($location->is($model));
         }
+    }
+
+    public function test_active_aliases_relationship_filters_lifecycle_without_breaking_aliases(): void
+    {
+        $records = $this->createLocationGraph('-active-aliases');
+        $city = $records['city'];
+
+        $active = $city->aliases()->create([
+            'alias' => 'Active Alias',
+        ]);
+        $inactive = $city->aliases()->create([
+            'alias' => 'Inactive Alias',
+            'is_active' => false,
+        ]);
+        $deprecated = $city->aliases()->create([
+            'alias' => 'Deprecated Alias',
+            'is_active' => false,
+            'deprecated_at' => CarbonImmutable::parse('2026-04-01'),
+        ]);
+
+        self::assertTrue($city->activeAliases()->whereKey($active->getKey())->exists());
+        self::assertFalse($city->activeAliases()->whereKey($inactive->getKey())->exists());
+        self::assertFalse($city->activeAliases()->whereKey($deprecated->getKey())->exists());
+        self::assertSame(3, $city->aliases()->count());
+
+        $created = $city->aliases()->create([
+            'alias' => 'Created Through Full Alias Relation',
+        ]);
+
+        self::assertInstanceOf(LocationAlias::class, $created);
+        self::assertSame(4, $city->aliases()->count());
     }
 
     public function test_alias_target_normalized_alias_unique_constraint_is_enforced(): void

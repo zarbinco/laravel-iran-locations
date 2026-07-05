@@ -13,4 +13,11 @@ trait HasLocationAliases
     {
         return $this->morphMany(LocationModelResolver::model('location_alias'), 'location');
     }
+
+    public function activeAliases(): MorphMany
+    {
+        return $this->aliases()
+            ->where('is_active', true)
+            ->whereNull('deprecated_at');
+    }
 }

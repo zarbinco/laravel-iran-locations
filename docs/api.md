@@ -62,6 +62,8 @@ Pagination uses `per_page` and `page` with the configured maximum.
 
 `GET /aliases` accepts `location_type` as one of the stable public keys: `province`, `county`, `official_district`, `rural_district`, `city`, `city_region`, `city_area`, or `neighborhood`. Responses return that same stable key. Class names and unsupported type strings are rejected by request validation.
 
+`GET /aliases` defaults to active aliases. Use `status=active`, `status=inactive`, `status=deprecated`, or `status=all` to control lifecycle filtering. Alias resources expose `is_active`, `deprecated_at`, `source_version`, and `data_version` so consumers can inspect package lifecycle state.
+
 ## Search
 
 ```http
@@ -86,7 +88,9 @@ Search returns grouped results:
 }
 ```
 
-Search terms are normalized through the configured `LocationNormalizer`.
+Search terms are normalized through the configured `LocationNormalizer`. Alias-backed search only consumes active, non-deprecated aliases. Deprecated aliases may still be visible through `/aliases` when an explicit lifecycle status requests them.
+
+Normal neighborhood-region API and builder consumption uses active mappings by default. The Eloquent models expose `allRegions()` and `allNeighborhoods()` for code that needs to inspect inactive or deprecated mappings directly.
 
 ## Options
 

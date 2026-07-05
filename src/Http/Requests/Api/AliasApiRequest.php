@@ -15,6 +15,7 @@ class AliasApiRequest extends ApiRequest
             'q' => ['nullable', 'string', 'min:'.$this->searchMinLength(), 'max:100'],
             'source' => ['nullable', 'in:package,custom,all'],
             'location_type' => ['nullable', Rule::in(LocationModelResolver::locationTypeKeys())],
+            'status' => ['nullable', 'in:active,inactive,deprecated,all'],
             'sort' => ['nullable', 'string', 'max:50'],
             'per_page' => ['nullable', 'integer', 'min:1', 'max:'.$this->maxPerPage()],
             'page' => ['nullable', 'integer', 'min:1'],

@@ -104,15 +104,13 @@ class LocationDatabaseInspector
 
             $query->where('source', 'package');
 
-            if (! in_array($dataset, ['aliases', 'neighborhood_region'], true)) {
-                if (! Schema::hasColumn($table, 'is_active') || ! Schema::hasColumn($table, 'deprecated_at')) {
-                    $counts[$dataset] = null;
+            if (! Schema::hasColumn($table, 'is_active') || ! Schema::hasColumn($table, 'deprecated_at')) {
+                $counts[$dataset] = null;
 
-                    continue;
-                }
-
-                $query->where('is_active', true)->whereNull('deprecated_at');
+                continue;
             }
+
+            $query->where('is_active', true)->whereNull('deprecated_at');
 
             $counts[$dataset] = $query->count();
         }

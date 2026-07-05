@@ -82,6 +82,27 @@ class LocationBuilderTest extends TestCase
             'alias' => 'Alias Province',
         ]);
 
+        $deprecatedAliasTarget = new Province([
+            'code' => 'province-deprecated-alias-search',
+            'name_fa' => 'Deprecated Alias Target',
+        ]);
+        $deprecatedAliasTarget->save();
+        $deprecatedAliasTarget->aliases()->create([
+            'alias' => 'Deprecated Alias Province',
+            'is_active' => false,
+            'deprecated_at' => CarbonImmutable::parse('2026-01-01'),
+        ]);
+
+        $inactiveAliasTarget = new Province([
+            'code' => 'province-inactive-alias-search',
+            'name_fa' => 'Inactive Alias Target',
+        ]);
+        $inactiveAliasTarget->save();
+        $inactiveAliasTarget->aliases()->create([
+            'alias' => 'Inactive Alias Province',
+            'is_active' => false,
+        ]);
+
         Province::create([
             'code' => 'province-inactive-search',
             'name_fa' => 'Needle Province',
@@ -90,12 +111,14 @@ class LocationBuilderTest extends TestCase
 
         self::assertTrue(Province::query()->search('Needle Province')->first()->is($province));
         self::assertTrue(Province::query()->search('Alias Province')->first()->is($province));
+        self::assertNull(Province::query()->search('Deprecated Alias Province')->first());
+        self::assertNull(Province::query()->search('Inactive Alias Province')->first());
 
         config()->set('iran-locations.search.include_aliases', false);
 
         self::assertNull(Province::query()->search('Alias Province')->first());
-        self::assertSame(2, Province::query()->search(null)->count());
-        self::assertSame(2, Province::query()->search('')->count());
+        self::assertSame(4, Province::query()->search(null)->count());
+        self::assertSame(4, Province::query()->search('')->count());
         self::assertSame(1, Province::query()->active()->search('Needle Province')->count());
     }
 
@@ -394,6 +417,66 @@ class LocationBuilderTest extends TestCase
         self::assertTrue($filtered->is($records['neighborhood']));
         self::assertTrue(Neighborhood::query()->filter(['missing_region' => true])->first()->is($missingRegion));
         self::assertTrue(Neighborhood::query()->filter(['has_region' => '0'])->first()->is($missingRegion));
+    }
+
+    public function test_neighborhood_builder_region_filters_use_active_pivot_mappings(): void
+    {
+        $records = $this->createGraph('active-pivot');
+        /** @var City $city */
+        $city = $records['city'];
+        /** @var CityRegion $region */
+        $region = $records['region'];
+
+        $active = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'code' => 'neighborhood-active-pivot-only',
+            'name_fa' => 'Active Pivot Only',
+            'type' => 'neighborhood',
+        ]);
+        $active->save();
+        $active->allRegions()->attach($region->getKey(), [
+            'is_primary' => false,
+            'source' => 'custom',
+            'is_active' => true,
+        ]);
+
+        $deprecated = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'code' => 'neighborhood-deprecated-pivot-only',
+            'name_fa' => 'Deprecated Pivot Only',
+            'type' => 'neighborhood',
+        ]);
+        $deprecated->save();
+        $deprecated->allRegions()->attach($region->getKey(), [
+            'is_primary' => false,
+            'source' => 'package',
+            'is_active' => false,
+            'deprecated_at' => CarbonImmutable::parse('2026-02-01'),
+        ]);
+
+        $inactive = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'code' => 'neighborhood-inactive-pivot-only',
+            'name_fa' => 'Inactive Pivot Only',
+            'type' => 'neighborhood',
+        ]);
+        $inactive->save();
+        $inactive->allRegions()->attach($region->getKey(), [
+            'is_primary' => false,
+            'source' => 'package',
+            'is_active' => false,
+        ]);
+
+        self::assertTrue(Neighborhood::query()->forRegion($region)->whereKey($active->getKey())->exists());
+        self::assertFalse(Neighborhood::query()->forRegion($region)->whereKey($deprecated->getKey())->exists());
+        self::assertFalse(Neighborhood::query()->forRegion($region)->whereKey($inactive->getKey())->exists());
+
+        self::assertTrue(Neighborhood::query()->hasRegion()->whereKey($active->getKey())->exists());
+        self::assertFalse(Neighborhood::query()->hasRegion()->whereKey($deprecated->getKey())->exists());
+        self::assertFalse(Neighborhood::query()->hasRegion()->whereKey($inactive->getKey())->exists());
+
+        self::assertTrue(Neighborhood::query()->missingRegion()->whereKey($deprecated->getKey())->exists());
+        self::assertTrue(Neighborhood::query()->missingRegion()->whereKey($inactive->getKey())->exists());
     }
 
     /**

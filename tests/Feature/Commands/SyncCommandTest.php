@@ -46,6 +46,18 @@ class SyncCommandTest extends TestCase
         self::assertSame(0, LocationDataVersion::query()->count());
     }
 
+    public function test_sync_command_accepts_active_chunk_option(): void
+    {
+        $exitCode = Artisan::call('iran-locations:sync', ['--dry-run' => true, '--chunk' => 1]);
+        $output = Artisan::output();
+
+        self::assertSame(0, $exitCode);
+        self::assertStringContainsString('Mode: dry-run', $output);
+        self::assertStringContainsString('provinces: +31', $output);
+        self::assertStringContainsString('No database changes were made.', $output);
+        self::assertSame(0, Province::query()->count());
+    }
+
     public function test_sync_applies_records_and_prints_summary(): void
     {
         $exitCode = Artisan::call('iran-locations:sync');

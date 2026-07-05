@@ -50,6 +50,8 @@ class LocationAliasController extends Controller
             $query->where('location_type', LocationModelResolver::normalizeLocationType((string) $filters['location_type']));
         }
 
+        $this->applyStatus($query, (string) ($filters['status'] ?? 'active'));
+
         $sort = (string) ($filters['sort'] ?? '');
         $direction = str_starts_with($sort, '-') ? 'desc' : 'asc';
         $column = ltrim($sort, '-');
@@ -59,5 +61,15 @@ class LocationAliasController extends Controller
         }
 
         $query->orderBy($column, $direction)->orderBy('id');
+    }
+
+    private function applyStatus(Builder $query, string $status): void
+    {
+        match ($status) {
+            'inactive' => $query->where('is_active', false),
+            'deprecated' => $query->whereNotNull('deprecated_at'),
+            'all' => $query,
+            default => $query->where('is_active', true)->whereNull('deprecated_at'),
+        };
     }
 }

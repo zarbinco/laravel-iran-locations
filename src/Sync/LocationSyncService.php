@@ -83,7 +83,7 @@ class LocationSyncService
         foreach ($datasets as $dataset) {
             $results[] = match ($dataset) {
                 'aliases' => $this->syncAliases($options, $dataVersion),
-                'neighborhood_region' => $this->syncNeighborhoodRegion($options),
+                'neighborhood_region' => $this->syncNeighborhoodRegion($options, $dataVersion),
                 default => $this->syncModelDataset($dataset, $options, $dataVersion),
             };
         }
@@ -97,26 +97,28 @@ class LocationSyncService
         $records = $this->repository->all($dataset);
         $incomingCodes = [];
 
-        foreach ($records as $index => $record) {
-            $code = $this->recordCode($record, $index);
+        foreach ($this->chunks($records, $options) as $chunk) {
+            foreach ($chunk as $index => $record) {
+                $code = $this->recordCode($record, $index);
 
-            if ($code === null) {
-                $result->add(new LocationSyncChange($dataset, "record-{$index}", 'fail', message: 'Record is missing a stable code.'));
+                if ($code === null) {
+                    $result->add(new LocationSyncChange($dataset, "record-{$index}", 'fail', message: 'Record is missing a stable code.'));
 
-                continue;
+                    continue;
+                }
+
+                $incomingCodes[$code] = true;
+
+                $payload = $this->payloadFor($dataset, $record, $dataVersion, $message);
+
+                if ($payload === null) {
+                    $result->add(new LocationSyncChange($dataset, $code, 'fail', after: $record, message: $message));
+
+                    continue;
+                }
+
+                $this->syncModelRecord($dataset, $code, $payload, $options, $result);
             }
-
-            $incomingCodes[$code] = true;
-
-            $payload = $this->payloadFor($dataset, $record, $dataVersion, $message);
-
-            if ($payload === null) {
-                $result->add(new LocationSyncChange($dataset, $code, 'fail', after: $record, message: $message));
-
-                continue;
-            }
-
-            $this->syncModelRecord($dataset, $code, $payload, $options, $result);
         }
 
         $this->handleMissingPackageRecords($dataset, $incomingCodes, $records, $options, $dataVersion, $result);
@@ -190,138 +192,157 @@ class LocationSyncService
     {
         $dataset = 'aliases';
         $result = new LocationSyncDatasetResult($dataset);
+        $records = $this->repository->aliases();
+        $incomingKeys = [];
 
-        foreach ($this->repository->aliases() as $index => $record) {
-            $code = $this->aliasCode($record, $index);
-            $payload = $this->aliasPayload($record, $dataVersion, $message);
+        foreach ($this->chunks($records, $options) as $chunk) {
+            foreach ($chunk as $index => $record) {
+                $code = $this->aliasCode($record, $index);
+                $payload = $this->aliasPayload($record, $dataVersion, $message);
 
-            if ($payload === null) {
-                $result->add(new LocationSyncChange($dataset, $code, 'fail', after: $record, message: $message));
+                if ($payload === null) {
+                    $result->add(new LocationSyncChange($dataset, $code, 'fail', after: $record, message: $message));
 
-                continue;
-            }
-
-            $existing = $this->query('aliases')
-                ->where('location_type', $payload['location_type'])
-                ->where('location_id', $payload['location_id'])
-                ->where('normalized_alias', $payload['normalized_alias'])
-                ->first();
-
-            if (! $existing instanceof Model) {
-                $result->add(new LocationSyncChange($dataset, $code, 'create', after: $payload));
-
-                if (! $options->dryRun) {
-                    $alias = $this->newModel('aliases');
-                    $alias->fill($payload);
-                    $alias->saveQuietly();
+                    continue;
                 }
 
-                continue;
-            }
+                $incomingKeys[$this->aliasKey((string) $payload['location_type'], (int) $payload['location_id'], (string) $payload['normalized_alias'])] = true;
 
-            if ($existing->getAttribute('source') === 'custom') {
-                $result->add(new LocationSyncChange($dataset, $code, 'skip', before: $this->snapshot($existing, $payload), after: $payload, message: 'Custom alias was preserved.'));
+                $existing = $this->query('aliases')
+                    ->where('location_type', $payload['location_type'])
+                    ->where('location_id', $payload['location_id'])
+                    ->where('normalized_alias', $payload['normalized_alias'])
+                    ->first();
 
-                continue;
-            }
+                if (! $existing instanceof Model) {
+                    $result->add(new LocationSyncChange($dataset, $code, 'create', after: $payload));
 
-            $changes = $this->changedAttributes($existing, $payload);
+                    if (! $options->dryRun) {
+                        $alias = $this->newModel('aliases');
+                        $alias->fill($payload);
+                        $alias->saveQuietly();
+                    }
 
-            if ($changes === []) {
-                $result->add(new LocationSyncChange($dataset, $code, 'unchanged', before: $this->snapshot($existing, $payload), after: $payload));
+                    continue;
+                }
 
-                continue;
-            }
+                if ($existing->getAttribute('source') === 'custom') {
+                    $result->add(new LocationSyncChange($dataset, $code, 'skip', before: $this->snapshot($existing, $payload), after: $payload, message: 'Custom alias was preserved.'));
 
-            $result->add(new LocationSyncChange($dataset, $code, 'update', before: $this->snapshot($existing, $payload), after: array_merge($this->snapshot($existing, $payload), $changes)));
+                    continue;
+                }
 
-            if (! $options->dryRun) {
-                $existing->fill($changes);
-                $existing->saveQuietly();
+                $changes = $this->changedAttributes($existing, $payload);
+
+                if ($changes === []) {
+                    $result->add(new LocationSyncChange($dataset, $code, 'unchanged', before: $this->snapshot($existing, $payload), after: $payload));
+
+                    continue;
+                }
+
+                $result->add(new LocationSyncChange($dataset, $code, 'update', before: $this->snapshot($existing, $payload), after: array_merge($this->snapshot($existing, $payload), $changes)));
+
+                if (! $options->dryRun) {
+                    $existing->fill($changes);
+                    $existing->saveQuietly();
+                }
             }
         }
+
+        $this->deprecateMissingPackageAliases($incomingKeys, $records, $options, $dataVersion, $result);
 
         return $result;
     }
 
-    private function syncNeighborhoodRegion(LocationSyncOptions $options): LocationSyncDatasetResult
+    private function syncNeighborhoodRegion(LocationSyncOptions $options, string $dataVersion): LocationSyncDatasetResult
     {
         $dataset = 'neighborhood_region';
         $result = new LocationSyncDatasetResult($dataset);
         $table = LocationModelResolver::table('neighborhood_region');
+        $records = $this->repository->neighborhoodRegion();
+        $incomingKeys = [];
 
-        foreach ($this->repository->neighborhoodRegion() as $index => $record) {
-            $neighborhoodCode = $this->string($record['neighborhood_code'] ?? null);
-            $cityRegionCode = $this->string($record['city_region_code'] ?? null);
-            $changeCode = ($neighborhoodCode ?? "record-{$index}").':'.($cityRegionCode ?? 'city-region');
-            $neighborhoodId = $this->resolveId('neighborhoods', $neighborhoodCode);
-            $cityRegionId = $this->resolveId('city_regions', $cityRegionCode);
+        foreach ($this->chunks($records, $options) as $chunk) {
+            foreach ($chunk as $index => $record) {
+                $neighborhoodCode = $this->string($record['neighborhood_code'] ?? null);
+                $cityRegionCode = $this->string($record['city_region_code'] ?? null);
+                $changeCode = ($neighborhoodCode ?? "record-{$index}").':'.($cityRegionCode ?? 'city-region');
+                $neighborhoodId = $this->resolveId('neighborhoods', $neighborhoodCode);
+                $cityRegionId = $this->resolveId('city_regions', $cityRegionCode);
 
-            if ($neighborhoodId === null || $cityRegionId === null) {
-                $result->add(new LocationSyncChange($dataset, $changeCode, 'fail', after: $record, message: 'Neighborhood-region dependency is missing.'));
+                if ($neighborhoodId === null || $cityRegionId === null) {
+                    $result->add(new LocationSyncChange($dataset, $changeCode, 'fail', after: $record, message: 'Neighborhood-region dependency is missing.'));
 
-                continue;
-            }
-
-            $payload = [
-                'neighborhood_id' => $neighborhoodId,
-                'city_region_id' => $cityRegionId,
-                'is_primary' => $this->boolean($record['is_primary'] ?? true),
-                'source' => $this->string($record['source'] ?? null) ?? 'package',
-                'confidence' => $this->integer($record['confidence'] ?? null),
-            ];
-
-            $existing = DB::table($table)
-                ->where('neighborhood_id', $neighborhoodId)
-                ->where('city_region_id', $cityRegionId)
-                ->first();
-
-            if ($existing === null) {
-                $result->add(new LocationSyncChange($dataset, $changeCode, 'create', after: $payload));
-
-                if (! $options->dryRun) {
-                    DB::table($table)->insert([
-                        ...$payload,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
+                    continue;
                 }
 
-                continue;
-            }
+                $payload = [
+                    'neighborhood_id' => $neighborhoodId,
+                    'city_region_id' => $cityRegionId,
+                    'is_primary' => $this->boolean($record['is_primary'] ?? true),
+                    'source' => $this->string($record['source'] ?? null) ?? 'package',
+                    'is_active' => $this->boolean($record['is_active'] ?? true),
+                    'source_version' => $this->string($record['source_version'] ?? null) ?? $this->manifestSourceVersion(),
+                    'data_version' => $dataVersion,
+                    'deprecated_at' => null,
+                    'confidence' => $this->integer($record['confidence'] ?? null),
+                ];
+                $incomingKeys[$this->mappingKey($neighborhoodId, $cityRegionId)] = true;
 
-            if (($existing->source ?? null) === 'custom') {
-                $result->add(new LocationSyncChange($dataset, $changeCode, 'skip', before: (array) $existing, after: $payload, message: 'Custom neighborhood-region mapping was preserved.'));
-
-                continue;
-            }
-
-            $changes = [];
-
-            foreach (['is_primary', 'source', 'confidence'] as $key) {
-                if (! $this->sameValue($existing->{$key} ?? null, $payload[$key])) {
-                    $changes[$key] = $payload[$key];
-                }
-            }
-
-            if ($changes === []) {
-                $result->add(new LocationSyncChange($dataset, $changeCode, 'unchanged', before: (array) $existing, after: $payload));
-
-                continue;
-            }
-
-            $result->add(new LocationSyncChange($dataset, $changeCode, 'update', before: (array) $existing, after: array_merge((array) $existing, $changes)));
-
-            if (! $options->dryRun) {
-                DB::table($table)
+                $existing = DB::table($table)
                     ->where('neighborhood_id', $neighborhoodId)
                     ->where('city_region_id', $cityRegionId)
-                    ->update([
-                        ...$changes,
-                        'updated_at' => now(),
-                    ]);
+                    ->first();
+
+                if ($existing === null) {
+                    $result->add(new LocationSyncChange($dataset, $changeCode, 'create', after: $payload));
+
+                    if (! $options->dryRun) {
+                        DB::table($table)->insert([
+                            ...$payload,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+
+                    continue;
+                }
+
+                if (($existing->source ?? null) === 'custom') {
+                    $result->add(new LocationSyncChange($dataset, $changeCode, 'skip', before: (array) $existing, after: $payload, message: 'Custom neighborhood-region mapping was preserved.'));
+
+                    continue;
+                }
+
+                $changes = [];
+
+                foreach (['is_primary', 'source', 'is_active', 'source_version', 'data_version', 'deprecated_at', 'confidence'] as $key) {
+                    if (! $this->sameValue($existing->{$key} ?? null, $payload[$key])) {
+                        $changes[$key] = $payload[$key];
+                    }
+                }
+
+                if ($changes === []) {
+                    $result->add(new LocationSyncChange($dataset, $changeCode, 'unchanged', before: (array) $existing, after: $payload));
+
+                    continue;
+                }
+
+                $result->add(new LocationSyncChange($dataset, $changeCode, 'update', before: (array) $existing, after: array_merge((array) $existing, $changes)));
+
+                if (! $options->dryRun) {
+                    DB::table($table)
+                        ->where('neighborhood_id', $neighborhoodId)
+                        ->where('city_region_id', $cityRegionId)
+                        ->update([
+                            ...$changes,
+                            'updated_at' => now(),
+                        ]);
+                }
             }
         }
+
+        $this->deprecateMissingNeighborhoodRegionMappings($incomingKeys, $records, $options, $dataVersion, $result);
 
         return $result;
     }
@@ -384,6 +405,118 @@ class LocationSyncService
         }
 
         return $records !== [] || $options->hasExplicitDatasets();
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $records
+     * @return array<int, array<int, array<string, mixed>>>
+     */
+    private function chunks(array $records, LocationSyncOptions $options): array
+    {
+        return array_chunk($records, $options->chunkSize, preserve_keys: true);
+    }
+
+    /**
+     * @param  array<string, true>  $incomingKeys
+     * @param  array<int, array<string, mixed>>  $records
+     */
+    private function deprecateMissingPackageAliases(
+        array $incomingKeys,
+        array $records,
+        LocationSyncOptions $options,
+        string $dataVersion,
+        LocationSyncDatasetResult $result,
+    ): void {
+        if (! $this->shouldDeprecateMissing($records, $options)) {
+            return;
+        }
+
+        $aliases = $this->query('aliases')
+            ->where('source', 'package')
+            ->get(['id', 'location_type', 'location_id', 'normalized_alias', 'is_active', 'deprecated_at', 'data_version']);
+
+        foreach ($aliases as $alias) {
+            $key = $this->aliasKey(
+                (string) $alias->getAttribute('location_type'),
+                (int) $alias->getAttribute('location_id'),
+                (string) $alias->getAttribute('normalized_alias'),
+            );
+
+            if (isset($incomingKeys[$key])) {
+                continue;
+            }
+
+            if ($this->isDeprecatedState($alias->getAttribute('is_active'), $alias->getAttribute('deprecated_at'))) {
+                $result->add(new LocationSyncChange('aliases', $key, 'unchanged', before: $this->aliasDeprecationSnapshot($alias), message: 'Missing package alias was already deprecated.'));
+
+                continue;
+            }
+
+            $after = [
+                'is_active' => false,
+                'deprecated_at' => $alias->freshTimestamp(),
+                'data_version' => $dataVersion,
+            ];
+
+            $result->add(new LocationSyncChange('aliases', $key, 'deprecate', before: $this->aliasDeprecationSnapshot($alias), after: $after, message: 'Package alias is missing from current package data.'));
+
+            if (! $options->dryRun) {
+                $alias->forceFill($after);
+                $alias->saveQuietly();
+            }
+        }
+    }
+
+    /**
+     * @param  array<string, true>  $incomingKeys
+     * @param  array<int, array<string, mixed>>  $records
+     */
+    private function deprecateMissingNeighborhoodRegionMappings(
+        array $incomingKeys,
+        array $records,
+        LocationSyncOptions $options,
+        string $dataVersion,
+        LocationSyncDatasetResult $result,
+    ): void {
+        if (! $this->shouldDeprecateMissing($records, $options)) {
+            return;
+        }
+
+        $table = LocationModelResolver::table('neighborhood_region');
+        $mappings = DB::table($table)
+            ->where('source', 'package')
+            ->get(['id', 'neighborhood_id', 'city_region_id', 'is_active', 'deprecated_at', 'data_version']);
+
+        foreach ($mappings as $mapping) {
+            $key = $this->mappingKey((int) $mapping->neighborhood_id, (int) $mapping->city_region_id);
+
+            if (isset($incomingKeys[$key])) {
+                continue;
+            }
+
+            if ($this->isDeprecatedState($mapping->is_active ?? null, $mapping->deprecated_at ?? null)) {
+                $result->add(new LocationSyncChange('neighborhood_region', $key, 'unchanged', before: $this->mappingDeprecationSnapshot($mapping), message: 'Missing package neighborhood-region mapping was already deprecated.'));
+
+                continue;
+            }
+
+            $after = [
+                'is_active' => false,
+                'deprecated_at' => now(),
+                'data_version' => $dataVersion,
+            ];
+
+            $result->add(new LocationSyncChange('neighborhood_region', $key, 'deprecate', before: $this->mappingDeprecationSnapshot($mapping), after: $after, message: 'Package neighborhood-region mapping is missing from current package data.'));
+
+            if (! $options->dryRun) {
+                DB::table($table)
+                    ->where('id', $mapping->id)
+                    ->update([
+                        ...$after,
+                        'updated_at' => now(),
+                    ]);
+            }
+        }
     }
 
     /**
@@ -781,6 +914,50 @@ class LocationSyncService
             'deprecated_at' => $model->getAttribute('deprecated_at'),
             'data_version' => $model->getAttribute('data_version'),
         ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function aliasDeprecationSnapshot(Model $alias): array
+    {
+        return [
+            'location_type' => $alias->getAttribute('location_type'),
+            'location_id' => $alias->getAttribute('location_id'),
+            'normalized_alias' => $alias->getAttribute('normalized_alias'),
+            'is_active' => $alias->getAttribute('is_active'),
+            'deprecated_at' => $alias->getAttribute('deprecated_at'),
+            'data_version' => $alias->getAttribute('data_version'),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function mappingDeprecationSnapshot(object $mapping): array
+    {
+        return [
+            'neighborhood_id' => $mapping->neighborhood_id ?? null,
+            'city_region_id' => $mapping->city_region_id ?? null,
+            'is_active' => $mapping->is_active ?? null,
+            'deprecated_at' => $mapping->deprecated_at ?? null,
+            'data_version' => $mapping->data_version ?? null,
+        ];
+    }
+
+    private function aliasKey(string $type, int $locationId, string $normalizedAlias): string
+    {
+        return "{$type}|{$locationId}|{$normalizedAlias}";
+    }
+
+    private function mappingKey(int $neighborhoodId, int $cityRegionId): string
+    {
+        return "{$neighborhoodId}|{$cityRegionId}";
+    }
+
+    private function isDeprecatedState(mixed $isActive, mixed $deprecatedAt): bool
+    {
+        return ! (bool) $isActive && $deprecatedAt !== null;
     }
 
     private function sameValue(mixed $current, mixed $incoming): bool

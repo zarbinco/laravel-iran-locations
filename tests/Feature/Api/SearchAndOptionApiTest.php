@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Tests\Feature\Api;
 
+use Carbon\CarbonImmutable;
 use Zarbin\IranLocations\Models\City;
 
 class SearchAndOptionApiTest extends ApiTestCase
@@ -39,6 +40,16 @@ class SearchAndOptionApiTest extends ApiTestCase
         $this->getJson('/iran-locations/api/search?q=Alias Search Province&limit=1')
             ->assertOk()
             ->assertJsonPath('results.provinces.0.code', 'province-search-api');
+
+        $records['city']->aliases()->create([
+            'alias' => 'Deprecated Search City',
+            'is_active' => false,
+            'deprecated_at' => CarbonImmutable::parse('2026-05-01'),
+        ]);
+
+        $this->getJson('/iran-locations/api/search?q=Deprecated Search City&limit=1')
+            ->assertOk()
+            ->assertJsonPath('results.cities', []);
     }
 
     public function test_alias_endpoint_filters_aliases(): void
@@ -55,7 +66,49 @@ class SearchAndOptionApiTest extends ApiTestCase
             ->assertJsonPath('data.0.id', $alias->getKey())
             ->assertJsonPath('data.0.location_type', 'city')
             ->assertJsonPath('data.0.location_id', $records['city']->getKey())
-            ->assertJsonPath('data.0.normalized_alias', 'normalized:Alias City API');
+            ->assertJsonPath('data.0.normalized_alias', 'normalized:Alias City API')
+            ->assertJsonPath('data.0.is_active', true)
+            ->assertJsonPath('data.0.deprecated_at', null);
+    }
+
+    public function test_alias_endpoint_defaults_to_active_and_supports_status_filters(): void
+    {
+        $records = $this->createLocationGraph('alias-status-api');
+
+        $active = $records['city']->aliases()->create([
+            'alias' => 'Status Alias Active',
+        ]);
+        $deprecated = $records['city']->aliases()->create([
+            'alias' => 'Status Alias Deprecated',
+            'is_active' => false,
+            'deprecated_at' => CarbonImmutable::parse('2026-06-01'),
+        ]);
+        $inactive = $records['city']->aliases()->create([
+            'alias' => 'Status Alias Inactive',
+            'is_active' => false,
+        ]);
+
+        $this->getJson('/iran-locations/api/aliases?q=Status Alias&per_page=3')
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.id', $active->getKey())
+            ->assertJsonPath('data.0.is_active', true)
+            ->assertJsonPath('data.0.deprecated_at', null);
+
+        $this->getJson('/iran-locations/api/aliases?q=Status Alias&status=all&per_page=3')
+            ->assertOk()
+            ->assertJsonCount(3, 'data');
+
+        $this->getJson('/iran-locations/api/aliases?q=Status Alias Deprecated&status=deprecated')
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $deprecated->getKey())
+            ->assertJsonPath('data.0.is_active', false);
+
+        $this->getJson('/iran-locations/api/aliases?q=Status Alias Inactive&status=inactive')
+            ->assertOk()
+            ->assertJsonPath('data.0.id', $inactive->getKey())
+            ->assertJsonPath('data.0.is_active', false)
+            ->assertJsonPath('data.0.deprecated_at', null);
     }
 
     public function test_alias_endpoint_rejects_unsupported_location_type_filter(): void

@@ -77,12 +77,19 @@ class CityRegion extends Model
 
     public function neighborhoods(): BelongsToMany
     {
+        return $this->allNeighborhoods()
+            ->wherePivot('is_active', true)
+            ->wherePivotNull('deprecated_at');
+    }
+
+    public function allNeighborhoods(): BelongsToMany
+    {
         return $this->belongsToMany(
             LocationModelResolver::model('neighborhood'),
             LocationModelResolver::table('neighborhood_region'),
             'city_region_id',
             'neighborhood_id',
-        )->withPivot(['is_primary', 'source', 'confidence'])->withTimestamps();
+        )->withPivot(['is_primary', 'source', 'is_active', 'source_version', 'data_version', 'deprecated_at', 'confidence'])->withTimestamps();
     }
 
     public function defaultNeighborhoods(): HasMany

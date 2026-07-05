@@ -104,7 +104,10 @@ class LocationBuilder extends Builder
 
             if ((bool) config('iran-locations.search.include_aliases', true) && method_exists($this->getModel(), 'aliases')) {
                 $query->orWhereHas('aliases', function (Builder $aliasQuery) use ($normalized): void {
-                    $aliasQuery->where('normalized_alias', 'like', $this->like($normalized));
+                    $aliasQuery
+                        ->where('is_active', true)
+                        ->whereNull('deprecated_at')
+                        ->where('normalized_alias', 'like', $this->like($normalized));
                 });
             }
         });

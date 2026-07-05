@@ -29,3 +29,9 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Changed alias `location_type` storage, admin/API filters, resources, and sync payloads to use stable public morph-map keys instead of PHP class names.
 - Changed data-version sync tracking so repeated successful syncs for the same data version and checksum update the existing row instead of appending duplicates.
 - Clarified alias deprecation lifecycle so aliases do not persist `replaced_by_id`, and normalized missing data-version checksums to an empty string for database-enforced idempotence.
+- Made sync `--chunk` an active record-processing batch option for model datasets, aliases, and neighborhood-region mappings.
+- Added lifecycle fields and stale deprecation handling for package-owned neighborhood-region mappings.
+- Added stale deprecation handling for package-owned aliases while preserving custom aliases and mappings.
+- Changed active search to ignore inactive and deprecated aliases.
+- Changed normal neighborhood-region relationships to return active, non-deprecated mappings by default, with all-mapping helpers for maintenance access.
+- Changed the alias API to default to active aliases, expose lifecycle fields, and support `status=active|inactive|deprecated|all`.

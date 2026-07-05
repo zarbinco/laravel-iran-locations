@@ -18,7 +18,7 @@ class SyncCommand extends Command
         {--only= : Comma-separated datasets to sync}
         {--force : Allow package sync to update records with unknown source}
         {--no-deprecate : Do not deprecate missing package records}
-        {--chunk=500 : Reserved chunk size option for large datasets}';
+        {--chunk=500 : Number of package data records processed per sync chunk}';
 
     protected $description = 'Synchronize package Iran location data safely.';
 

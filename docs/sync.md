@@ -29,10 +29,15 @@ Repeated successful syncs for the same `data_version` and checksum update that r
 - Package-owned records are matched by stable `code`.
 - Custom records with `source = custom` are always preserved; this is not configurable.
 - Package data is required to contain normalized/searchable fields. Sync writes those normalized fields and fills missing normalized or slug fields through the configured `LocationNormalizer`.
-- Missing package-owned records are deprecated by default.
+- Missing package-owned records, aliases, and neighborhood-region mappings are deprecated by default.
+- Custom records, aliases, and neighborhood-region mappings are always preserved.
 - Hard delete behavior is rejected by the sync service.
 - Empty non-authoritative datasets are not used to deprecate records during default full sync.
-- Alias sync stores stable location type keys and package lifecycle fields. Alias deprecation uses `is_active` and `deprecated_at`; aliases do not use `replaced_by_id`. It does not perform full stale alias cleanup yet; broader alias and neighborhood-region stale policy is reserved for a later phase.
+- Alias sync stores stable location type keys and package lifecycle fields. Alias deprecation uses `is_active` and `deprecated_at`; aliases do not use `replaced_by_id`.
+- Neighborhood-region mappings have lifecycle fields and stale package mappings are deprecated, not deleted.
+- Deprecated aliases are not used by normal active location search.
+- Normal neighborhood-region relationships consume active, non-deprecated mappings. Use `allRegions()` and `allNeighborhoods()` when maintenance code needs inactive or deprecated mapping rows.
+- Explicit `--only=<dataset>` with an empty dataset is treated as intentional and may deprecate stale package-owned rows for that dataset.
 
 `package_record_delete_behavior` supports the safe `deprecate` behavior. Configuring hard delete is intentionally rejected by the sync service. Admin direct mutation of package-owned records is controlled separately by `data.allow_package_record_direct_edit`.
 
@@ -51,4 +56,12 @@ php artisan iran-locations:install --sync
 
 ## Options
 
-Use `--dataset` to sync selected datasets. Use `--no-deprecate` to preserve missing package records during a sync. Use `--force` only when you intentionally want package sync to manage records with an unexpected source.
+Use `--only` to sync selected datasets. Use `--no-deprecate` to preserve missing package records during a sync. Use `--force` only when you intentionally want package sync to manage records with an unexpected source.
+
+Use `--chunk` to control how many package data records are processed per sync batch:
+
+```bash
+php artisan iran-locations:sync --chunk=100
+```
+
+The current JSON repository still loads package data from local JSON files before sync processing starts. Chunking controls processing batches for normal datasets, aliases, and neighborhood-region mappings; it is not streaming file I/O.

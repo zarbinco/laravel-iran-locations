@@ -27,6 +27,10 @@ class LocationAliasResource extends JsonResource
             'normalized_alias' => $model->getAttribute('normalized_alias'),
             'reason' => $model->getAttribute('reason'),
             'source' => $model->getAttribute('source'),
+            'is_active' => (bool) $model->getAttribute('is_active'),
+            'source_version' => $model->getAttribute('source_version'),
+            'data_version' => $model->getAttribute('data_version'),
+            'deprecated_at' => $model->getAttribute('deprecated_at'),
         ];
     }
 

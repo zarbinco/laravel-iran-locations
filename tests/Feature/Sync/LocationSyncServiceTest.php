@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zarbin\IranLocations\Tests\Feature\Sync;
 
 use Carbon\CarbonImmutable;
+use Illuminate\Support\Facades\DB;
 use Zarbin\IranLocations\Contracts\LocationDataRepository;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
 use Zarbin\IranLocations\Data\LocationDataManifest;
@@ -20,6 +21,7 @@ use Zarbin\IranLocations\Models\OfficialDistrict;
 use Zarbin\IranLocations\Models\Province;
 use Zarbin\IranLocations\Models\RuralDistrict;
 use Zarbin\IranLocations\Support\LocationDatabaseInspector;
+use Zarbin\IranLocations\Support\LocationModelResolver;
 use Zarbin\IranLocations\Sync\LocationSyncException;
 use Zarbin\IranLocations\Sync\LocationSyncOptions;
 use Zarbin\IranLocations\Sync\LocationSyncService;
@@ -112,6 +114,71 @@ class LocationSyncServiceTest extends TestCase
         self::assertSame($firstVersion->getKey(), $secondVersion->getKey());
         self::assertNotSame('', $secondVersion->getAttribute('checksum'));
         self::assertNotEmpty($secondVersion->getAttribute('summary'));
+    }
+
+    public function test_chunk_size_one_full_sync_matches_default_dry_run_totals(): void
+    {
+        $service = $this->app->make(LocationSyncService::class);
+
+        $default = $service->sync(LocationSyncOptions::make(dryRun: true));
+        $chunked = $service->sync(LocationSyncOptions::make(dryRun: true, chunkSize: 1));
+
+        self::assertTrue($chunked->isSuccessful());
+        self::assertSame($default->totals(), $chunked->totals());
+        self::assertSame($default->summary()['datasets'], $chunked->summary()['datasets']);
+    }
+
+    public function test_alias_sync_with_chunk_size_one_creates_aliases(): void
+    {
+        $records = $this->createSyncGraph('alias-chunk');
+        $repository = new ArrayLocationDataRepository([
+            'aliases' => [
+                [
+                    'location_type' => 'province',
+                    'location_code' => $records['province']->getAttribute('code'),
+                    'alias' => 'Chunk Alias One',
+                    'normalized_alias' => 'chunk alias one',
+                ],
+                [
+                    'location_type' => 'province',
+                    'location_code' => $records['province']->getAttribute('code'),
+                    'alias' => 'Chunk Alias Two',
+                    'normalized_alias' => 'chunk alias two',
+                ],
+            ],
+        ]);
+
+        $result = $this->serviceFor($repository)->sync(LocationSyncOptions::make(datasets: ['aliases'], chunkSize: 1));
+
+        self::assertTrue($result->isSuccessful());
+        self::assertSame(2, $result->datasetsByName()['aliases']->totals()['created']);
+        self::assertSame(2, LocationAlias::query()->where('location_type', 'province')->count());
+    }
+
+    public function test_neighborhood_region_sync_with_chunk_size_one_creates_mappings(): void
+    {
+        $first = $this->createSyncGraph('mapping-chunk-one');
+        $second = $this->createSyncGraph('mapping-chunk-two');
+        $repository = new ArrayLocationDataRepository([
+            'neighborhood_region' => [
+                [
+                    'neighborhood_code' => $first['neighborhood']->getAttribute('code'),
+                    'city_region_code' => $first['region']->getAttribute('code'),
+                    'is_primary' => true,
+                ],
+                [
+                    'neighborhood_code' => $second['neighborhood']->getAttribute('code'),
+                    'city_region_code' => $second['region']->getAttribute('code'),
+                    'is_primary' => false,
+                ],
+            ],
+        ]);
+
+        $result = $this->serviceFor($repository)->sync(LocationSyncOptions::make(datasets: ['neighborhood_region'], chunkSize: 1));
+
+        self::assertTrue($result->isSuccessful());
+        self::assertSame(2, $result->datasetsByName()['neighborhood_region']->totals()['created']);
+        self::assertSame(2, DB::table(LocationModelResolver::table('neighborhood_region'))->where('source', 'package')->count());
     }
 
     public function test_custom_records_are_preserved_and_not_overwritten(): void
@@ -371,6 +438,121 @@ class LocationSyncServiceTest extends TestCase
         self::assertNull($alias->getAttribute('deprecated_at'));
     }
 
+    public function test_package_alias_missing_from_explicit_alias_dataset_is_deprecated(): void
+    {
+        $records = $this->createSyncGraph('alias-stale-package');
+        $alias = $this->packageAlias($records['province'], 'Package Alias Missing');
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository(['aliases' => []]))
+            ->sync(LocationSyncOptions::make(datasets: ['aliases']));
+
+        $alias->refresh();
+
+        self::assertSame(1, $result->datasetsByName()['aliases']->totals()['deprecated']);
+        self::assertFalse((bool) $alias->getAttribute('is_active'));
+        self::assertNotNull($alias->getAttribute('deprecated_at'));
+        self::assertSame('test', $alias->getAttribute('data_version'));
+    }
+
+    public function test_custom_alias_missing_from_explicit_alias_dataset_is_preserved(): void
+    {
+        $records = $this->createSyncGraph('alias-stale-custom');
+        $alias = $this->packageAlias($records['province'], 'Custom Alias Missing', source: 'custom');
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository(['aliases' => []]))
+            ->sync(LocationSyncOptions::make(datasets: ['aliases']));
+
+        $alias->refresh();
+
+        self::assertSame(0, $result->datasetsByName()['aliases']->totals()['deprecated']);
+        self::assertTrue((bool) $alias->getAttribute('is_active'));
+        self::assertNull($alias->getAttribute('deprecated_at'));
+        self::assertSame('custom', $alias->getAttribute('source'));
+    }
+
+    public function test_already_deprecated_stale_package_alias_reports_unchanged(): void
+    {
+        $records = $this->createSyncGraph('alias-stale-deprecated');
+        $alias = $this->packageAlias($records['province'], 'Deprecated Alias Missing', isActive: false, deprecatedAt: now());
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository(['aliases' => []]))
+            ->sync(LocationSyncOptions::make(datasets: ['aliases']));
+
+        $alias->refresh();
+
+        self::assertSame(1, $result->datasetsByName()['aliases']->totals()['unchanged']);
+        self::assertSame(0, $result->datasetsByName()['aliases']->totals()['deprecated']);
+        self::assertFalse((bool) $alias->getAttribute('is_active'));
+        self::assertNotNull($alias->getAttribute('deprecated_at'));
+    }
+
+    public function test_dry_run_reports_stale_alias_deprecation_without_mutating(): void
+    {
+        $records = $this->createSyncGraph('alias-stale-dry-run');
+        $alias = $this->packageAlias($records['province'], 'Dry Run Alias Missing');
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository(['aliases' => []]))
+            ->sync(LocationSyncOptions::make(dryRun: true, datasets: ['aliases']));
+
+        $alias->refresh();
+
+        self::assertSame(1, $result->datasetsByName()['aliases']->totals()['deprecated']);
+        self::assertTrue((bool) $alias->getAttribute('is_active'));
+        self::assertNull($alias->getAttribute('deprecated_at'));
+    }
+
+    public function test_default_full_sync_with_empty_aliases_does_not_deprecate_package_aliases(): void
+    {
+        $records = $this->createSyncGraph('alias-default-empty');
+        $alias = $this->packageAlias($records['province'], 'Default Empty Alias');
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository([]))->sync();
+
+        $alias->refresh();
+
+        self::assertSame(0, $result->datasetsByName()['aliases']->totals()['deprecated']);
+        self::assertTrue((bool) $alias->getAttribute('is_active'));
+        self::assertNull($alias->getAttribute('deprecated_at'));
+    }
+
+    public function test_explicit_empty_alias_dataset_deprecates_package_aliases(): void
+    {
+        $records = $this->createSyncGraph('alias-explicit-empty');
+        $alias = $this->packageAlias($records['province'], 'Explicit Empty Alias');
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository([]))
+            ->sync(LocationSyncOptions::make(datasets: ['aliases']));
+
+        $alias->refresh();
+
+        self::assertSame(1, $result->datasetsByName()['aliases']->totals()['deprecated']);
+        self::assertFalse((bool) $alias->getAttribute('is_active'));
+        self::assertSame('province', $alias->getAttribute('location_type'));
+    }
+
+    public function test_alias_stale_policy_uses_stable_location_type_keys(): void
+    {
+        $records = $this->createSyncGraph('alias-stable-key');
+        $alias = $this->packageAlias($records['province'], 'Stable Key Alias');
+        $repository = new ArrayLocationDataRepository([
+            'aliases' => [[
+                'location_type' => 'provinces',
+                'location_code' => $records['province']->getAttribute('code'),
+                'alias' => 'Stable Key Alias',
+                'normalized_alias' => $alias->getAttribute('normalized_alias'),
+            ]],
+        ]);
+
+        $result = $this->serviceFor($repository)->sync(LocationSyncOptions::make(datasets: ['aliases']));
+
+        $alias->refresh();
+
+        self::assertSame(0, $result->datasetsByName()['aliases']->totals()['deprecated']);
+        self::assertSame('province', $alias->getAttribute('location_type'));
+        self::assertTrue((bool) $alias->getAttribute('is_active'));
+        self::assertNull($alias->getAttribute('deprecated_at'));
+    }
+
     public function test_repeated_sync_with_missing_checksum_uses_empty_checksum_and_updates_same_data_version_row(): void
     {
         $repository = new ArrayLocationDataRepository([
@@ -392,6 +574,113 @@ class LocationSyncServiceTest extends TestCase
         self::assertNotEmpty($secondVersion->getAttribute('summary'));
     }
 
+    public function test_package_neighborhood_region_mapping_missing_from_explicit_dataset_is_deprecated(): void
+    {
+        $records = $this->createSyncGraph('mapping-stale-package');
+        $this->insertNeighborhoodRegionMapping($records['neighborhood'], $records['region']);
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository(['neighborhood_region' => []]))
+            ->sync(LocationSyncOptions::make(datasets: ['neighborhood_region']));
+        $mapping = $this->mappingRow($records['neighborhood'], $records['region']);
+
+        self::assertSame(1, $result->datasetsByName()['neighborhood_region']->totals()['deprecated']);
+        self::assertFalse((bool) $mapping->is_active);
+        self::assertNotNull($mapping->deprecated_at);
+        self::assertSame('test', $mapping->data_version);
+    }
+
+    public function test_custom_neighborhood_region_mapping_missing_from_explicit_dataset_is_preserved(): void
+    {
+        $records = $this->createSyncGraph('mapping-stale-custom');
+        $this->insertNeighborhoodRegionMapping($records['neighborhood'], $records['region'], source: 'custom');
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository(['neighborhood_region' => []]))
+            ->sync(LocationSyncOptions::make(datasets: ['neighborhood_region']));
+        $mapping = $this->mappingRow($records['neighborhood'], $records['region']);
+
+        self::assertSame(0, $result->datasetsByName()['neighborhood_region']->totals()['deprecated']);
+        self::assertTrue((bool) $mapping->is_active);
+        self::assertNull($mapping->deprecated_at);
+        self::assertSame('custom', $mapping->source);
+    }
+
+    public function test_already_deprecated_stale_neighborhood_region_mapping_reports_unchanged(): void
+    {
+        $records = $this->createSyncGraph('mapping-stale-deprecated');
+        $this->insertNeighborhoodRegionMapping($records['neighborhood'], $records['region'], isActive: false, deprecatedAt: now());
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository(['neighborhood_region' => []]))
+            ->sync(LocationSyncOptions::make(datasets: ['neighborhood_region']));
+        $mapping = $this->mappingRow($records['neighborhood'], $records['region']);
+
+        self::assertSame(1, $result->datasetsByName()['neighborhood_region']->totals()['unchanged']);
+        self::assertSame(0, $result->datasetsByName()['neighborhood_region']->totals()['deprecated']);
+        self::assertFalse((bool) $mapping->is_active);
+        self::assertNotNull($mapping->deprecated_at);
+    }
+
+    public function test_dry_run_reports_stale_neighborhood_region_mapping_deprecation_without_mutating(): void
+    {
+        $records = $this->createSyncGraph('mapping-stale-dry-run');
+        $this->insertNeighborhoodRegionMapping($records['neighborhood'], $records['region']);
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository(['neighborhood_region' => []]))
+            ->sync(LocationSyncOptions::make(dryRun: true, datasets: ['neighborhood_region']));
+        $mapping = $this->mappingRow($records['neighborhood'], $records['region']);
+
+        self::assertSame(1, $result->datasetsByName()['neighborhood_region']->totals()['deprecated']);
+        self::assertTrue((bool) $mapping->is_active);
+        self::assertNull($mapping->deprecated_at);
+    }
+
+    public function test_default_full_sync_with_empty_neighborhood_region_does_not_deprecate_package_mappings(): void
+    {
+        $records = $this->createSyncGraph('mapping-default-empty');
+        $this->insertNeighborhoodRegionMapping($records['neighborhood'], $records['region']);
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository([]))->sync();
+        $mapping = $this->mappingRow($records['neighborhood'], $records['region']);
+
+        self::assertSame(0, $result->datasetsByName()['neighborhood_region']->totals()['deprecated']);
+        self::assertTrue((bool) $mapping->is_active);
+        self::assertNull($mapping->deprecated_at);
+    }
+
+    public function test_explicit_empty_neighborhood_region_dataset_deprecates_package_mappings(): void
+    {
+        $records = $this->createSyncGraph('mapping-explicit-empty');
+        $this->insertNeighborhoodRegionMapping($records['neighborhood'], $records['region']);
+
+        $result = $this->serviceFor(new ArrayLocationDataRepository([]))
+            ->sync(LocationSyncOptions::make(datasets: ['neighborhood_region']));
+        $mapping = $this->mappingRow($records['neighborhood'], $records['region']);
+
+        self::assertSame(1, $result->datasetsByName()['neighborhood_region']->totals()['deprecated']);
+        self::assertFalse((bool) $mapping->is_active);
+        self::assertNotNull($mapping->deprecated_at);
+    }
+
+    public function test_current_package_neighborhood_region_mapping_reactivates_deprecated_mapping(): void
+    {
+        $records = $this->createSyncGraph('mapping-reactivate');
+        $this->insertNeighborhoodRegionMapping($records['neighborhood'], $records['region'], isActive: false, deprecatedAt: now(), dataVersion: 'old');
+        $repository = new ArrayLocationDataRepository([
+            'neighborhood_region' => [[
+                'neighborhood_code' => $records['neighborhood']->getAttribute('code'),
+                'city_region_code' => $records['region']->getAttribute('code'),
+                'is_primary' => true,
+            ]],
+        ]);
+
+        $result = $this->serviceFor($repository)->sync(LocationSyncOptions::make(datasets: ['neighborhood_region']));
+        $mapping = $this->mappingRow($records['neighborhood'], $records['region']);
+
+        self::assertSame(1, $result->datasetsByName()['neighborhood_region']->totals()['updated']);
+        self::assertTrue((bool) $mapping->is_active);
+        self::assertNull($mapping->deprecated_at);
+        self::assertSame('test', $mapping->data_version);
+    }
+
     public function test_hard_delete_behavior_is_rejected(): void
     {
         config()->set('iran-locations.data.package_record_delete_behavior', 'delete');
@@ -400,6 +689,115 @@ class LocationSyncServiceTest extends TestCase
         $this->expectExceptionMessage('Hard delete behavior is not supported');
 
         $this->app->make(LocationSyncService::class)->sync(LocationSyncOptions::make(datasets: ['provinces']));
+    }
+
+    /**
+     * @return array{province: Province, city: City, region: CityRegion, neighborhood: Neighborhood}
+     */
+    private function createSyncGraph(string $suffix): array
+    {
+        $province = new Province([
+            'code' => "test.province.{$suffix}",
+            'name_fa' => "Province {$suffix}",
+            'normalized_name' => "province {$suffix}",
+            'source' => 'package',
+            'data_version' => 'old',
+        ]);
+        $province->save();
+
+        $city = new City([
+            'province_id' => $province->getKey(),
+            'code' => "test.city.{$suffix}",
+            'name_fa' => "City {$suffix}",
+            'normalized_name' => "city {$suffix}",
+            'source' => 'package',
+            'data_version' => 'old',
+        ]);
+        $city->save();
+
+        $region = new CityRegion([
+            'city_id' => $city->getKey(),
+            'code' => "test.region.{$suffix}",
+            'number' => 1,
+            'name_fa' => "Region {$suffix}",
+            'normalized_name' => "region {$suffix}",
+            'source' => 'package',
+            'data_version' => 'old',
+        ]);
+        $region->save();
+
+        $neighborhood = new Neighborhood([
+            'city_id' => $city->getKey(),
+            'default_city_region_id' => $region->getKey(),
+            'code' => "test.neighborhood.{$suffix}",
+            'name_fa' => "Neighborhood {$suffix}",
+            'normalized_name' => "neighborhood {$suffix}",
+            'source' => 'package',
+            'data_version' => 'old',
+        ]);
+        $neighborhood->save();
+
+        return [
+            'province' => $province,
+            'city' => $city,
+            'region' => $region,
+            'neighborhood' => $neighborhood,
+        ];
+    }
+
+    private function packageAlias(
+        Province $province,
+        string $alias,
+        string $source = 'package',
+        bool $isActive = true,
+        mixed $deprecatedAt = null,
+    ): LocationAlias {
+        $model = $province->aliases()->create([
+            'alias' => $alias,
+            'normalized_alias' => strtolower($alias),
+            'source' => $source,
+            'data_version' => 'old',
+            'is_active' => $isActive,
+            'deprecated_at' => $deprecatedAt,
+        ]);
+        self::assertInstanceOf(LocationAlias::class, $model);
+
+        return $model;
+    }
+
+    private function insertNeighborhoodRegionMapping(
+        Neighborhood $neighborhood,
+        CityRegion $region,
+        string $source = 'package',
+        bool $isActive = true,
+        mixed $deprecatedAt = null,
+        string $dataVersion = 'old',
+    ): void {
+        DB::table(LocationModelResolver::table('neighborhood_region'))->insert([
+            'neighborhood_id' => $neighborhood->getKey(),
+            'city_region_id' => $region->getKey(),
+            'is_primary' => true,
+            'source' => $source,
+            'is_active' => $isActive,
+            'source_version' => 'old-source',
+            'data_version' => $dataVersion,
+            'deprecated_at' => $deprecatedAt,
+            'confidence' => 100,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+
+    private function mappingRow(Neighborhood $neighborhood, CityRegion $region): object
+    {
+        $mapping = DB::table(LocationModelResolver::table('neighborhood_region'))
+            ->where('neighborhood_id', $neighborhood->getKey())
+            ->where('city_region_id', $region->getKey())
+            ->first();
+
+        self::assertIsObject($mapping);
+
+        return $mapping;
     }
 
     private function serviceFor(LocationDataRepository $repository): LocationSyncService
