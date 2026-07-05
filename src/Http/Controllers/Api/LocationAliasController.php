@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Zarbin\IranLocations\Http\Controllers\Api;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
@@ -17,8 +18,18 @@ class LocationAliasController extends Controller
 {
     use ResolvesLocationApiModels;
 
-    public function index(AliasApiRequest $request): AnonymousResourceCollection
+    public function index(AliasApiRequest $request): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return response()->json([
+                'data' => [],
+                'meta' => [
+                    'driver' => 'json',
+                    'mode' => 'read-only packaged JSON',
+                ],
+            ]);
+        }
+
         $filters = $request->validated();
         $query = $this->query('location_alias');
 

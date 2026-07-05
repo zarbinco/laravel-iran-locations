@@ -1,6 +1,6 @@
 # Laravel Iran Locations
 
-Laravel Iran Locations provides Iran location data, Eloquent models, safe database sync, query helpers, optional admin screens, optional read-only API endpoints, and plain Blade select components for Laravel applications.
+Laravel Iran Locations provides Iran location data, Eloquent models, safe database sync, a read-only JSON driver, query helpers, optional admin screens, optional read-only API endpoints, and plain Blade select components for Laravel applications.
 
 > Pre-release note: this package is currently private and unreleased. The packaged dataset is versioned separately from any future package tag; the current data version is `0.2.0-dev`. Some supported dataset surfaces may be incomplete in this version, so a public/stable release should wait until the release checklist and consumer smoke tests pass.
 
@@ -8,6 +8,7 @@ Laravel Iran Locations provides Iran location data, Eloquent models, safe databa
 
 - Iran provinces, counties, official districts, rural districts, cities, and Tehran municipal records from a packaged dataset
 - Versioned package data with manifest counts and checksums
+- Read-only JSON driver for no-migration dropdowns, options, and search
 - Persian text normalization through `zarbinco/laravel-persian-core`
 - Safe database sync with dry-run support
 - Eloquent models, relationships, configurable tables, and configurable model classes
@@ -36,6 +37,12 @@ Laravel Iran Locations provides Iran location data, Eloquent models, safe databa
 composer require zarbinco/laravel-iran-locations
 ```
 
+Database mode is the default full-featured mode:
+
+```env
+IRAN_LOCATIONS_DRIVER=database
+```
+
 Publish the config, migrations, and views as needed:
 
 ```bash
@@ -43,19 +50,29 @@ php artisan vendor:publish --tag=iran-locations-config
 php artisan vendor:publish --tag=iran-locations-migrations
 php artisan vendor:publish --tag=iran-locations-views
 php artisan migrate
+php artisan iran-locations:sync --dry-run
+php artisan iran-locations:sync
 ```
+
+For read-only no-migration usage, select the JSON driver:
+
+```env
+IRAN_LOCATIONS_DRIVER=json
+```
+
+```bash
+composer require zarbinco/laravel-iran-locations
+```
+
+No vendor-published migrations, `php artisan migrate`, or `iran-locations:sync` are required in JSON mode. It reads packaged `data/*.json` directly and is intended for dropdowns, read-only lists, public options/search APIs, validation lists, and lightweight apps. JSON mode is read-only: no custom records, admin CRUD, database relationships, sync, or user edits. Select and API option values are stable location codes.
+JSON mode uses codes, not database IDs. Use code filters and props such as `province_code`, `city_code`, `provinceCode`, and `cityCode`; ID filters and ID props are database-driver only. Cross-request JSON caching is disabled by default for no-migration safety. If you set `IRAN_LOCATIONS_JSON_CACHE=true`, the package uses your application cache store.
 
 ## Syncing Data
 
-Review changes first:
+Sync is available only in database mode. Review changes first, then apply:
 
 ```bash
 php artisan iran-locations:sync --dry-run
-```
-
-Apply the packaged data:
-
-```bash
 php artisan iran-locations:sync
 php artisan iran-locations:status
 php artisan iran-locations:doctor
@@ -106,6 +123,19 @@ Stale package-owned aliases are deprecated by sync. Normal location search and t
 ## Normalization
 
 The package delegates Persian display, search, slug, and alias normalization to `zarbinco/laravel-persian-core` through the `LocationNormalizer` contract. It does not duplicate Persian character replacement or digit normalization logic locally.
+
+## Read API
+
+The facade exposes a small read API backed by the configured storage driver:
+
+```php
+use Zarbin\IranLocations\Facades\IranLocations;
+
+$provinces = IranLocations::all('provinces');
+$tehran = IranLocations::find('city', 's.01.01.01.01');
+$cityOptions = IranLocations::options('cities', ['province_code' => 'p.01']);
+$matches = IranLocations::search('تهران');
+```
 
 ## Eloquent Usage
 
@@ -199,8 +229,9 @@ The API is disabled by default. Enable it in config:
 ```
 
 Default endpoints are mounted under `iran-locations/api` and include status, search, list, nested list, alias, and option endpoints. The API is read-only.
+In JSON mode, read/list/options/search/status endpoints use packaged JSON directly and public values are codes instead of database IDs.
 The default API middleware stack is `['api']`; public applications should configure middleware deliberately, for example `['api', 'throttle:60,1']` or their own throttle/auth stack.
-Nested API route parents resolve active, non-deprecated records by default. Conflicting nested parent filters, such as `/provinces/1/cities?province_id=2`, return `422` instead of being silently overridden.
+Nested API route parents resolve active, non-deprecated records by default. Conflicting nested parent filters, such as `/provinces/p.01/cities?province_code=p.02`, return `422` instead of being silently overridden. In JSON mode, database ID filters such as `province_id` return `422`; use the matching code filter instead.
 HTTP request validation enforces `search.min_length` for API/admin search inputs that include `q`.
 
 ## Blade Components
@@ -208,16 +239,17 @@ HTTP request validation enforces `search.min_length` for API/admin search inputs
 The package registers components under the `iran-locations` namespace:
 
 ```blade
-<x-iran-locations::province-select name="province_id" />
-<x-iran-locations::city-select name="city_id" :province-id="$provinceId" />
-<x-iran-locations::neighborhood-select name="neighborhood_id" :city-id="$cityId" />
+<x-iran-locations::province-select name="province_code" />
+<x-iran-locations::city-select name="city_code" province-code="p.01" />
+<x-iran-locations::neighborhood-select name="neighborhood_code" city-code="s.01.01.01.01" />
 ```
 
 Components are plain Blade, preserve old input, support parent filters, and require no JavaScript.
+Component option values are stable location codes. Code-based parent props work in both storage modes; database ID parent props require the database driver and return no JSON-mode options when used alone.
 
 ## Configuration
 
-`config/iran-locations.php` controls table names, model classes, route keys, save-time normalization, package-record admin edit policy, admin routes, API routes, search, and pagination. Models and tables can be overridden for application-specific needs.
+`config/iran-locations.php` controls storage driver, table names, model classes, route keys, save-time normalization, package-record admin edit policy, admin routes, API routes, search, and pagination. Models and tables can be overridden for application-specific needs in database mode.
 
 ## Testing
 

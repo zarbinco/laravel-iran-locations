@@ -18,6 +18,7 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Added Persian Core-backed normalization.
 - Added configurable models, tables, route keys, and relationships.
 - Added safe database sync with dry-run, deprecation, custom record preservation, and data-version tracking.
+- Added a read-only JSON driver for no-migration usage from packaged `data/*.json`; database mode remains the default.
 - Added query builders, filters, and alias-aware search.
 - Added optional admin UI, optional read-only API, and Blade select components.
 
@@ -36,6 +37,7 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Added lifecycle fields and stale deprecation handling for package-owned neighborhood-region mappings.
 - Added stale deprecation handling for package-owned aliases while preserving custom aliases and mappings.
 - Changed active search to ignore inactive and deprecated aliases.
+- Changed select and option outputs to prefer stable public codes as values, including JSON mode where database IDs do not exist.
 - Changed normal neighborhood-region relationships to return active, non-deprecated mappings by default, with all-mapping helpers for maintenance access.
 - Changed the alias API to default to active aliases, expose lifecycle fields, and support `status=active|inactive|deprecated|all`.
 - Normalized packaged Persian display data from Arabic `ك/ي` to Persian `ک/ی`.

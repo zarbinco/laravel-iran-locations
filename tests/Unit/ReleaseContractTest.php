@@ -17,6 +17,8 @@ class ReleaseContractTest extends TestCase
         $normalization = $config['normalization'];
         /** @var array<string, mixed> $data */
         $data = $config['data'];
+        /** @var array<string, mixed> $storage */
+        $storage = $config['storage'];
         /** @var array<string, mixed> $admin */
         $admin = $config['admin'];
         /** @var array<string, mixed> $api */
@@ -24,6 +26,9 @@ class ReleaseContractTest extends TestCase
 
         self::assertArrayNotHasKey('on_sync', $normalization);
         self::assertArrayNotHasKey('preserve_custom_records', $data);
+        self::assertSame('database', $storage['driver']);
+        self::assertArrayHasKey('json', $storage);
+        self::assertFalse($storage['json']['cache']);
         self::assertFalse($data['allow_package_record_direct_edit']);
         self::assertFalse($admin['enabled']);
         self::assertFalse($api['enabled']);

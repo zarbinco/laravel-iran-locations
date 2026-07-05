@@ -14,6 +14,24 @@ class StatusController extends Controller
     public function __invoke(IranLocationsManager $locations, LocationDatabaseInspector $database): JsonResponse
     {
         $manifest = $locations->dataManifest();
+
+        if (strtolower((string) config('iran-locations.storage.driver', 'database')) === 'json') {
+            return response()->json([
+                'driver' => 'json',
+                'mode' => 'read-only',
+                'data_version' => $locations->dataVersion(),
+                'manifest' => [
+                    'checksum' => $manifest['checksum'] ?? null,
+                    'counts' => $manifest['counts'] ?? [],
+                    'contains' => $manifest['contains'] ?? [],
+                ],
+                'database' => [
+                    'tables' => 'skipped',
+                    'sync_required' => false,
+                ],
+            ]);
+        }
+
         $databasePackageCounts = $database->packageActiveDatasetCounts();
         $latestAppliedVersion = $database->latestAppliedVersion();
 

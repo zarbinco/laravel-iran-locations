@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Zarbin\IranLocations\Http\Controllers\Api\Concerns\ResolvesLocationApiModels;
@@ -14,8 +15,12 @@ class RuralDistrictController extends Controller
 {
     use ResolvesLocationApiModels;
 
-    public function index(RuralDistrictApiRequest $request): AnonymousResourceCollection
+    public function index(RuralDistrictApiRequest $request): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readCollectionResponse('rural_district', $request);
+        }
+
         $query = $this->query('rural_district')->with(['province', 'county', 'officialDistrict']);
         $this->applyLocationFilters($query, $request->validated());
 

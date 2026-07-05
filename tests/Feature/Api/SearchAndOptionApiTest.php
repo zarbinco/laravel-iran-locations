@@ -161,7 +161,7 @@ class SearchAndOptionApiTest extends ApiTestCase
 
         $this->getJson('/iran-locations/api/options/cities?province_id='.$records['province']->getKey().'&limit=3')
             ->assertOk()
-            ->assertJsonPath('0.value', $records['city']->getKey())
+            ->assertJsonPath('0.value', $records['city']->getAttribute('code'))
             ->assertJsonPath('0.code', 'city-options-api')
             ->assertJsonPath('0.label', 'City options-api')
             ->assertJsonMissing(['code' => 'city-options-other-api'])

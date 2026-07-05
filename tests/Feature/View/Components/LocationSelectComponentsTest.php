@@ -51,12 +51,12 @@ class LocationSelectComponentsTest extends TestCase
 
         $html = Blade::render(
             '<x-iran-locations::city-select name="city_id" :province-id="$provinceId" :selected="$selected" />',
-            ['provinceId' => $records['province']->getKey(), 'selected' => $records['city']->getKey()],
+            ['provinceId' => $records['province']->getKey(), 'selected' => $records['city']->getAttribute('code')],
         );
 
         self::assertStringContainsString('City component-city', $html);
         self::assertStringNotContainsString('City component-city-other', $html);
-        self::assertMatchesRegularExpression('/value="'.$records['city']->getKey().'"[^>]*selected/', $html);
+        self::assertMatchesRegularExpression('/value="'.$records['city']->getAttribute('code').'"[^>]*selected/', $html);
 
         $byCode = Blade::render(
             '<x-iran-locations::city-select name="city_id" :province-code="$provinceCode" />',
@@ -176,12 +176,12 @@ class LocationSelectComponentsTest extends TestCase
 
         $officialDistricts = Blade::render(
             '<x-iran-locations::official-district-select name="official_district_id" :county-id="$countyId" :selected="$selected" />',
-            ['countyId' => $records['county']->getKey(), 'selected' => $records['officialDistrict']->getKey()],
+            ['countyId' => $records['county']->getKey(), 'selected' => $records['officialDistrict']->getAttribute('code')],
         );
 
         self::assertStringContainsString('Official District component-official', $officialDistricts);
         self::assertStringNotContainsString('Official District component-official-other', $officialDistricts);
-        self::assertMatchesRegularExpression('/value="'.$records['officialDistrict']->getKey().'"[^>]*selected/', $officialDistricts);
+        self::assertMatchesRegularExpression('/value="'.$records['officialDistrict']->getAttribute('code').'"[^>]*selected/', $officialDistricts);
 
         $officialDistrictsByCode = Blade::render(
             '<x-iran-locations::official-district-select name="official_district_id" :county-code="$countyCode" />',
@@ -255,7 +255,7 @@ class LocationSelectComponentsTest extends TestCase
 
         $this->app['request']->setLaravelSession($this->app['session.store']);
         $this->app['session.store']->put('_old_input', [
-            'city_id' => (string) $records['city']->getKey(),
+            'city_id' => (string) $records['city']->getAttribute('code'),
         ]);
 
         $html = Blade::render(
@@ -263,7 +263,7 @@ class LocationSelectComponentsTest extends TestCase
             ['provinceId' => $records['province']->getKey()],
         );
 
-        self::assertMatchesRegularExpression('/value="'.$records['city']->getKey().'"[^>]*selected/', $html);
+        self::assertMatchesRegularExpression('/value="'.$records['city']->getAttribute('code').'"[^>]*selected/', $html);
         self::assertStringNotContainsString((string) $inactive->getAttribute('name_fa'), $html);
         self::assertStringNotContainsString((string) $deprecated->getAttribute('name_fa'), $html);
     }

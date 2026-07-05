@@ -19,8 +19,12 @@ class OfficialDistrictController extends Controller
 {
     use ResolvesLocationApiModels;
 
-    public function index(OfficialDistrictApiRequest $request): AnonymousResourceCollection
+    public function index(OfficialDistrictApiRequest $request): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readCollectionResponse('official_district', $request);
+        }
+
         $query = $this->query('official_district')->with(['province', 'county']);
         $this->applyLocationFilters($query, $request->validated());
 
@@ -29,6 +33,17 @@ class OfficialDistrictController extends Controller
 
     public function cities(CityApiRequest $request, int|string $officialDistrict): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readNestedCollectionResponse(
+                'official_district',
+                $officialDistrict,
+                'city',
+                'official_district_code',
+                $request,
+                'Official district',
+            );
+        }
+
         $model = $this->resolveLocation('official_district', $officialDistrict);
 
         if ($model === null) {
@@ -55,6 +70,17 @@ class OfficialDistrictController extends Controller
 
     public function ruralDistricts(RuralDistrictApiRequest $request, int|string $officialDistrict): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readNestedCollectionResponse(
+                'official_district',
+                $officialDistrict,
+                'rural_district',
+                'official_district_code',
+                $request,
+                'Official district',
+            );
+        }
+
         $model = $this->resolveLocation('official_district', $officialDistrict);
 
         if ($model === null) {

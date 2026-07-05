@@ -27,6 +27,13 @@ Public Persian display fields in the packaged JSON have been normalized from Ara
 
 Automated data quality tests guard public Persian characters, leading/trailing display whitespace, duplicate codes, manifest counts and checksum, package reference integrity, province-capital mappings, and documented duplicate neighborhood names. The current documented duplicate neighborhood names are two ambiguous Tehran source rows: `استاد معین` in region 09 and `مشیریه` in region 15.
 
+## Read-Only JSON Driver
+
+Set `IRAN_LOCATIONS_DRIVER=json` to read packaged data directly from `data/*.json` without publishing migrations, running migrations, or syncing database tables. JSON mode is read-only and does not support custom records, admin CRUD, database relationships, sync, or user edits. It is intended for dropdowns, read-only location lists, options/search APIs, validation lists, and lightweight applications.
+
+Normal packaged data must include a non-empty manifest checksum. `iran-locations:doctor` validates the manifest checksum against packaged JSON data in both storage modes.
+JSON mode keeps an in-request dataset cache and disables Laravel cross-request caching by default. Set `IRAN_LOCATIONS_JSON_CACHE=true` only when you deliberately want to use the application cache store; cache keys include both data version and manifest checksum.
+
 ## Scope And Limitations
 
 The package does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless a release explicitly documents that scope. Rural district coverage remains limited by the current source files. Treat the data as versioned package data, not as automatically complete, official, current national coverage.

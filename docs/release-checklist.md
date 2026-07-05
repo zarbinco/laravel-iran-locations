@@ -31,6 +31,9 @@ Use this checklist before manually tagging a reviewed release.
 - Confirm packaged data quality tests pass for manifest counts, checksums, references, Persian `ک/ی`, province capitals, duplicate-code guards, and documented duplicate neighborhood names.
 - Confirm `zarbinco/laravel-persian-core` uses a stable semver constraint.
 - Confirm runtime dependencies do not include development-only extensions such as `ext-zip`.
+- Confirm the default storage driver remains `database`.
+- Confirm `IRAN_LOCATIONS_DRIVER=json` supports read-only no-migration lists, options, search, status, doctor, and Blade components.
+- Confirm JSON mode blocks sync and does not register admin routes.
 - Confirm admin and API routes are disabled by default.
 - Confirm admin routes are protected by application auth middleware and the configured `admin.gate` when enabled.
 - Confirm package-owned admin mutations remain blocked by default.
@@ -45,6 +48,7 @@ Use this checklist before manually tagging a reviewed release.
 - Run `php artisan iran-locations:sync --dry-run`.
 - Run `php artisan iran-locations:sync`.
 - Run `php artisan iran-locations:status`.
+- In a separate no-migration smoke check, set `IRAN_LOCATIONS_DRIVER=json` and confirm `doctor`, `status`, select components, and read-only API options work without publishing migrations or running sync.
 - Confirm route registration when admin/API are deliberately enabled in the smoke app.
 
 ## Manual Release Decision

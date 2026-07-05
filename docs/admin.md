@@ -1,6 +1,7 @@
 # Admin UI
 
 The optional admin UI is disabled by default.
+Admin routes are available only in the database driver. With `IRAN_LOCATIONS_DRIVER=json`, admin routes are not registered because JSON mode is read-only and has no custom records or database mutations.
 
 ## Enable
 

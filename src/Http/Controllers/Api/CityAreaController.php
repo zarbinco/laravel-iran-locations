@@ -17,8 +17,12 @@ class CityAreaController extends Controller
 {
     use ResolvesLocationApiModels;
 
-    public function index(CityAreaApiRequest $request): AnonymousResourceCollection
+    public function index(CityAreaApiRequest $request): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readCollectionResponse('city_area', $request);
+        }
+
         $query = $this->query('city_area')->with('region.city');
         $this->applyLocationFilters($query, $request->validated());
 
@@ -27,6 +31,10 @@ class CityAreaController extends Controller
 
     public function neighborhoods(NeighborhoodApiRequest $request, int|string $area): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readNestedCollectionResponse('city_area', $area, 'neighborhood', 'area_code', $request, 'City area');
+        }
+
         $model = $this->resolveLocation('city_area', $area);
 
         if ($model === null) {

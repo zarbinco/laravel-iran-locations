@@ -7,6 +7,7 @@ namespace Zarbin\IranLocations\Http\Resources;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Zarbin\IranLocations\Support\LocationRecord;
 
 class LocationOptionResource extends JsonResource
 {
@@ -14,15 +15,20 @@ class LocationOptionResource extends JsonResource
     {
         $model = $this->resource;
 
+        if ($model instanceof LocationRecord) {
+            return $model->option();
+        }
+
         if (! $model instanceof Model) {
             return [];
         }
 
         $label = $model->getAttribute('display_name_fa') ?: $model->getAttribute('name_fa');
+        $code = $model->getAttribute('code');
 
         return [
-            'value' => $model->getKey(),
-            'code' => $model->getAttribute('code'),
+            'value' => is_string($code) ? $code : (string) $model->getKey(),
+            'code' => $code,
             'label' => $label,
             'name_fa' => $model->getAttribute('name_fa'),
         ];

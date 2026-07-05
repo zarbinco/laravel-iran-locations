@@ -53,6 +53,15 @@ return [
 
     'route_key' => 'id',
 
+    'storage' => [
+        'driver' => env('IRAN_LOCATIONS_DRIVER', 'database'),
+
+        'json' => [
+            'cache' => env('IRAN_LOCATIONS_JSON_CACHE', false),
+            'cache_key' => 'iran_locations.json_data',
+        ],
+    ],
+
     'normalization' => [
         'driver' => 'persian-core',
         'on_save' => true,

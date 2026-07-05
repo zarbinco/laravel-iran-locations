@@ -21,13 +21,31 @@ class DoctorCommand extends Command
 
         $normalizer = app(LocationNormalizer::class);
         $result = $validator->validate();
-        $models = $database->configuredModelsExist();
-        $missingTables = $database->missingDatasetTables(null, includeDataVersion: true);
+        $driver = $this->storageDriver();
 
+        $this->line('Driver: '.$driver);
+        $this->line('Mode: '.($driver === 'json' ? 'read-only packaged JSON' : 'database'));
         $this->line('Normalizer contract: '.get_debug_type($normalizer));
         $this->line('Normalization driver: '.(string) config('iran-locations.normalization.driver', 'persian-core'));
         $this->line('Configuration loaded: '.(config('iran-locations.tables.provinces') ? 'yes' : 'no'));
         $this->line('Package data validation: '.($result['ok'] ? 'passed' : 'failed'));
+
+        if ($driver === 'json') {
+            $this->line('Database tables: skipped');
+            $this->line('Packaged data: '.($result['ok'] ? 'OK' : 'failed'));
+
+            foreach ($result['errors'] as $error) {
+                $this->error($error);
+            }
+
+            $this->line('No database records were inspected or modified.');
+
+            return $result['ok'] ? self::SUCCESS : self::FAILURE;
+        }
+
+        $models = $database->configuredModelsExist();
+        $missingTables = $database->missingDatasetTables(null, includeDataVersion: true);
+
         $this->line('Configured models: '.($this->allTrue($models) ? 'passed' : 'failed'));
         $this->line('Database tables: '.($missingTables === [] ? 'ready' : 'missing '.implode(', ', $missingTables)));
         $this->line('Latest applied database data version: '.($database->latestAppliedVersion() ?? 'none'));
@@ -45,6 +63,11 @@ class DoctorCommand extends Command
         $this->line('No database records were inspected or modified.');
 
         return $result['ok'] && $this->allTrue($models) ? self::SUCCESS : self::FAILURE;
+    }
+
+    private function storageDriver(): string
+    {
+        return strtolower((string) config('iran-locations.storage.driver', 'database'));
     }
 
     /**

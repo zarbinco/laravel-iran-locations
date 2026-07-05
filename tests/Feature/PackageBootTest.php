@@ -28,6 +28,8 @@ class PackageBootTest extends TestCase
     {
         self::assertSame('iran_provinces', config('iran-locations.tables.provinces'));
         self::assertSame('persian-core', config('iran-locations.normalization.driver'));
+        self::assertSame('database', config('iran-locations.storage.driver'));
+        self::assertFalse(config('iran-locations.storage.json.cache'));
         self::assertFalse(config('iran-locations.admin.enabled'));
         self::assertFalse(config('iran-locations.api.enabled'));
         self::assertSame(['api'], config('iran-locations.api.middleware'));

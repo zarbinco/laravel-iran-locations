@@ -8,14 +8,18 @@ use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use InvalidArgumentException;
 use Zarbin\IranLocations\Commands\DoctorCommand;
 use Zarbin\IranLocations\Commands\InstallCommand;
 use Zarbin\IranLocations\Commands\StatusCommand;
 use Zarbin\IranLocations\Commands\SyncCommand;
 use Zarbin\IranLocations\Contracts\LocationDataRepository;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
+use Zarbin\IranLocations\Contracts\LocationReadRepository;
 use Zarbin\IranLocations\Data\JsonLocationDataRepository;
 use Zarbin\IranLocations\Data\LocationDataValidator;
+use Zarbin\IranLocations\Repositories\DatabaseLocationReadRepository;
+use Zarbin\IranLocations\Repositories\JsonLocationReadRepository;
 use Zarbin\IranLocations\Support\LocationDatabaseInspector;
 use Zarbin\IranLocations\Support\LocationModelResolver;
 use Zarbin\IranLocations\Support\PersianCoreLocationNormalizer;
@@ -33,11 +37,23 @@ class IranLocationsServiceProvider extends ServiceProvider
         $this->app->singleton(LocationDataValidator::class);
         $this->app->singleton(LocationDatabaseInspector::class);
         $this->app->singleton(LocationSyncService::class);
+        $this->app->singleton(LocationReadRepository::class, function ($app): LocationReadRepository {
+            $driver = strtolower((string) config('iran-locations.storage.driver', 'database'));
+
+            return match ($driver) {
+                'database' => $app->make(DatabaseLocationReadRepository::class),
+                'json' => $app->make(JsonLocationReadRepository::class),
+                default => throw new InvalidArgumentException(
+                    "Unsupported Iran Locations storage driver [{$driver}]. Supported drivers: database, json.",
+                ),
+            };
+        });
 
         $this->app->singleton(IranLocationsManager::class, function ($app): IranLocationsManager {
             return new IranLocationsManager(
                 $app->make(LocationNormalizer::class),
                 $app->make(LocationDataRepository::class),
+                $app->make(LocationReadRepository::class),
             );
         });
 
@@ -87,7 +103,7 @@ class IranLocationsServiceProvider extends ServiceProvider
 
     private function loadConfiguredRoutes(): void
     {
-        if ((bool) config('iran-locations.admin.enabled', false)) {
+        if ((bool) config('iran-locations.admin.enabled', false) && $this->storageDriver() === 'database') {
             Route::middleware((array) config('iran-locations.admin.middleware', ['web', 'auth']))
                 ->prefix((string) config('iran-locations.admin.prefix', 'admin/iran-locations'))
                 ->group($this->packagePath('routes/admin.php'));
@@ -98,6 +114,11 @@ class IranLocationsServiceProvider extends ServiceProvider
                 ->prefix((string) config('iran-locations.api.prefix', 'iran-locations/api'))
                 ->group($this->packagePath('routes/api.php'));
         }
+    }
+
+    private function storageDriver(): string
+    {
+        return strtolower((string) config('iran-locations.storage.driver', 'database'));
     }
 
     private function packagePath(string $path = ''): string

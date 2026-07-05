@@ -1,6 +1,7 @@
 # Sync
 
 The sync engine imports packaged JSON data into your application database through configured models and table names.
+Sync is available only when `IRAN_LOCATIONS_DRIVER=database`. With `IRAN_LOCATIONS_DRIVER=json`, packaged JSON data is used directly and no sync is required.
 
 Default sync order follows data dependencies: provinces, counties, official districts, rural districts, cities, municipal regions and areas, neighborhoods, neighborhood-region mappings, and aliases.
 
@@ -22,6 +23,7 @@ php artisan iran-locations:sync
 
 Successful full syncs write a data-version record with the package data version, checksum, and summary.
 Repeated successful syncs for the same `data_version` and checksum update that row with the latest summary and timestamps instead of creating duplicate data-version rows. Normal packaged data must include a manifest checksum, and `iran-locations:doctor` validates it against the packaged JSON data.
+In JSON mode, `iran-locations:sync` exits with a clear message instead of attempting database writes.
 
 ## Safety Behavior
 
@@ -64,4 +66,4 @@ Use `--chunk` to control how many package data records are processed per sync ba
 php artisan iran-locations:sync --chunk=100
 ```
 
-The current JSON repository still loads package data from local JSON files before sync processing starts. Chunking controls processing batches for normal datasets, aliases, and neighborhood-region mappings; it is not streaming file I/O.
+During database sync, package data is loaded from local JSON files before processing starts. Chunking controls processing batches for normal datasets, aliases, and neighborhood-region mappings; it is not streaming file I/O.

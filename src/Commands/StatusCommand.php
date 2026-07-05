@@ -19,10 +19,22 @@ class StatusCommand extends Command
     {
         $this->info('Laravel Iran Locations status');
         $this->line('Package data status');
+        $this->line('Driver: '.$this->storageDriver());
+        $this->line('Mode: '.($this->storageDriver() === 'json' ? 'read-only' : 'database'));
         $this->line('Data version: '.$locations->dataVersion());
 
         foreach (LocationDataManifest::datasets() as $dataset) {
             $this->line("{$dataset}: ".$locations->dataCount($dataset));
+        }
+
+        if ($this->storageDriver() === 'json') {
+            $this->newLine();
+            $this->line('Database tables: skipped');
+            $this->line('Migration/sync required: no');
+            $this->line('Admin routes enabled: no');
+            $this->line('API routes enabled: '.($this->enabled('iran-locations.api.enabled') ? 'yes' : 'no'));
+
+            return self::SUCCESS;
         }
 
         $this->newLine();
@@ -62,6 +74,11 @@ class StatusCommand extends Command
     private function enabled(string $key): bool
     {
         return (bool) config($key, false);
+    }
+
+    private function storageDriver(): string
+    {
+        return strtolower((string) config('iran-locations.storage.driver', 'database'));
     }
 
     /**

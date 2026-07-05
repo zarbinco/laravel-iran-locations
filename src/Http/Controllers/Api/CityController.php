@@ -21,8 +21,12 @@ class CityController extends Controller
 {
     use ResolvesLocationApiModels;
 
-    public function index(CityApiRequest $request): AnonymousResourceCollection
+    public function index(CityApiRequest $request): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readCollectionResponse('city', $request);
+        }
+
         $query = $this->query('city')->with(['province', 'county', 'officialDistrict']);
         $this->applyLocationFilters($query, $request->validated());
 
@@ -31,6 +35,10 @@ class CityController extends Controller
 
     public function regions(CityRegionApiRequest $request, int|string $city): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readNestedCollectionResponse('city', $city, 'city_region', 'city_code', $request, 'City');
+        }
+
         $model = $this->resolveLocation('city', $city);
 
         if ($model === null) {
@@ -57,6 +65,10 @@ class CityController extends Controller
 
     public function areas(CityAreaApiRequest $request, int|string $city): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readNestedCollectionResponse('city', $city, 'city_area', 'city_code', $request, 'City');
+        }
+
         $model = $this->resolveLocation('city', $city);
 
         if ($model === null) {
@@ -83,6 +95,10 @@ class CityController extends Controller
 
     public function neighborhoods(NeighborhoodApiRequest $request, int|string $city): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readNestedCollectionResponse('city', $city, 'neighborhood', 'city_code', $request, 'City');
+        }
+
         $model = $this->resolveLocation('city', $city);
 
         if ($model === null) {

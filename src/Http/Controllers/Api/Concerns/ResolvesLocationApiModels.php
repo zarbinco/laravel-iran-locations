@@ -8,13 +8,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Zarbin\IranLocations\Builders\LocationBuilder;
 use Zarbin\IranLocations\Contracts\LocationNormalizer;
+use Zarbin\IranLocations\Contracts\LocationReadRepository;
 use Zarbin\IranLocations\Http\Requests\Api\ApiRequest;
 use Zarbin\IranLocations\Http\Requests\Api\OptionApiRequest;
 use Zarbin\IranLocations\Http\Resources\LocationOptionResource;
 use Zarbin\IranLocations\Support\LocationModelResolver;
+use Zarbin\IranLocations\Support\LocationRecord;
 
 trait ResolvesLocationApiModels
 {
@@ -160,6 +163,149 @@ trait ResolvesLocationApiModels
         $records = $query->limit($request->limit())->get();
 
         return response()->json(LocationOptionResource::collection($records)->resolve($request));
+    }
+
+    protected function readOptionResponse(string $type, OptionApiRequest $request): JsonResponse
+    {
+        if (($response = $this->unsupportedJsonDatabaseIdFilterResponse($request->validated())) !== null) {
+            return $response;
+        }
+
+        return response()->json(
+            $this->readRepository()
+                ->options($type, $request->validated(), $request->limit())
+                ->all(),
+        );
+    }
+
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    protected function readCollectionResponse(string $type, ApiRequest $request, array $filters = []): JsonResponse
+    {
+        $validated = $request->validated();
+
+        if (($response = $this->unsupportedJsonDatabaseIdFilterResponse($validated)) !== null) {
+            return $response;
+        }
+
+        $records = $this->readRepository()->all($type, array_merge($validated, $filters));
+        $page = max(1, (int) $request->input('page', 1));
+        $perPage = $request->perPage();
+        $total = $records->count();
+
+        return response()->json([
+            'data' => $this->recordArrayCollection($records->forPage($page, $perPage)->values()),
+            'meta' => [
+                'current_page' => $page,
+                'per_page' => $perPage,
+                'total' => $total,
+            ],
+        ]);
+    }
+
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    protected function readNestedCollectionResponse(
+        string $parentType,
+        int|string $parentValue,
+        string $childType,
+        string $parentCodeField,
+        ApiRequest $request,
+        string $parentLabel,
+        array $filters = [],
+    ): JsonResponse {
+        $parent = $this->readRepository()->find($parentType, (string) $parentValue);
+
+        if ($parent === null) {
+            return $this->missingLocationResponse($parentLabel);
+        }
+
+        $validated = $request->validated();
+        $conflict = $this->nestedFilterConflictResponse($validated, [
+            $parentCodeField => $parent->code(),
+        ]);
+
+        if ($conflict !== null) {
+            return $conflict;
+        }
+
+        return $this->readCollectionResponse($childType, $request, array_merge($filters, [
+            $parentCodeField => $parent->code(),
+        ]));
+    }
+
+    protected function usesJsonReadRepository(): bool
+    {
+        return strtolower((string) config('iran-locations.storage.driver', 'database')) === 'json';
+    }
+
+    protected function readRepository(): LocationReadRepository
+    {
+        return app(LocationReadRepository::class);
+    }
+
+    /**
+     * @param  Collection<int, LocationRecord>  $records
+     * @return array<int, array<string, mixed>>
+     */
+    protected function recordArrayCollection(Collection $records): array
+    {
+        return $records
+            ->map(fn (LocationRecord $record): array => $record->toArray())
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @param  array<string, mixed>  $filters
+     */
+    protected function unsupportedJsonDatabaseIdFilterResponse(array $filters): ?JsonResponse
+    {
+        if (! $this->usesJsonReadRepository()) {
+            return null;
+        }
+
+        $errors = [];
+
+        foreach ($this->databaseIdFilterSuggestions() as $field => $suggestion) {
+            if (! filled($filters[$field] ?? null)) {
+                continue;
+            }
+
+            $errors[$field] = [
+                "The {$field} filter is not supported in JSON driver mode. Use {$suggestion} instead.",
+            ];
+        }
+
+        if ($errors === []) {
+            return null;
+        }
+
+        return response()->json([
+            'message' => 'Database ID filters are not supported in JSON driver mode. Use code filters instead.',
+            'errors' => $errors,
+        ], 422);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function databaseIdFilterSuggestions(): array
+    {
+        return [
+            'province_id' => 'province_code',
+            'county_id' => 'county_code',
+            'official_district_id' => 'official_district_code',
+            'rural_district_id' => 'rural_district_code',
+            'city_id' => 'city_code',
+            'region_id' => 'region_code or city_region_code',
+            'city_region_id' => 'region_code or city_region_code',
+            'area_id' => 'area_code or city_area_code',
+            'city_area_id' => 'area_code or city_area_code',
+            'neighborhood_id' => 'neighborhood_code',
+        ];
     }
 
     /**

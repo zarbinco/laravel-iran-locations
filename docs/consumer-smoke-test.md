@@ -105,17 +105,17 @@ curl -s "http://127.0.0.1:8017/iran-locations/api/search?q=تهران"
 Render the main select components in a temporary view or through `Blade::render()`:
 
 ```blade
-<x-iran-locations::province-select name="province_id" />
-<x-iran-locations::county-select name="county_id" />
-<x-iran-locations::official-district-select name="official_district_id" />
-<x-iran-locations::rural-district-select name="rural_district_id" />
-<x-iran-locations::city-select name="city_id" />
-<x-iran-locations::city-region-select name="city_region_id" />
-<x-iran-locations::city-area-select name="city_area_id" />
-<x-iran-locations::neighborhood-select name="neighborhood_id" />
+<x-iran-locations::province-select name="province_code" />
+<x-iran-locations::county-select name="county_code" province-code="p.01" />
+<x-iran-locations::official-district-select name="official_district_code" county-code="c.01.01" />
+<x-iran-locations::rural-district-select name="rural_district_code" official-district-code="b.01.01.01" />
+<x-iran-locations::city-select name="city_code" province-code="p.01" />
+<x-iran-locations::city-region-select name="city_region_code" city-code="s.01.01.01.01" />
+<x-iran-locations::city-area-select name="city_area_code" city-region-code="r.01.01.01.01.05" />
+<x-iran-locations::neighborhood-select name="neighborhood_code" city-code="s.01.01.01.01" />
 ```
 
-Also check filtered variants for province, county, official district, city, and neighborhood parents. Components should render active, non-deprecated records by default and should preserve `selected`, `placeholder`, `class`, `required`, and `disabled` props.
+Also check filtered variants for province, county, official district, city, and neighborhood parents. Components render stable public codes as values, so JSON/no-migration smoke checks should use code props such as `province-code` and `city-code`. Components should render active, non-deprecated records by default and should preserve `selected`, `placeholder`, `class`, `required`, and `disabled` props.
 
 ## Package Checks
 

@@ -19,8 +19,12 @@ class ProvinceController extends Controller
 {
     use ResolvesLocationApiModels;
 
-    public function index(ProvinceApiRequest $request): AnonymousResourceCollection
+    public function index(ProvinceApiRequest $request): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readCollectionResponse('province', $request);
+        }
+
         $query = $this->query('province');
         $this->applyLocationFilters($query, $request->validated());
 
@@ -29,6 +33,10 @@ class ProvinceController extends Controller
 
     public function cities(CityApiRequest $request, int|string $province): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readNestedCollectionResponse('province', $province, 'city', 'province_code', $request, 'Province');
+        }
+
         $model = $this->resolveLocation('province', $province);
 
         if ($model === null) {
@@ -55,6 +63,10 @@ class ProvinceController extends Controller
 
     public function counties(CountyApiRequest $request, int|string $province): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readNestedCollectionResponse('province', $province, 'county', 'province_code', $request, 'Province');
+        }
+
         $model = $this->resolveLocation('province', $province);
 
         if ($model === null) {

@@ -15,65 +15,41 @@ class OptionController extends Controller
 
     public function provinces(OptionApiRequest $request): JsonResponse
     {
-        return $this->optionResponse(
-            $this->optionQuery('province', $request->validated()),
-            $request,
-        );
+        return $this->readOptionResponse('province', $request);
     }
 
     public function cities(OptionApiRequest $request): JsonResponse
     {
-        return $this->optionResponse(
-            $this->optionQuery('city', $request->validated()),
-            $request,
-        );
+        return $this->readOptionResponse('city', $request);
     }
 
     public function counties(OptionApiRequest $request): JsonResponse
     {
-        return $this->optionResponse(
-            $this->optionQuery('county', $request->validated()),
-            $request,
-        );
+        return $this->readOptionResponse('county', $request);
     }
 
     public function officialDistricts(OptionApiRequest $request): JsonResponse
     {
-        return $this->optionResponse(
-            $this->optionQuery('official_district', $request->validated()),
-            $request,
-        );
+        return $this->readOptionResponse('official_district', $request);
     }
 
     public function ruralDistricts(OptionApiRequest $request): JsonResponse
     {
-        return $this->optionResponse(
-            $this->optionQuery('rural_district', $request->validated()),
-            $request,
-        );
+        return $this->readOptionResponse('rural_district', $request);
     }
 
     public function cityRegions(OptionApiRequest $request): JsonResponse
     {
-        return $this->optionResponse(
-            $this->optionQuery('city_region', $request->validated()),
-            $request,
-        );
+        return $this->readOptionResponse('city_region', $request);
     }
 
     public function cityAreas(OptionApiRequest $request): JsonResponse
     {
-        return $this->optionResponse(
-            $this->optionQuery('city_area', $request->validated()),
-            $request,
-        );
+        return $this->readOptionResponse('city_area', $request);
     }
 
     public function neighborhoods(OptionApiRequest $request): JsonResponse
     {
-        return $this->optionResponse(
-            $this->optionQuery('neighborhood', $request->validated()),
-            $request,
-        );
+        return $this->readOptionResponse('neighborhood', $request);
     }
 }

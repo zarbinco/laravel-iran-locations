@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Zarbin\IranLocations\View\Components;
 
 use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Zarbin\IranLocations\Support\LocationRecord;
 
 class CityAreaSelect extends LocationSelect
 {
@@ -33,7 +33,7 @@ class CityAreaSelect extends LocationSelect
     }
 
     /**
-     * @return Collection<int, Model>
+     * @return Collection<int, LocationRecord>
      */
     public function options(): Collection
     {

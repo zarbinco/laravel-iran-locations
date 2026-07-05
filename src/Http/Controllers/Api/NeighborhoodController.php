@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zarbin\IranLocations\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Zarbin\IranLocations\Http\Controllers\Api\Concerns\ResolvesLocationApiModels;
@@ -14,8 +15,12 @@ class NeighborhoodController extends Controller
 {
     use ResolvesLocationApiModels;
 
-    public function index(NeighborhoodApiRequest $request): AnonymousResourceCollection
+    public function index(NeighborhoodApiRequest $request): AnonymousResourceCollection|JsonResponse
     {
+        if ($this->usesJsonReadRepository()) {
+            return $this->readCollectionResponse('neighborhood', $request);
+        }
+
         $query = $this->query('neighborhood')->with(['city', 'defaultRegion', 'defaultArea']);
         $this->applyLocationFilters($query, $request->validated());
 

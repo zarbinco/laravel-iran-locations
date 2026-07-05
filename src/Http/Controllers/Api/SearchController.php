@@ -27,6 +27,13 @@ class SearchController extends Controller
         $query = (string) $request->validated('q');
         $limit = $request->limit();
 
+        if ($this->usesJsonReadRepository()) {
+            return response()->json([
+                'query' => $query,
+                'results' => $this->jsonResults($query, $limit),
+            ]);
+        }
+
         return response()->json([
             'query' => $query,
             'results' => [
@@ -56,5 +63,31 @@ class SearchController extends Controller
         }
 
         return $query->limit($limit)->get();
+    }
+
+    /**
+     * @return array<string, array<int, array<string, mixed>>>
+     */
+    private function jsonResults(string $query, int $limit): array
+    {
+        $types = [
+            'province' => 'provinces',
+            'county' => 'counties',
+            'official_district' => 'official_districts',
+            'rural_district' => 'rural_districts',
+            'city' => 'cities',
+            'city_region' => 'city_regions',
+            'city_area' => 'city_areas',
+            'neighborhood' => 'neighborhoods',
+        ];
+        $results = [];
+
+        foreach ($types as $type => $key) {
+            $results[$key] = $this->recordArrayCollection(
+                $this->readRepository()->all($type, ['q' => $query])->take($limit)->values(),
+            );
+        }
+
+        return $results;
     }
 }

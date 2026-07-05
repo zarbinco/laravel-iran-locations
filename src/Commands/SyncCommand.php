@@ -25,6 +25,15 @@ class SyncCommand extends Command
     public function handle(LocationSyncService $sync, LocationDataRepository $repository): int
     {
         $this->info('Iran Locations Sync');
+
+        if ($this->storageDriver() === 'json') {
+            $this->error('The iran-locations:sync command is only available in database driver mode.');
+            $this->line('Current driver: json.');
+            $this->line('No sync is required because packaged JSON data is used directly.');
+
+            return self::FAILURE;
+        }
+
         $this->line('Data version: '.$repository->dataVersion());
         $this->line('Checksum: '.(string) ($repository->manifest()['checksum'] ?? ''));
         $this->line('Mode: '.$this->mode());
@@ -81,6 +90,11 @@ class SyncCommand extends Command
     private function mode(): string
     {
         return (bool) $this->option('dry-run') ? 'dry-run' : 'apply';
+    }
+
+    private function storageDriver(): string
+    {
+        return strtolower((string) config('iran-locations.storage.driver', 'database'));
     }
 
     private function summaryLine(LocationSyncDatasetResult $dataset): string
