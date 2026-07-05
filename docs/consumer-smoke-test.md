@@ -31,6 +31,7 @@ SQLite is enough for the smoke test:
 
 ```bash
 php artisan key:generate
+touch database/database.sqlite
 php artisan vendor:publish --tag=iran-locations-config
 php artisan vendor:publish --tag=iran-locations-migrations
 php artisan vendor:publish --tag=iran-locations-views
@@ -42,7 +43,6 @@ php artisan migrate
 Run the commands before and after sync:
 
 ```bash
-php artisan iran-locations:status
 php artisan iran-locations:doctor
 php artisan iran-locations:sync --dry-run
 php artisan iran-locations:sync
@@ -164,3 +164,12 @@ zip iran-locations-smoke-report.zip iran-locations-smoke-report.txt
 ```
 
 Do not commit the temporary Laravel app or smoke report artifacts into this package repository.
+
+## Cleanup
+
+After recording the result, remove the temporary app if it is no longer needed:
+
+```bash
+cd /tmp
+rm -rf iran-locations-smoke
+```

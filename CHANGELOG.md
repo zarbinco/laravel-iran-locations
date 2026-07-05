@@ -25,8 +25,8 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 
 - Enforced `search.min_length` through API and admin HTTP request validation.
 - Enforced package-owned admin edit/delete protection through `data.allow_package_record_direct_edit`.
-- Removed misleading config keys that did not represent real runtime toggles: `normalization.on_sync` and `data.preserve_custom_records`.
-- Changed alias `location_type` storage, admin/API filters, resources, and sync payloads to use stable public morph-map keys instead of PHP class names.
+- Removed misleading normalization and custom-preservation config toggles that did not represent runtime behavior.
+- Changed alias type storage, admin/API filters, resources, and sync payloads to use stable public morph-map keys instead of PHP class names.
 - Changed data-version sync tracking so repeated successful syncs for the same data version and checksum update the existing row instead of appending duplicates.
 - Clarified alias deprecation lifecycle so aliases do not persist `replaced_by_id`, and normalized missing data-version checksums to an empty string for database-enforced idempotence.
 - Made sync `--chunk` an active record-processing batch option for model datasets, aliases, and neighborhood-region mappings.
@@ -50,3 +50,4 @@ This is a private pre-release baseline, not a stable public `1.0.0` release.
 - Expanded CI with a release-gate/archive hygiene job while keeping publishing, tags, and deployment secrets out of scope.
 - Expanded consumer smoke-test documentation with a Git Bash path repository flow and optional smoke report artifact.
 - Declared `ext-zip` as a development-only requirement for archive hygiene tooling and explicitly enabled `zip` in CI jobs.
+- Finalized release-readiness documentation, package scope notes, and manual checklist guidance for maintainer review.

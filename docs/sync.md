@@ -41,7 +41,7 @@ Repeated successful syncs for the same `data_version` and checksum update that r
 
 `package_record_delete_behavior` supports the safe `deprecate` behavior. Configuring hard delete is intentionally rejected by the sync service. Admin direct mutation of package-owned records is controlled separately by `data.allow_package_record_direct_edit`.
 
-`normalization.on_sync` was removed because sync normalization is part of the package data contract and is not a runtime toggle. `normalization.on_save` still controls model save-time normalization for application/admin writes. If a future phase recomputes normalized fields during sync, that should be implemented explicitly and tested separately.
+Sync normalization is part of the package data contract and has no runtime config toggle. `normalization.on_save` still controls model save-time normalization for application/admin writes. Future changes to sync-time normalized fields should be implemented explicitly and covered by tests.
 
 ## Useful Commands
 

@@ -57,6 +57,40 @@ class PublicDocumentationTest extends TestCase
         self::assertStringContainsString('zarbinco/laravel-persian-core', $readme);
     }
 
+    public function test_public_documentation_avoids_removed_config_keys_and_private_paths(): void
+    {
+        $blockedPatterns = [
+            'removed sync normalization key' => '/normalization\.on_sync/',
+            'removed custom preservation key' => '/data\.preserve_custom_records/',
+            'drive-letter local path' => '/[A-Z]:\//',
+            'mounted temp path' => '#/'.'mnt/data#',
+            'local stack path' => '/\b(?:'.'lara'.'gon|x'.'ampp)\b/i',
+        ];
+
+        foreach ($this->publicDocumentationFiles() as $file) {
+            $contents = file_get_contents($this->path($file));
+
+            self::assertIsString($contents);
+
+            foreach ($blockedPatterns as $label => $pattern) {
+                self::assertDoesNotMatchRegularExpression($pattern, $contents, "{$file} contains {$label}.");
+            }
+        }
+    }
+
+    public function test_release_docs_reference_release_gate_and_placeholder_smoke_path(): void
+    {
+        $checklist = file_get_contents($this->path('docs/release-checklist.md'));
+        $smoke = file_get_contents($this->path('docs/consumer-smoke-test.md'));
+
+        self::assertIsString($checklist);
+        self::assertIsString($smoke);
+        self::assertStringContainsString('composer run-script release:check', $checklist);
+        self::assertStringContainsString('tools/check-archive.php <archive.zip>', $checklist);
+        self::assertStringContainsString('/absolute/path/to/laravel-iran-locations', $smoke);
+        self::assertStringContainsString('rm -rf iran-locations-smoke', $smoke);
+    }
+
     /**
      * @return array<int, string>
      */

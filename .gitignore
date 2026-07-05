@@ -1,4 +1,5 @@
 /vendor/
+/node_modules/
 /composer.lock
 /.phpunit.cache/
 /.phpunit.result.cache
@@ -14,6 +15,7 @@
 /.env
 /_review/
 /_source/
+/REVIEW_NOTES.md
 *.zip
 *.tar
 *.tar.gz

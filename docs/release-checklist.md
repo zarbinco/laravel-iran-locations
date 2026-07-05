@@ -1,42 +1,54 @@
 # Release Checklist
 
+Use this checklist before manually tagging a reviewed release.
+
+## Local Gate
+
+- Start from a clean working tree.
+- Confirm the package development PHP installation has the `zip` extension enabled; archive hygiene tooling requires `ext-zip`, but package runtime consumers do not.
 - Run `composer validate --strict`.
 - Run `composer test`.
 - Run `vendor/bin/phpunit tests/Unit/LocationDataQualityTest.php`.
 - Run `composer run-script format:test`.
 - Run `composer analyse`.
-- Run `composer run-script test:ci` for the package CI command group.
-- Run `composer run-script release:check` for the full local release gate.
+- Run `composer run-script test:ci`.
+- Run `composer run-script release:check`.
 - Optionally run `bash tools/release-check.sh` from Git Bash or a compatible shell; it wraps the Composer release gate.
-- Confirm `tools/check-archive.php` passes for the generated Composer archive.
-- Confirm the package development PHP installation has the `zip` extension enabled; archive hygiene tooling requires `ext-zip`, but package runtime consumers do not.
-- Skip or replace unavailable scripts with the package's configured equivalents, and record any skipped checks.
-- Confirm the working tree has no `.phpunit.cache/` or `.phpunit.result.cache`.
-- Confirm the working tree has no `REVIEW_NOTES.md`.
+
+## Archive Hygiene
+
+- Confirm `tools/check-archive.php <archive.zip>` passes for the Composer archive.
+- Confirm no `_review/`, `.phpunit.cache/`, `.phpunit.result.cache`, `REVIEW_NOTES.md`, nested zip/tar archive, `vendor/`, `node_modules/`, `coverage/`, `artifacts/`, `_source/`, build, dist, or release directory is included in the archive.
+- Confirm `.gitattributes` export-ignore rules cover private, cache, build, release, review, dependency, and generated archive paths.
+- Confirm `.gitignore` keeps local caches, review folders, dependency folders, and generated archives out of the working tree.
 - Confirm no local/private paths, drive-letter development paths, mounted temp paths, or local stack names are present in release files.
-- Confirm no raw SQL source files are included in the package archive.
-- Confirm no generated full-project zip files or nested zip artifacts are included in the package archive.
-- Confirm no `vendor/` or `node_modules/` directories are included.
-- Confirm no `.env`, secrets, logs, caches, or coverage output are included.
-- Confirm `.gitattributes` export-ignore rules exclude private, cache, build, release, and review artifacts.
-- Run `composer archive --format=zip` and inspect the archive contents before tagging.
-- Confirm Composer archives do not contain `_review/`, `REVIEW_NOTES.md`, `.phpunit.cache/`, `vendor/`, `node_modules/`, `coverage/`, `artifacts/`, `_source/`, build/release directories, or nested archives.
-- Confirm `.gitattributes` keeps private, cache, build, release, review, dependency, and generated archive paths export-ignored.
+
+## Package Contract
+
+- Confirm `config/iran-locations.php`, `README.md`, `docs/data.md`, and the data manifest all agree on data version and dataset counts.
+- Confirm packaged data quality tests pass for manifest counts, checksums, references, Persian `ک/ی`, province capitals, duplicate-code guards, and documented duplicate neighborhood names.
 - Confirm `zarbinco/laravel-persian-core` uses a stable semver constraint.
-- Confirm Packagist metadata is correct.
-- Confirm README examples match the current API.
-- Confirm packaged data quality tests pass for Persian `ک/ی`, province capitals, manifest checksum, and reference integrity.
-- Confirm config publishing works.
-- Confirm migration publishing works.
-- Confirm view publishing works.
+- Confirm runtime dependencies do not include development-only extensions such as `ext-zip`.
 - Confirm admin and API routes are disabled by default.
-- Confirm admin routes are protected by application auth middleware and the configured `admin.gate`.
-- Confirm admin mutation forms reject mismatched parent hierarchy selections and alias targets without real records.
+- Confirm admin routes are protected by application auth middleware and the configured `admin.gate` when enabled.
+- Confirm package-owned admin mutations remain blocked by default.
 - Confirm public API middleware is deliberate, preferably including `api` middleware and throttling/auth when exposed publicly.
 - Confirm nested API route parents hide inactive/deprecated records and conflicting nested filters return `422`.
-- Run the [consumer smoke test](consumer-smoke-test.md) in a fresh Laravel app.
-- Run `php artisan iran-locations:sync --dry-run` in a test app.
-- Confirm safe sync behavior before applying data.
-- Confirm CI only validates the package and archive hygiene; it must not publish Packagist releases, GitHub releases, tags, or use deployment secrets.
-- Confirm CI setup keeps `extensions: zip` enabled for jobs that run tests or release-gate tooling.
-- Leave final public release decisions and final release announcement/docs for the final release preparation step.
+
+## Consumer Smoke
+
+- Run the [consumer smoke test](consumer-smoke-test.md) in a fresh Laravel application outside this repository.
+- Confirm config, migration, and view publishing work.
+- Run `php artisan iran-locations:doctor`.
+- Run `php artisan iran-locations:sync --dry-run`.
+- Run `php artisan iran-locations:sync`.
+- Run `php artisan iran-locations:status`.
+- Confirm route registration when admin/API are deliberately enabled in the smoke app.
+
+## Manual Release Decision
+
+- Choose the tag name only after review.
+- Create the Git tag manually only after maintainer approval.
+- Create any GitHub release manually only after maintainer approval.
+- Do not publish from CI; CI should only validate tests, static analysis, formatting, archive hygiene, and release-gate commands.
+- Do not add deployment secrets, Packagist publishing automation, or release publishing automation to this package workflow.

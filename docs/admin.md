@@ -55,3 +55,5 @@ Source controls match that policy: forms do not offer `Package` as a selectable 
 Custom records remain editable. Custom records are deleted when safe, or deactivated if related records prevent deletion.
 
 Set `data.allow_package_record_direct_edit` to `true` only when you deliberately need to override package-owned records during private testing or release preparation. When enabled, package-owned records are deprecated instead of deleted where the model supports deprecation.
+
+The admin UI is for application maintenance and custom records. Package-owned data updates should normally flow through the sync command.

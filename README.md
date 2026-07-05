@@ -12,16 +12,19 @@ Laravel Iran Locations provides Iran location data, Eloquent models, safe databa
 - Safe database sync with dry-run support
 - Eloquent models, relationships, configurable tables, and configurable model classes
 - Query builders and validation-friendly filters
+- Stable alias type keys and Eloquent morph-map support
 - Optional Blade/Tailwind admin UI
 - Optional read-only HTTP API
 - Plain Blade select components for forms
 - Alias support for search-friendly location names
+- Data quality audit tests for counts, checksums, references, Persian display fields, and province capitals
 
 ## Requirements
 
 - PHP 8.2 or newer
 - Laravel 11, 12, or 13
 - `zarbinco/laravel-persian-core`
+- PHP `zip` extension for package development/release archive checks only
 
 ## Installation
 
@@ -68,13 +71,23 @@ The current packaged dataset includes:
 - 73 rural districts
 - 1456 cities
 - 22 Tehran city regions
+- 0 city areas
 - 568 Tehran neighborhood or urban-place style records
+- 568 neighborhood-region mappings
+- 0 aliases
 
-The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. The municipal hierarchy remains separate: city region, city area, and neighborhood. City areas and aliases are structurally supported but are empty in packaged data version `0.2.0-dev` unless your application adds records.
+The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. The municipal hierarchy remains separate: city region, city area, and neighborhood. City areas and aliases are structurally supported but are empty in packaged data version `0.2.0-dev` unless your application adds records. Rural district coverage is currently limited by the available source files.
 
 Public Persian display names in the packaged data are normalized from Arabic `ك/ي` to Persian `ک/ی`, and the 31 province capital city flags are populated. Data quality tests guard manifest counts, checksums, reference integrity, duplicate codes, public Persian text fields, documented duplicate neighborhood names, and province-capital mappings.
 
 Treat this as versioned package data, not automatically complete, official, current national coverage. It does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless explicitly documented. Verify source assumptions and licensing suitability before production, legal, regulatory, logistics, or high-stakes use.
+
+## Not Included
+
+- Coordinates, boundaries, routing, or postal codes
+- Full village-level coverage
+- Guaranteed always-current official gazette updates
+- Legal, regulatory, logistics, or high-stakes suitability guarantees
 
 ## Alias Contract
 
@@ -153,7 +166,6 @@ Configure the prefix, middleware, and optional gate in the same config file.
 Keep admin routes behind application auth middleware. When `admin.gate` is configured, every package admin route enforces that gate consistently.
 By default, admin users can create and maintain `source = custom` records, but direct edits or delete/deprecate actions for `source = package` records are blocked. Set `data.allow_package_record_direct_edit` to `true` only when you intentionally need to override package-owned records during private testing or release preparation.
 Admin mutation forms validate parent hierarchy consistency, and alias forms accept only stable location type keys whose target records exist.
-Public/stable release should wait until the release checklist and consumer smoke tests pass.
 
 ## API
 
