@@ -2,6 +2,8 @@
 
 Laravel Iran Locations provides Iran location data, Eloquent models, safe database sync, query helpers, optional admin screens, optional read-only API endpoints, and plain Blade select components for Laravel applications.
 
+> Pre-release note: this package is currently private and unreleased. The packaged dataset is versioned separately from any future package tag; the current data version is `0.2.0-dev`. Some supported dataset surfaces may be incomplete in this version, so a public/stable release should wait until the release checklist and consumer smoke tests pass.
+
 ## Features
 
 - Iran provinces, counties, official districts, rural districts, cities, and Tehran municipal records from a packaged dataset
@@ -53,6 +55,7 @@ php artisan iran-locations:doctor
 ```
 
 The sync engine never truncates package tables. Custom records are preserved. Package-owned records missing from the current package data are deprecated by default instead of being hard deleted.
+Package data is required to contain normalized/searchable fields. Sync writes those normalized fields and fills missing normalized or slug fields through the configured `LocationNormalizer`; sync normalization is not user-toggleable.
 
 ## Data Scope
 
@@ -66,7 +69,9 @@ The current packaged dataset includes:
 - 22 Tehran city regions
 - 568 Tehran neighborhood or urban-place style records
 
-The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. The municipal hierarchy remains separate: city region, city area, and neighborhood. City areas and aliases are structurally supported but are empty in the packaged dataset unless your application adds records. Verify the packaged data and licensing suitability for your own use case.
+The packaged data is generated from spreadsheet source files. The official hierarchy is province, county, official district, city, and rural district. The municipal hierarchy remains separate: city region, city area, and neighborhood. City areas and aliases are structurally supported but are empty in packaged data version `0.2.0-dev` unless your application adds records.
+
+Treat this as versioned package data, not automatically complete, official, current national coverage. It does not currently include village, boundary, latitude/longitude, postal-code, routing, or always-current official gazette data unless explicitly documented. Verify source assumptions and licensing suitability before production, legal, regulatory, logistics, or high-stakes use.
 
 ## Normalization
 
@@ -132,6 +137,8 @@ The admin UI is disabled by default. Enable it in `config/iran-locations.php`:
 ```
 
 Configure the prefix, middleware, and optional gate in the same config file.
+By default, admin users can create and maintain `source = custom` records, but direct edits or delete/deprecate actions for `source = package` records are blocked. Set `data.allow_package_record_direct_edit` to `true` only when you intentionally need to override package-owned records during private testing or release preparation.
+Public/stable release should wait until the release checklist and consumer smoke tests pass.
 
 ## API
 
@@ -144,6 +151,7 @@ The API is disabled by default. Enable it in config:
 ```
 
 Default endpoints are mounted under `iran-locations/api` and include status, search, list, nested list, alias, and option endpoints. The API is read-only.
+HTTP request validation enforces `search.min_length` for API/admin search inputs that include `q`.
 
 ## Blade Components
 
@@ -159,7 +167,7 @@ Components are plain Blade, preserve old input, support parent filters, and requ
 
 ## Configuration
 
-`config/iran-locations.php` controls table names, model classes, route keys, normalization, sync behavior, admin routes, API routes, search, and pagination. Models and tables can be overridden for application-specific needs.
+`config/iran-locations.php` controls table names, model classes, route keys, save-time normalization, package-record admin edit policy, admin routes, API routes, search, and pagination. Models and tables can be overridden for application-specific needs.
 
 ## Testing
 

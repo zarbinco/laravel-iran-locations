@@ -14,6 +14,7 @@ The optional admin UI is disabled by default.
 ```
 
 Routes are named under `iran-locations.admin.*`.
+Admin search inputs that include `q` are validated against `search.min_length`.
 
 ## Managed Records
 
@@ -35,4 +36,10 @@ php artisan vendor:publish --tag=iran-locations-views
 
 ## Safe Destroy
 
-Package-owned records are deprecated instead of deleted. Custom records are deleted when safe, or deactivated if related records prevent deletion.
+With the default `data.allow_package_record_direct_edit = false`, package-owned records cannot be directly updated, deleted, or deprecated through the admin UI. Admin create and update requests also reject `source = package` while that setting is false.
+
+Source controls match that policy: forms do not offer `Package` as a selectable source while direct edit is disabled. Existing package-owned records show a read-only package-managed source indicator.
+
+Custom records remain editable. Custom records are deleted when safe, or deactivated if related records prevent deletion.
+
+Set `data.allow_package_record_direct_edit` to `true` only when you deliberately need to override package-owned records during private testing or release preparation. When enabled, package-owned records are deprecated instead of deleted where the model supports deprecation.

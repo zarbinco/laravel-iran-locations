@@ -67,6 +67,7 @@ class LocationAliasController extends AdminController
         $this->authorizeIranLocationsAdmin();
 
         $model = $this->findModel('location_alias', $alias);
+        $this->guardPackageRecordDirectEdit($model, 'Alias');
         $model->fill($this->aliasPayload($request->validated()));
         $model->save();
 

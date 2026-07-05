@@ -26,10 +26,15 @@ Successful syncs write a data-version record with the package data version, chec
 
 - Tables are never truncated.
 - Package-owned records are matched by stable `code`.
-- Custom records are preserved.
+- Custom records with `source = custom` are always preserved; this is not configurable.
+- Package data is required to contain normalized/searchable fields. Sync writes those normalized fields and fills missing normalized or slug fields through the configured `LocationNormalizer`.
 - Missing package-owned records are deprecated by default.
 - Hard delete behavior is rejected by the sync service.
 - Empty non-authoritative datasets are not used to deprecate records during default full sync.
+
+`package_record_delete_behavior` supports the safe `deprecate` behavior. Configuring hard delete is intentionally rejected by the sync service. Admin direct mutation of package-owned records is controlled separately by `data.allow_package_record_direct_edit`.
+
+`normalization.on_sync` was removed because sync normalization is part of the package data contract and is not a runtime toggle. `normalization.on_save` still controls model save-time normalization for application/admin writes. If a future phase recomputes normalized fields during sync, that should be implemented explicitly and tested separately.
 
 ## Useful Commands
 

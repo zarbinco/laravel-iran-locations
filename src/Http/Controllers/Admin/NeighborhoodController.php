@@ -76,6 +76,7 @@ class NeighborhoodController extends AdminController
         $this->authorizeIranLocationsAdmin();
 
         $model = $this->findModel('neighborhood', $neighborhood);
+        $this->guardPackageRecordDirectEdit($model, 'Neighborhood');
         $model->fill($this->payload($request->validated()));
         $model->save();
 

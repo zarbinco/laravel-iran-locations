@@ -56,14 +56,12 @@ return [
     'normalization' => [
         'driver' => 'persian-core',
         'on_save' => true,
-        'on_sync' => true,
         'aliases' => true,
         'slugs' => true,
     ],
 
     'data' => [
         'current_version' => '0.2.0-dev',
-        'preserve_custom_records' => true,
         'package_record_delete_behavior' => 'deprecate',
         'allow_package_record_direct_edit' => false,
     ],

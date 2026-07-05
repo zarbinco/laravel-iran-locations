@@ -63,6 +63,7 @@ class ProvinceController extends AdminController
         $this->authorizeIranLocationsAdmin();
 
         $model = $this->findModel('province', $province);
+        $this->guardPackageRecordDirectEdit($model, 'Province');
         $model->fill($this->payload($request->validated()));
         $model->save();
 

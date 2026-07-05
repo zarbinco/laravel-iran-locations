@@ -69,6 +69,7 @@ class OfficialDistrictController extends AdminController
         $this->authorizeIranLocationsAdmin();
 
         $model = $this->findModel('official_district', $official_district);
+        $this->guardPackageRecordDirectEdit($model, 'Official district');
         $model->fill($this->payload($request->validated()));
         $model->save();
 

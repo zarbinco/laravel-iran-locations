@@ -9,7 +9,7 @@ class SearchApiRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'q' => ['required', 'string', 'max:100'],
+            'q' => ['required', 'string', 'min:'.$this->searchMinLength(), 'max:100'],
             'limit' => ['nullable', 'integer', 'min:1', 'max:'.$this->maxPerPage()],
         ];
     }

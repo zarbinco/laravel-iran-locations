@@ -19,7 +19,7 @@ abstract class ApiRequest extends FormRequest
     protected function commonRules(): array
     {
         return [
-            'q' => ['nullable', 'string', 'max:100'],
+            'q' => ['nullable', 'string', 'min:'.$this->searchMinLength(), 'max:100'],
             'status' => ['nullable', 'in:active,inactive,deprecated,all'],
             'source' => ['nullable', 'in:package,custom,all'],
             'code' => ['nullable', 'string', 'max:255'],
@@ -45,5 +45,16 @@ abstract class ApiRequest extends FormRequest
     protected function maxPerPage(): int
     {
         return (int) config('iran-locations.api.pagination.max_per_page', config('iran-locations.pagination.max_per_page', 100));
+    }
+
+    protected function searchMinLength(): int
+    {
+        $value = config('iran-locations.search.min_length', 2);
+
+        if (! is_numeric($value)) {
+            return 2;
+        }
+
+        return max(1, (int) $value);
     }
 }

@@ -69,6 +69,8 @@ class OfficialDivisionAdminTest extends AdminTestCase
             'source' => 'package',
         ]);
 
+        config()->set('iran-locations.data.allow_package_record_direct_edit', true);
+
         $this->delete(route('iran-locations.admin.counties.destroy', $packageCounty->getKey()))
             ->assertRedirect();
 

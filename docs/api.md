@@ -1,6 +1,7 @@
 # API
 
 The optional API is disabled by default and read-only.
+Responses expose versioned package data. Treat that data as package-maintained location data, not automatically complete, official, current national coverage.
 
 ## Enable
 
@@ -54,6 +55,8 @@ Route parameters can resolve records by id, code, or slug where practical.
 ## Filters
 
 List endpoints support builder-backed filters such as `q`, `status`, `source`, `code`, `slug`, `sort`, `province_id`, `province_code`, `county_id`, `county_code`, `official_district_id`, `official_district_code`, `city_id`, `city_code`, `region_id`, `region_code`, `area_id`, `area_code`, `type`, `has_neighborhoods`, and `has_areas` where relevant.
+
+When `q` is present, HTTP request validation enforces the configured `search.min_length`. The grouped `/search` endpoint requires `q`; list, option, and alias endpoints allow it to be omitted.
 
 Pagination uses `per_page` and `page` with the configured maximum.
 

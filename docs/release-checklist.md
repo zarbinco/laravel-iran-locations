@@ -4,10 +4,16 @@
 - Run `composer test`.
 - Run `composer run-script format:test`.
 - Run `composer analyse`.
+- Skip or replace unavailable scripts with the package's configured equivalents, and record any skipped checks.
+- Confirm the working tree has no `.phpunit.cache/` or `.phpunit.result.cache`.
+- Confirm the working tree has no `REVIEW_NOTES.md`.
+- Confirm no local/private paths, drive-letter development paths, mounted temp paths, or local stack names are present in release files.
 - Confirm no raw SQL source files are included in the package archive.
-- Confirm no generated zip files are included in the package archive.
+- Confirm no generated full-project zip files or nested zip artifacts are included in the package archive.
 - Confirm no `vendor/` or `node_modules/` directories are included.
 - Confirm no `.env`, secrets, logs, caches, or coverage output are included.
+- Confirm `.gitattributes` export-ignore rules exclude private, cache, build, release, and review artifacts.
+- Run `composer archive --format=zip` and inspect the archive contents before tagging.
 - Confirm `zarbinco/laravel-persian-core` uses a stable semver constraint.
 - Confirm Packagist metadata is correct.
 - Confirm README examples match the current API.

@@ -55,8 +55,10 @@ class ProvinceAdminTest extends AdminTestCase
         self::assertFalse(Province::query()->whereKey($province->getKey())->exists());
     }
 
-    public function test_package_owned_province_destroy_deprecates_instead_of_deleting(): void
+    public function test_package_owned_province_destroy_deprecates_when_direct_edit_is_enabled(): void
     {
+        config()->set('iran-locations.data.allow_package_record_direct_edit', true);
+
         $province = $this->province('package.province', 'Package Province', 'package');
 
         $this->delete(route('iran-locations.admin.provinces.destroy', $province->getKey()))

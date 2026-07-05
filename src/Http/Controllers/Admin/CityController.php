@@ -72,6 +72,7 @@ class CityController extends AdminController
         $this->authorizeIranLocationsAdmin();
 
         $model = $this->findModel('city', $city);
+        $this->guardPackageRecordDirectEdit($model, 'City');
         $model->fill($this->payload($request->validated()));
         $model->save();
 

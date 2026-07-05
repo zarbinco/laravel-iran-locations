@@ -72,6 +72,7 @@ class RuralDistrictController extends AdminController
         $this->authorizeIranLocationsAdmin();
 
         $model = $this->findModel('rural_district', $rural_district);
+        $this->guardPackageRecordDirectEdit($model, 'Rural district');
         $model->fill($this->payload($request->validated()));
         $model->save();
 

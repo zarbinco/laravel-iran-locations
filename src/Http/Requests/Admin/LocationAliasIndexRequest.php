@@ -9,7 +9,7 @@ class LocationAliasIndexRequest extends AdminFormRequest
     public function rules(): array
     {
         return [
-            'q' => ['nullable', 'string', 'max:255'],
+            'q' => ['nullable', 'string', 'min:'.$this->searchMinLength(), 'max:255'],
             'source' => ['nullable', 'in:package,custom,all'],
             'location_type' => ['nullable', 'in:province,city,city_region,city_area,neighborhood'],
             'sort' => ['nullable', 'string', 'max:50'],

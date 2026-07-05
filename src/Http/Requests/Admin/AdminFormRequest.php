@@ -36,7 +36,7 @@ abstract class AdminFormRequest extends FormRequest
     protected function commonIndexRules(): array
     {
         return [
-            'q' => ['nullable', 'string', 'max:100'],
+            'q' => ['nullable', 'string', 'min:'.$this->searchMinLength(), 'max:100'],
             'status' => ['nullable', 'in:active,inactive,deprecated,all'],
             'source' => ['nullable', 'in:package,custom,all'],
             'code' => ['nullable', 'string', 'max:255'],
@@ -58,9 +58,32 @@ abstract class AdminFormRequest extends FormRequest
             'slug' => ['nullable', 'string', 'max:255'],
             'display_name_fa' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],
-            'source' => ['nullable', 'in:package,custom'],
+            'source' => $this->sourceRule(),
             'source_version' => ['nullable', 'string', 'max:255'],
             'data_version' => ['nullable', 'string', 'max:255'],
         ];
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    protected function sourceRule(): array
+    {
+        $allowed = (bool) config('iran-locations.data.allow_package_record_direct_edit', false)
+            ? ['package', 'custom']
+            : ['custom'];
+
+        return ['nullable', Rule::in($allowed)];
+    }
+
+    protected function searchMinLength(): int
+    {
+        $value = config('iran-locations.search.min_length', 2);
+
+        if (! is_numeric($value)) {
+            return 2;
+        }
+
+        return max(1, (int) $value);
     }
 }

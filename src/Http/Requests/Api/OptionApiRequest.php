@@ -9,7 +9,7 @@ class OptionApiRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'q' => ['nullable', 'string', 'max:100'],
+            'q' => ['nullable', 'string', 'min:'.$this->searchMinLength(), 'max:100'],
             'province_id' => ['nullable', 'integer'],
             'province_code' => ['nullable', 'string', 'max:255'],
             'county_id' => ['nullable', 'integer'],

@@ -16,7 +16,7 @@ class LocationAliasRequest extends AdminFormRequest
             'location_id' => ['required', 'integer'],
             'alias' => ['required', 'string', 'max:255'],
             'reason' => ['nullable', 'string', 'max:255'],
-            'source' => ['nullable', 'in:package,custom'],
+            'source' => $this->sourceRule(),
         ];
     }
 

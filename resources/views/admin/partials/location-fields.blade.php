@@ -21,14 +21,26 @@
         <span class="mb-1 block font-medium text-slate-700">Display name override</span>
         <input class="w-full rounded border border-slate-300 px-3 py-2" name="display_name_fa" value="{{ old('display_name_fa', $model->getAttribute('display_name_fa')) }}">
     </label>
-    <label class="text-sm">
+    @php
+        $allowsPackageSource = (bool) config('iran-locations.data.allow_package_record_direct_edit', false);
+        $currentSource = old('source', $model->getAttribute('source') ?: 'custom');
+        $isPackageManaged = $model->exists && $model->getAttribute('source') === 'package';
+    @endphp
+    <div class="text-sm">
         <span class="mb-1 block font-medium text-slate-700">Source</span>
-        <select class="w-full rounded border border-slate-300 px-3 py-2" name="source">
-            @foreach (['custom' => 'Custom', 'package' => 'Package'] as $value => $label)
-                <option value="{{ $value }}" @selected(old('source', $model->getAttribute('source') ?: 'custom') === $value)>{{ $label }}</option>
-            @endforeach
-        </select>
-    </label>
+        @if ($allowsPackageSource)
+            <select class="w-full rounded border border-slate-300 px-3 py-2" name="source">
+                @foreach (['custom' => 'Custom', 'package' => 'Package'] as $value => $label)
+                    <option value="{{ $value }}" @selected($currentSource === $value)>{{ $label }}</option>
+                @endforeach
+            </select>
+        @elseif ($isPackageManaged)
+            <div class="w-full rounded border border-slate-200 bg-slate-50 px-3 py-2 text-slate-600">Package-managed</div>
+        @else
+            <input type="hidden" name="source" value="custom">
+            <div class="w-full rounded border border-slate-200 bg-slate-50 px-3 py-2 text-slate-600">Custom</div>
+        @endif
+    </div>
     <label class="text-sm">
         <span class="mb-1 block font-medium text-slate-700">Source version</span>
         <input class="w-full rounded border border-slate-300 px-3 py-2" name="source_version" value="{{ old('source_version', $model->getAttribute('source_version')) }}">

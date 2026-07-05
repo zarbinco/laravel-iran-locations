@@ -66,6 +66,7 @@ class CountyController extends AdminController
         $this->authorizeIranLocationsAdmin();
 
         $model = $this->findModel('county', $county);
+        $this->guardPackageRecordDirectEdit($model, 'County');
         $model->fill($this->payload($request->validated()));
         $model->save();
 

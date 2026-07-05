@@ -107,8 +107,24 @@ abstract class AdminController extends Controller
         return $data;
     }
 
+    protected function allowsPackageRecordDirectEdit(): bool
+    {
+        return (bool) config('iran-locations.data.allow_package_record_direct_edit', false);
+    }
+
+    protected function guardPackageRecordDirectEdit(Model $model, string $resourceName): void
+    {
+        if ($this->allowsPackageRecordDirectEdit() || $model->getAttribute('source') !== 'package') {
+            return;
+        }
+
+        abort(403, "{$resourceName} is package-owned and cannot be changed from the admin UI unless package record direct edit is explicitly enabled.");
+    }
+
     protected function safeDestroy(Model $model, string $resourceName): RedirectResponse
     {
+        $this->guardPackageRecordDirectEdit($model, $resourceName);
+
         if ($model->getAttribute('source') === 'package') {
             if (method_exists($model, 'markDeprecated')) {
                 $model->markDeprecated();

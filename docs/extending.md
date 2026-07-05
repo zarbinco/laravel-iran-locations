@@ -32,7 +32,11 @@ The `route_key` config supports `id`, `code`, and `slug`. Unsupported values fal
 
 ## Custom Records
 
-Application-owned records should use `source = custom`. The sync engine preserves custom records and does not overwrite same-code custom records.
+Application-owned records should use `source = custom`. The sync engine always preserves custom records and does not overwrite same-code custom records.
+
+The admin UI rejects `source = package` input and blocks package-owned record mutation unless `data.allow_package_record_direct_edit` is deliberately enabled.
+
+Package data is versioned package data, not automatically complete, official, current national coverage. Verify source assumptions and licensing suitability before production or high-stakes use.
 
 ## Aliases
 
@@ -41,3 +45,4 @@ Aliases are polymorphic and available on provinces, counties, official districts
 ## Normalization Contract
 
 Bind your own implementation of `Zarbin\IranLocations\Contracts\LocationNormalizer` if you need different display, search, or slug normalization behavior. Do not duplicate Persian normalization maps in application code when the Persian Core adapter already provides the behavior.
+Package data is required to contain normalized/searchable fields. Sync writes those normalized fields and fills missing normalized or slug fields through the configured normalizer. Model save-time normalization can be disabled with `normalization.on_save` for application writes, but sync normalization is not optional.

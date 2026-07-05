@@ -124,3 +124,19 @@ composer test
 composer run-script format:test
 composer analyse
 ```
+
+If a script is not defined or not configured in a given checkout, skip it or replace it with the package's configured equivalent and record the reason in the release notes.
+
+## Archive Hygiene
+
+From the package repository, build and inspect a Composer archive before publishing:
+
+```bash
+composer archive --format=zip
+
+unzip -l zarbinco-laravel-iran-locations-*.zip | grep -E "(REVIEW_NOTES|\.phpunit\.cache|vendor/|node_modules/|_source/|coverage/|artifacts/|_review/)" \
+  && echo "Unexpected private artifact found" \
+  || echo "Archive hygiene looks clean"
+```
+
+Also confirm the archive is not a full project snapshot and does not contain nested zip, tar, build, release, or temporary review artifacts.
