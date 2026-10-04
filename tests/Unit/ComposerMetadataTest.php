@@ -18,9 +18,7 @@ class ComposerMetadataTest extends TestCase
         self::assertSame('https://github.com/zarbinco/laravel-iran-locations/issues', $composer['support']['issues']);
         self::assertSame('https://github.com/zarbinco/laravel-iran-locations', $composer['support']['source']);
         self::assertSame('^8.2', $composer['require']['php']);
-        self::assertSame('^0.1|^1.0', $composer['require']['zarbinco/laravel-persian-core']);
-        self::assertStringContainsString('^0.1', $composer['require']['zarbinco/laravel-persian-core']);
-        self::assertStringContainsString('^1.0', $composer['require']['zarbinco/laravel-persian-core']);
+        self::assertSame('^0.2', $composer['require']['zarbinco/laravel-persian-core']);
         self::assertArrayNotHasKey('ext-zip', $composer['require']);
         self::assertSame('*', $composer['require-dev']['ext-zip']);
         self::assertSame('stable', $composer['minimum-stability']);

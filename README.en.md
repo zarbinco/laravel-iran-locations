@@ -39,7 +39,7 @@ Laravel Iran Locations provides Iran location data, Eloquent models, safe databa
 | 12 | PHP 8.2+ |
 | 13 | PHP 8.3+ |
 
-- `zarbinco/laravel-persian-core` `^0.1` or `^1.0`
+- `zarbinco/laravel-persian-core` `^0.2`
 - PHP `zip` extension for package development/release archive checks only
 
 ## Installation
