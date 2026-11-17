@@ -30,11 +30,10 @@
 
 | Laravel | PHP |
 | --- | --- |
-| 11 | PHP 8.2+ |
 | 12 | PHP 8.2+ |
 | 13 | PHP 8.3+ |
 
-- `zarbinco/laravel-persian-core` با نسخه `^0.2`
+- `zarbinco/laravel-persian-core` با نسخه `^1.0` (سازگار با Laravel 12 و 13)
 - اکستنشن PHP `zip` فقط برای توسعه خود پکیج و release/archive check لازم است؛ مصرف‌کننده پکیج برای runtime معمولی به آن نیاز ندارد.
 
 ## نصب

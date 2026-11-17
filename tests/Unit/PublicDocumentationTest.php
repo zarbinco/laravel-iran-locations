@@ -66,6 +66,8 @@ class PublicDocumentationTest extends TestCase
         self::assertStringContainsString('جدول‌ها را truncate نمی‌کند', $readme);
         self::assertStringContainsString('رکوردهای `source = custom` حفظ می‌شوند', $readme);
         self::assertStringContainsString('zarbinco/laravel-persian-core', $readme);
+        self::assertStringContainsString('Laravel 12 و 13', $readme);
+        self::assertStringContainsString('`^1.0`', $readme);
     }
 
     public function test_english_readme_documents_release_safety_and_data_scope(): void
@@ -77,6 +79,8 @@ class PublicDocumentationTest extends TestCase
         self::assertStringContainsString('The Persian README is the primary GitHub documentation.', $readme);
         self::assertStringContainsString('https://packagist.org/packages/zarbinco/laravel-iran-locations', $readme);
         self::assertStringContainsString('https://github.com/zarbinco/laravel-iran-locations/actions/workflows/tests.yml/badge.svg', $readme);
+        self::assertStringContainsString('Laravel 12 and 13', $readme);
+        self::assertStringContainsString('`^1.0`', $readme);
         self::assertStringContainsString('31 provinces', $readme);
         self::assertStringContainsString('484 counties', $readme);
         self::assertStringContainsString('1087 official districts', $readme);
@@ -86,6 +90,7 @@ class PublicDocumentationTest extends TestCase
         self::assertStringContainsString('Custom records are preserved', $readme);
         self::assertStringContainsString('read-only JSON driver', $readme);
         self::assertStringContainsString('database IDs', $readme);
+        self::assertStringContainsString('`^1.0`', $readme);
     }
 
     public function test_public_documentation_avoids_removed_config_keys_and_private_paths(): void

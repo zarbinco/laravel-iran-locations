@@ -23,7 +23,7 @@ For a published release later, install normally instead:
 composer require zarbinco/laravel-iran-locations
 ```
 
-Laravel 11, 12, or 13 may be used when matching the supported dependency matrix. Keep `zarbinco/laravel-persian-core` on a stable semver-compatible version; do not change this package to depend on a development branch for release testing.
+Use Laravel 12 or 13 to match the supported dependency matrix. `zarbinco/laravel-persian-core` is constrained to the stable `^1.0` line; do not change this package to depend on a development branch for release testing.
 
 ## Database
 

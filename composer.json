@@ -21,17 +21,17 @@
     },
     "require": {
         "php": "^8.2",
-        "illuminate/contracts": "^11.0|^12.0|^13.0",
-        "illuminate/database": "^11.0|^12.0|^13.0",
-        "illuminate/routing": "^11.0|^12.0|^13.0",
-        "illuminate/support": "^11.0|^12.0|^13.0",
-        "zarbinco/laravel-persian-core": "^0.2"
+        "illuminate/contracts": "^12.0|^13.0",
+        "illuminate/database": "^12.0|^13.0",
+        "illuminate/routing": "^12.0|^13.0",
+        "illuminate/support": "^12.0|^13.0",
+        "zarbinco/laravel-persian-core": "^1.0"
     },
     "require-dev": {
         "ext-zip": "*",
         "larastan/larastan": "^2.0|^3.0",
         "laravel/pint": "^1.0",
-        "orchestra/testbench": "^9.0|^10.0|^11.0",
+        "orchestra/testbench": "^10.0|^11.0",
         "phpstan/phpstan": "^1.10|^2.0",
         "phpunit/phpunit": "^10.5|^11.5|^12.0"
     },

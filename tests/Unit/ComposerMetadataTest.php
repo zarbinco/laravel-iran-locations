@@ -18,16 +18,17 @@ class ComposerMetadataTest extends TestCase
         self::assertSame('https://github.com/zarbinco/laravel-iran-locations/issues', $composer['support']['issues']);
         self::assertSame('https://github.com/zarbinco/laravel-iran-locations', $composer['support']['source']);
         self::assertSame('^8.2', $composer['require']['php']);
-        self::assertSame('^0.2', $composer['require']['zarbinco/laravel-persian-core']);
+        self::assertSame('^1.0', $composer['require']['zarbinco/laravel-persian-core']);
         self::assertArrayNotHasKey('ext-zip', $composer['require']);
         self::assertSame('*', $composer['require-dev']['ext-zip']);
         self::assertSame('stable', $composer['minimum-stability']);
         self::assertTrue($composer['prefer-stable']);
 
         foreach (['illuminate/contracts', 'illuminate/database', 'illuminate/routing', 'illuminate/support'] as $package) {
-            self::assertSame('^11.0|^12.0|^13.0', $composer['require'][$package]);
+            self::assertSame('^12.0|^13.0', $composer['require'][$package]);
         }
 
+        self::assertSame('^10.0|^11.0', $composer['require-dev']['orchestra/testbench']);
         self::assertSame('src/', $composer['autoload']['psr-4']['Zarbin\\IranLocations\\']);
         self::assertContains(IranLocationsServiceProvider::class, $composer['extra']['laravel']['providers']);
         self::assertSame('Zarbin\\IranLocations\\Facades\\IranLocations', $composer['extra']['laravel']['aliases']['IranLocations']);

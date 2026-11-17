@@ -29,7 +29,7 @@ Use this checklist before manually tagging a reviewed release.
 - Confirm packaged JSON codes and manifest `code_scheme` use the generated short package code contract, with no legacy pre-release code compatibility layer.
 - Confirm [DATA-SOURCES.md](../DATA-SOURCES.md) and [DATA-LICENSE.md](../DATA-LICENSE.md) describe the imported/curated pre-release data without overclaiming official or legal approval.
 - Confirm packaged data quality tests pass for manifest counts, checksums, references, Persian `ک/ی`, province capitals, duplicate-code guards, and documented duplicate neighborhood names.
-- Confirm `zarbinco/laravel-persian-core` uses a stable semver constraint.
+- Confirm `zarbinco/laravel-persian-core` uses the stable `^1.0` semver constraint.
 - Confirm runtime dependencies do not include development-only extensions such as `ext-zip`.
 - Confirm the default storage driver remains `database`.
 - Confirm `IRAN_LOCATIONS_DRIVER=json` supports read-only no-migration lists, options, search, status, doctor, and Blade components.

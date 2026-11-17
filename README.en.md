@@ -35,11 +35,10 @@ Laravel Iran Locations provides Iran location data, Eloquent models, safe databa
 
 | Laravel | PHP |
 | --- | --- |
-| 11 | PHP 8.2+ |
 | 12 | PHP 8.2+ |
 | 13 | PHP 8.3+ |
 
-- `zarbinco/laravel-persian-core` `^0.2`
+- `zarbinco/laravel-persian-core` `^1.0` (Laravel 12 and 13)
 - PHP `zip` extension for package development/release archive checks only
 
 ## Installation
@@ -293,4 +292,3 @@ The release/archive hygiene gate requires the PHP `zip` extension. It is declare
 ## License
 
 The package is open-sourced software licensed under the [MIT license](LICENSE.md).
-
